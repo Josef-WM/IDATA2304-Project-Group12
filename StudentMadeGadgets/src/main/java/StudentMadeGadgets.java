@@ -1,3 +1,5 @@
 public class StudentMadeGadgets {
-  // Hello world
+  public static void main(String args[]) {
+    System.out.println("Welcome to our SMG");
+  }
 }
