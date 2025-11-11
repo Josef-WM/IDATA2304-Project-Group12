@@ -1,10 +1,6 @@
-import Sensor.Sensor;
-
-import java.util.ArrayList;
-
 public class SensorNode {
-
-  String sensorNodeAddress;
-  ArrayList<Sensor> sensorArrayList;
-
+  // CLIENT
+  // Connects to the server
+  // Sends sensor information to the server
+  // Uses information sent from the server to use actuator
 }
