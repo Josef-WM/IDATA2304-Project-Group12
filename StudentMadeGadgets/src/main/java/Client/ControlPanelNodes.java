@@ -1,3 +1,5 @@
+package Client;
+
 public class ControlPanelNodes {
   // CLIENT
   // Connects to the server

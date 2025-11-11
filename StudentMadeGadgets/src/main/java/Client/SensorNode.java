@@ -1,3 +1,5 @@
+package Client;
+
 public class SensorNode {
   // CLIENT
   // Connects to the server
