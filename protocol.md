@@ -1,5 +1,5 @@
 ## Protocol Specification
-This document describes the application-layer communication protocol for data exchange between the sensor/actuator nodes, as well as the control panel nodes.
+This document describes the application-layer communication protocol for data exchange between the sensor/actuator nodes and the control panel nodes.
 
 ## Terminology
 
