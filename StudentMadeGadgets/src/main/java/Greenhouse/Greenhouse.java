@@ -5,18 +5,19 @@ import Client.SensorNode;
 import java.util.ArrayList;
 
 public class Greenhouse {
-  String greenhouseName;
-  ArrayList<SensorNode> sensorNodes;
+  private String greenhouseName;
+  private ArrayList<SensorNode> sensorNodes;
 
-  double temperature;
-  int light;
-  int humidity;
+  private double temperature;
+  private int light;
+  private int humidity;
 
   public Greenhouse(String name) {
     this.greenhouseName = name;
     this.temperature = 14;
     this.humidity = 60;
     this.light = 1000;
+    this.sensorNodes = new ArrayList<>();
   }
 
   public void addSensorNodeToGreenhouse(SensorNode sensorNode) {
@@ -29,6 +30,10 @@ public class Greenhouse {
 
   public String getGreenhouseName() {
     return this.greenhouseName;
+  }
+
+  public void setGreenhouseName(String greenhouseName) {
+    this.greenhouseName = greenhouseName;
   }
 
   public double getTemperature() {
