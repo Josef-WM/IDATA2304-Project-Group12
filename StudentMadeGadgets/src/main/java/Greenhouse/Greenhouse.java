@@ -57,6 +57,10 @@ public class Greenhouse {
       humidity = 100;
       return;
     }
+    if (this.humidity+humidity < 0) {
+      humidity = 0;
+      return;
+    }
     this.humidity = this.humidity+humidity;
   }
 
