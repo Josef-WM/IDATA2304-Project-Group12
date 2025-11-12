@@ -1,4 +1,4 @@
 package Sensor;
 
-public class HumiditySensor implements Sensor{
+public class HumiditySensor {
 }
