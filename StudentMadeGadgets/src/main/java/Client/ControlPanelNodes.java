@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class ControlPanelNodes {
   public static void main(String args[]) throws IOException {
-    try (Socket socket = new Socket("10.22.234.144", 6767);
+    try (Socket socket = new Socket("Localhost", 6767);
          Protocol protocol = new Protocol(socket)){
 
       System.out.println("You connected to the server");
