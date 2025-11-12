@@ -1,5 +1,6 @@
-## Protocol Specification
-This document describes the application-layer communication protocol for data exchange between the sensor/actuator nodes and the control panel nodes.
+## The SSP Protocol Specification
+### **SSP, short for Six-Seven Protocol**
+This document describes the Six-Seven Protocol, an application-layer communication protocol for data exchange between the sensor/actuator nodes and the control panel nodes.
 
 ## Terminology
 - **Sensor :** In the context of an IoT system, a sensor gathers data from the environment/physical world, and then the real world phenomena gets converted into digital signals.
@@ -12,7 +13,7 @@ This document describes the application-layer communication protocol for data ex
 ## Table
 | Aspect                           | Specification                                                                               | Justification                                                                                                                                                                                               |
 |----------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Underlying Transport             | TCP                                                                                         |                                                                                                                                                                                                             |
+| Underlying Transport             | TCP                                                                                         | We use TCP as the underlying transport layer in our protocol. This is mainly because we want the protocol to be reliable, not to mention that the accuracy matters more than the speed.                     |
 | Port Number                      | 6767                                                                                        | This port number is not used by any other protocols: [List of TCP and UDP port numbers](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers). Its also a funny number which is easy to remember. |
 | Architecture                     | Who are the actors (nodes) in your solution? Who are the clients, who is/are the server(s)? |                                                                                                                                                                                                             |
 | Information Flow                 |                                                                                             |                                                                                                                                                                                                             |
