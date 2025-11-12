@@ -1,9 +1,12 @@
 package Actuator;
 
+import Greenhouse.Greenhouse;
+
 /**
  * Represents a fan, acts as an actuator in a greenhouse
  */
-public class FanActuator {
+public class FanActuator implements Actuator {
+  private Greenhouse greenhouse;
   private boolean isOn;
   private float speed;
 
@@ -19,6 +22,7 @@ public class FanActuator {
    * turns on the fan actuator
    */
   public void turnOn() {
+    greenhouse.changeTemperature(greenhouse.getTemperature() - 5);
     isOn = true;
   }
 
@@ -26,6 +30,7 @@ public class FanActuator {
    * turns off the fan actuator
    */
   public void turnOff() {
+    greenhouse.changeTemperature(greenhouse.getTemperature() + 5);
     isOn = false;
     }
 }
