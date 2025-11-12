@@ -4,6 +4,7 @@ This document describes the application-layer communication protocol for data ex
 ## Terminology
 - **Sensor :** In the context of an IoT system, a sensor gathers data from the environment/physical world, and then the real world phenomena gets converted into digital signals.
 - **Actuator :** The actuator is the component of the system that takes the digital signals and converts them into physical actions or changes the environment.
+
     We can think of the sensors as the "eyes and ears" of the system, while the actuators are the "hands and feet".
 - **Control-panel nodes** :
 - **Sensor/Actuator nodes** :
