@@ -5,9 +5,10 @@ import java.net.Socket;
 import java.io.IOException;
 import java.util.Scanner;
 
+
 public class ControlPanelNodes {
-  public static void main(String args[]) {
-    try (Socket socket = new Socket("10.22.60.144", 6767);
+  public static void main(String[] args) {
+    try (Socket socket = new Socket("localhost", 6767);
          Protocol protocol = new Protocol(socket);
          Scanner scanner = new Scanner(System.in)) {
 
