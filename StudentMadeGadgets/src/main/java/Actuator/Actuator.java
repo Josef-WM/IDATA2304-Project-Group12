@@ -2,7 +2,9 @@ package Actuator;
 
 public interface Actuator {
   String getID();
-  String getType();
+  default String getType() {
+    return null;
+  }
   boolean isOn();
-  void toggle();
+  boolean toggle();
 }

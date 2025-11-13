@@ -49,11 +49,13 @@ public class FanActuator implements Actuator {
    * Turning it on if off
    * And off if on
    */
-  public void toggle() {
+  public boolean toggle() {
     if (isOn) {
       turnOff();
+      return false;
     } else {
       turnOn();
+      return true;
     }
   }
 
