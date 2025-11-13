@@ -15,6 +15,9 @@ public class ControlPanelNode {
     System.out.println("Enter IP of server host:");
     Scanner scanner = new Scanner(System.in);
     String hostID = scanner.nextLine();
+    if (hostID.isBlank()) {
+      hostID = "Localhost";
+    }
     try (Socket socket = new Socket(hostID, 6767);
          Protocol protocol = new Protocol(socket);) {
 
