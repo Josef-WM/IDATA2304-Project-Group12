@@ -1,4 +1,4 @@
-package Protocol;
+package protocol;
 
 import java.io.*;
 import java.net.Socket;

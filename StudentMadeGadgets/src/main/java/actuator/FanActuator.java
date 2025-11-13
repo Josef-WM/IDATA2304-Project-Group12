@@ -1,6 +1,6 @@
-package Actuator;
+package actuator;
 
-import Greenhouse.Greenhouse;
+import greenhouse.Greenhouse;
 
 /**
  * Represents a fan, acts as an actuator in a greenhouse.

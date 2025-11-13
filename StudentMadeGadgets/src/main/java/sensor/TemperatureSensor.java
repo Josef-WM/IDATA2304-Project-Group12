@@ -1,6 +1,6 @@
-package Sensor;
+package sensor;
 
-import Greenhouse.Greenhouse;
+import greenhouse.Greenhouse;
 
 /**
  * Javadoc placeholder.

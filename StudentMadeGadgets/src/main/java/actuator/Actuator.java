@@ -1,4 +1,4 @@
-package Actuator;
+package actuator;
 
 public interface Actuator {
   String getID();

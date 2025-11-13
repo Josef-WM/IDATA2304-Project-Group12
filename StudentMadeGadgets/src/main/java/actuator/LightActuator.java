@@ -1,4 +1,4 @@
-package Actuator;
+package actuator;
 
 public class LightActuator {
 }

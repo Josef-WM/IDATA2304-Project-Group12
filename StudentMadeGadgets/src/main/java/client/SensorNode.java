@@ -1,11 +1,10 @@
-package Client;
+package client;
 
-import Actuator.Actuator;
-import Greenhouse.Greenhouse;
-import Sensor.Sensor;
+import actuator.Actuator;
+import greenhouse.Greenhouse;
+import sensor.Sensor;
 
 import java.util.HashMap;
-import java.util.ArrayList;
 
 /**
  * Javadoc placeholder.

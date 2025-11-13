@@ -1,6 +1,6 @@
-package Greenhouse;
+package greenhouse;
 
-import Client.SensorNode;
+import client.SensorNode;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;

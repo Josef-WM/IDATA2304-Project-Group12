@@ -1,9 +1,9 @@
-package Server;
+package server;
 
-import Actuator.FanActuator;
-import Greenhouse.Greenhouse;
-import Protocol.Protocol;
-import Sensor.TemperatureSensor;
+import actuator.FanActuator;
+import greenhouse.Greenhouse;
+import protocol.Protocol;
+import sensor.TemperatureSensor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

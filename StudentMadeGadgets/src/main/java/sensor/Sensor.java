@@ -1,4 +1,4 @@
-package Sensor;
+package sensor;
 
 public interface Sensor {
   String getID();

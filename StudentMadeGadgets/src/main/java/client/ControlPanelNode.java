@@ -1,6 +1,6 @@
-package Client;
+package client;
 
-import Protocol.Protocol;
+import protocol.Protocol;
 import java.net.Socket;
 import java.io.IOException;
 import java.util.Scanner;

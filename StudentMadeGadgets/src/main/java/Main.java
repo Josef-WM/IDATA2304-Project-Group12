@@ -1,5 +1,5 @@
-import Server.Server;
-import Client.ControlPanelNode;
+import server.Server;
+import client.ControlPanelNode;
 
 import java.io.IOException;
 import java.util.Scanner;
