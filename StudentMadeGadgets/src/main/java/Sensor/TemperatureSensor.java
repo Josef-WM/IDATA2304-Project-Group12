@@ -14,7 +14,7 @@ public class TemperatureSensor implements Sensor {
     this.greenhouse = greenhouse;
   }
 
-  @Override public String getID(){
+  @Override public String getID() {
     return id;
   }
 
