@@ -49,22 +49,22 @@ public class Greenhouse {
   }
 
   public void changeTemperature(double temperature) {
-    this.temperature = this.temperature+temperature;
+    this.temperature = this.temperature + temperature;
   }
 
   public void changeHumidity(int humidity) {
-    if (this.humidity+humidity > 100) {
+    if (this.humidity + humidity > 100) {
       humidity = 100;
       return;
     }
-    if (this.humidity+humidity < 0) {
+    if (this.humidity + humidity < 0) {
       humidity = 0;
       return;
     }
-    this.humidity = this.humidity+humidity;
+    this.humidity = this.humidity + humidity;
   }
 
   public void changeLight(int light) {
-    this.light = this.light+light;
+    this.light = this.light + light;
   }
 }
