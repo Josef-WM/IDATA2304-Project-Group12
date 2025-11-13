@@ -12,9 +12,11 @@ public class ControlPanelNode {
   }
 
   public static void runControlPanel() {
-    try (Socket socket = new Socket("localhost", 6767);
-         Protocol protocol = new Protocol(socket);
-         Scanner scanner = new Scanner(System.in)) {
+    System.out.println("Enter IP of server host:");
+    Scanner scanner = new Scanner(System.in);
+    String hostID = scanner.nextLine();
+    try (Socket socket = new Socket(hostID, 6767);
+         Protocol protocol = new Protocol(socket);) {
 
 
       System.out.println("You connected to the server");
