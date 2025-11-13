@@ -21,7 +21,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>Gui.MainWindow</mainClass>
+                    <mainClass>ui.MainWindow</mainClass>
                 </configuration>
             </plugin>
         </plugins>
