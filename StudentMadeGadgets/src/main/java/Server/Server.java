@@ -18,7 +18,14 @@ public class Server {
   private static final FanActuator fan = new FanActuator("1", greenhouse);
 
   /**
-   * Javadoc placeholder.
+   * Alternate way to run a server
+   */
+  public static void main(String[] args) throws IOException {
+    runServer();
+  }
+  
+  /**
+   * Starts a new server on port 6767
    */
   public static void runServer() throws IOException {
     try (ServerSocket serverSocket = new ServerSocket(6767)) {
