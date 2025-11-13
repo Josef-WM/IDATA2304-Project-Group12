@@ -74,7 +74,7 @@ public final class Message {
     return this.timestamp;
   }
 
-  public Long setTimestamp(Long timestamp) {
+  public void setTimestamp(Long timestamp) {
     this.timestamp = timestamp;
   }
 
