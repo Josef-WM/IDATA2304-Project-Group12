@@ -1,7 +1,7 @@
 package Sensor;
 
 public interface Sensor {
-  String getId();
+  String getID();
   String getType();
   String getUnit();
   double read();

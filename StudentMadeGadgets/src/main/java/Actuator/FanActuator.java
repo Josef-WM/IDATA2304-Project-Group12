@@ -7,18 +7,25 @@ import Greenhouse.Greenhouse;
  */
 public class FanActuator implements Actuator {
   private Greenhouse greenhouse;
-  private final int id;
+  private final String id;
   private boolean isOn;
   private float speed;
 
   /**
    * constructor for the FanActuator class.
    */
-  public FanActuator(int id, Greenhouse greenhouse) {
+  public FanActuator(String id, Greenhouse greenhouse) {
     this.id = id;
     this.isOn = false;
     this.speed = 0;
     this.greenhouse = greenhouse;
+  }
+
+  /**
+   * Returns the id of the fan
+   */
+  public String getID() {
+    return this.id;
   }
 
   /**
@@ -35,6 +42,19 @@ public class FanActuator implements Actuator {
   public void turnOff() {
     greenhouse.changeTemperature(5);
     isOn = false;
+  }
+
+  /**
+   * Toggles the fan
+   * Turning it on if off
+   * And off if on
+   */
+  public void toggle() {
+    if (isOn) {
+      turnOff();
+    } else {
+      turnOn();
+    }
   }
 
   public boolean isOn() {

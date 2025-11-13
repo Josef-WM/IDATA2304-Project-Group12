@@ -7,9 +7,10 @@ import java.util.Scanner;
 
 public class ControlPanelNodes {
   public static void main(String args[]) {
-    try (Socket socket = new Socket("localhost", 6767);
+    try (Socket socket = new Socket("10.22.60.144", 6767);
          Protocol protocol = new Protocol(socket);
          Scanner scanner = new Scanner(System.in)) {
+
 
       System.out.println("You connected to the server");
       System.out.println("Commands:");
