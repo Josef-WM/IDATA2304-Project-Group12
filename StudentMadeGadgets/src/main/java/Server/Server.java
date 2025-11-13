@@ -15,7 +15,7 @@ public class Server {
 
   private static final Greenhouse greenhouse = new Greenhouse("Greenhouse A");
   private static final TemperatureSensor tempSensor = new TemperatureSensor("TEMP-A", greenhouse);
-  private static final FanActuator fan = new FanActuator(1, greenhouse);
+  private static final FanActuator fan = new FanActuator("1", greenhouse);
 
   /**
    * Javadoc placeholder.
