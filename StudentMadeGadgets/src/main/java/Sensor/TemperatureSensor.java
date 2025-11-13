@@ -2,6 +2,9 @@ package Sensor;
 
 import Greenhouse.Greenhouse;
 
+/**
+ * Javadoc placeholder.
+ */
 public class TemperatureSensor implements Sensor {
   private final String id;
   private final Greenhouse greenhouse;
@@ -15,15 +18,15 @@ public class TemperatureSensor implements Sensor {
     return id;
   }
 
-  @Override public String getType(){
+  @Override public String getType() {
     return "Temperature";
   }
 
-  @Override public String getUnit(){
+  @Override public String getUnit() {
     return "Celsius";
   }
 
-  @Override public double read(){
+  @Override public double read() {
     return greenhouse.getTemperature();
   }
 }
