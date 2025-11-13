@@ -26,15 +26,15 @@ public class ControlPanelNode {
       System.out.println("Commands:");
       System.out.println("  READ temp");
       System.out.println("  TOGGLE fan");
-      System.out.println("  exit");
+      System.out.println("  EXIT");
       System.out.println();
 
       while (true) {
         System.out.print("> ");
         String input = scanner.nextLine().trim();
 
-        if (input.equalsIgnoreCase("exit")) {
-          protocol.sendMessage("QUIT");
+        if (input.equalsIgnoreCase("EXIT")) {
+          protocol.sendMessage("EXIT");
           break;
         }
 

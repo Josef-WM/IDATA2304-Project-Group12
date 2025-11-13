@@ -50,8 +50,9 @@ public class Server {
         message = message.trim();
         System.out.println("Got: " + message);
 
-        if (message.equals("exit")) {
+        if (message.equals("EXIT")) {
           protocol.sendMessage("Goodbye");
+          System.out.println("A client has disconnected: " + socket.getRemoteSocketAddress());
           break;
         }
 
