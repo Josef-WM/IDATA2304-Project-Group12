@@ -1,7 +1,8 @@
-import Actuator.FanActuator;
-import Client.SensorNode;
-import Greenhouse.Greenhouse;
-import Sensor.TemperatureSensor;
+import Server.Server;
+import Client.ControlPanelNode;
+
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Javadoc placeholder.
@@ -11,14 +12,20 @@ public class Main {
   /**
    * Javadoc placeholder.
    */
-  public static void main(String[] args) {
-    Greenhouse greenhouseA = new Greenhouse("Greenhouse A");
-    SensorNode sensorNode = new SensorNode(greenhouseA);
-    TemperatureSensor temperatureSensor = new TemperatureSensor("TEMP-A", greenhouseA);
+  public static void main(String[] args) throws IOException {
+    System.out.println("Welcome to SMG");
+    System.out.println("To set up a server use RUN server");
+    System.out.println("To enter a Control Panel use RUN cpanel");
+    Scanner scanner = new Scanner(System.in);
+    String input = scanner.nextLine();
 
-
-    System.out.println(temperatureSensor.read());
-    greenhouseA.changeTemperature(2.2);
-    System.out.println(temperatureSensor.read());
+    if (input.startsWith("RUN")) {
+      if (input.contains("server")) {
+        Server.runServer();
+      }
+      else if (input.contains("cpanel")) {
+        ControlPanelNode.runControlPanel();
+      }
+    }
   }
 }

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 
 public class ControlPanelNode {
-  public static void main(String[] args) {
+  public static void runControlPanel() {
     try (Socket socket = new Socket("localhost", 6767);
          Protocol protocol = new Protocol(socket);
          Scanner scanner = new Scanner(System.in)) {

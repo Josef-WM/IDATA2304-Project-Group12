@@ -20,7 +20,7 @@ public class Server {
   /**
    * Javadoc placeholder.
    */
-  public static void main(String[] args) throws IOException {
+  public static void runServer() throws IOException {
     try (ServerSocket serverSocket = new ServerSocket(6767)) {
       System.out.println("Server is now listening on 6767");
 
