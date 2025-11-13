@@ -47,7 +47,7 @@ public class Greenhouse {
    */
   private void graduallyUpdateEnvironment() {
     double tempChange = (random.nextDouble() - 1.5);
-    this.temperature = clamp(this.temperature + tempChange, -5, 40);
+    this.temperature = (double) Math.round(clamp(this.temperature + tempChange, -5, 40) * 10) / 10;
 
     int humChange = random.nextInt(7) - 3;
     this.humidity = (int) clamp(this.humidity + humChange, 0, 100);
