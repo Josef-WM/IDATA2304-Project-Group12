@@ -2,6 +2,9 @@ package Greenhouse;
 
 import Client.SensorNode;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Javadoc placeholder.
@@ -14,6 +17,9 @@ public class Greenhouse {
   private int light;
   private int humidity;
 
+  private final Random random = new Random();
+  private final Timer timer = new Timer(true);
+
   /**
    * Constructor for the Greenhouse class.
    */
@@ -23,6 +29,35 @@ public class Greenhouse {
     this.humidity = 60;
     this.light = 1000;
     this.sensorNodes = new ArrayList<>();
+
+    startGradualUpdater();
+  }
+
+  private void startGradualUpdater() {
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        graduallyUpdateEnvironment();
+      }
+    }, 0, 10_000); // every 10 seconds
+  }
+
+  /**
+   * Applies small random changes to the environment.
+   */
+  private void graduallyUpdateEnvironment() {
+    double tempChange = (random.nextDouble() - 1.5);
+    this.temperature = clamp(this.temperature + tempChange, -5, 40);
+
+    int humChange = random.nextInt(7) - 3;
+    this.humidity = (int) clamp(this.humidity + humChange, 0, 100);
+
+    int lightChange = random.nextInt(201) - 100;
+    this.light = (int) clamp(this.light + lightChange, 0, 5000);
+  }
+
+  private double clamp(double value, double min, double max) {
+    return Math.max(min, Math.min(max, value));
   }
 
   /**
