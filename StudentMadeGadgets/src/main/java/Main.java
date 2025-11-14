@@ -1,8 +1,7 @@
-import server.Server;
 import client.ControlPanelNode;
-
 import java.io.IOException;
 import java.util.Scanner;
+import server.Server;
 
 /**
  * Javadoc placeholder.
@@ -22,9 +21,9 @@ public class Main {
     if (input.startsWith("RUN")) {
       if (input.contains("server")) {
         Server.runServer();
-      }
-      else if (input.contains("cpanel")) {
-        ControlPanelNode.runControlPanel();
+      } else if (input.contains("cpanel")) {
+        ControlPanelNode controlPanelNode = new ControlPanelNode("localhost", 6767);
+        controlPanelNode.connect();
       }
     }
   }

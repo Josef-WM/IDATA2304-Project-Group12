@@ -6,7 +6,7 @@ import greenhouse.Greenhouse;
  * Represents a fan, acts as an actuator in a greenhouse.
  */
 public class FanActuator implements Actuator {
-  private Greenhouse greenhouse;
+  private final Greenhouse greenhouse;
   private final String id;
   private boolean isOn;
   private int speed;
@@ -52,7 +52,7 @@ public class FanActuator implements Actuator {
   /**
    * Toggles the fan
    * Turning it on if off
-   * And off if on
+   * And off if on.
    */
   public boolean toggle() {
     if (isOn) {
@@ -64,6 +64,11 @@ public class FanActuator implements Actuator {
     }
   }
 
+  /**
+   * Returns the isOn() state.
+   *
+   * @return boolean isOn() state
+   */
   public boolean isOn() {
     return this.isOn;
   }

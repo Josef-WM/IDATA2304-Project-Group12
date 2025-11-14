@@ -1,33 +1,45 @@
 package client;
 
-import protocol.Protocol;
-import java.net.Socket;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Scanner;
+import protocol.Protocol;
 
+/**
+ * ControlPanelNode class, includes methods for connecting
+ * to and sending commands to the server.
+ */
 public class ControlPanelNode {
+  String host = "localhost";
+  int port = 6767;
 
-  public static void main(String[] args) {
-    runControlPanel();
+  /**
+   * Constructor for the ControlPanelNode class.
+   *
+   * @param host the host/ip of the server to connect to, defaults to localhost
+   * @param port the port number to use, defaults to 6767 per the protocol specifications
+   */
+  public ControlPanelNode(String host, int port) {
+    this.host = host;
+    this.port = port;
   }
 
-  public static void runControlPanel() {
-    System.out.println("Enter IP of server host:");
-    Scanner scanner = new Scanner(System.in);
-    String hostID = scanner.nextLine();
-    if (hostID.isBlank()) {
-      hostID = "Localhost";
-    }
-    try (Socket socket = new Socket(hostID, 6767);
-         Protocol protocol = new Protocol(socket);) {
+  /**
+   * Connects to the server, specified with the host and port.
+   */
+  public void connect() throws IOException {
+    try (Socket socket = new Socket(host, port);
+         Protocol protocol = new Protocol(socket)) {
 
+      System.out.println("Connected to " + host + ":" + port);
 
-      System.out.println("You connected to the server");
       System.out.println("Commands:");
       System.out.println("  READ temp");
       System.out.println("  TOGGLE fan");
       System.out.println("  EXIT");
       System.out.println();
+
+      Scanner scanner = new Scanner(System.in);
 
       while (true) {
         System.out.print("> ");
