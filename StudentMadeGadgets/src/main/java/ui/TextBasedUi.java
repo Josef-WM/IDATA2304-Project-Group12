@@ -90,7 +90,7 @@ public class TextBasedUi {
     System.out.print("Enter your choice: ");
   }
 
-  // Connects a control panel to the server and sets it to the active one
+  // Connects your control panel to a server
   private void connectToServer() {
     System.out.println("Enter a Server host's IP:");
     try {

@@ -25,10 +25,12 @@ public class ControlPanelNode {
     this.port = port;
   }
 
+  // Set the control panel's connection host
   public void setHost(String host) {
     this.host = host;
   }
 
+  // Set the control panel's connection port
   public void setPort(int port) {
     this.port = port;
   }
@@ -44,14 +46,20 @@ public class ControlPanelNode {
     }
   }
 
+  // Disconnects the panel from the server
   public void disconnect() throws IOException {
     socket.close();
   }
 
+  // Returns the connection socket
   public Socket getSocket() {
     return this.socket;
   }
 
+  /**
+   * Returns True if the panel is connected to a server
+   * Returns False if the panel is not connected to a server
+   */
   public boolean isConnected() {
     return (this.socket != null);
   }
