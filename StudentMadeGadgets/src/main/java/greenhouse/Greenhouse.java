@@ -46,7 +46,7 @@ public class Greenhouse {
    * Applies small random changes to the environment.
    */
   private void graduallyUpdateEnvironment() {
-    double tempChange = (random.nextDouble() - 1.5);
+    double tempChange = ((random.nextDouble() - 0.5) * 3);
     this.temperature = (double) Math.round(clamp(this.temperature + tempChange, -5, 40) * 10) / 10;
 
     int humChange = random.nextInt(7) - 3;

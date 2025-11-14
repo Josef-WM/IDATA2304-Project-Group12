@@ -9,7 +9,8 @@ public class FanActuator implements Actuator {
   private Greenhouse greenhouse;
   private final String id;
   private boolean isOn;
-  private float speed;
+  private int speed;
+  private double heatDifference;
 
   /**
    * constructor for the FanActuator class.
@@ -19,6 +20,8 @@ public class FanActuator implements Actuator {
     this.isOn = false;
     this.speed = 0;
     this.greenhouse = greenhouse;
+    this.heatDifference = 0;
+
   }
 
   /**
@@ -32,7 +35,8 @@ public class FanActuator implements Actuator {
    * turns on the fan actuator.
    */
   public void turnOn() {
-    greenhouse.changeTemperature(-5);
+    this.heatDifference = this.heatDifference - 5*(1+speed*0.2);
+    greenhouse.changeTemperature(this.heatDifference);
     isOn = true;
   }
 
@@ -40,7 +44,8 @@ public class FanActuator implements Actuator {
    * turns off the fan actuator.
    */
   public void turnOff() {
-    greenhouse.changeTemperature(5);
+    greenhouse.changeTemperature(-this.heatDifference);
+    this.heatDifference = 0;
     isOn = false;
   }
 
@@ -66,7 +71,7 @@ public class FanActuator implements Actuator {
   /**
    * sets the speed of the fan actuator.
    */
-  public void setSpeed(float speed) {
-    this.speed = speed;
+  public void setPower(int power) {
+    this.speed = power;
   }
 }

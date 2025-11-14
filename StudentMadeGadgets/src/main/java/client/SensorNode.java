@@ -66,4 +66,8 @@ public class SensorNode {
   public boolean toggleActuator(String deviceID) {
     return getActuator(deviceID).toggle();
   }
+
+  public void setActuatorPower(String deviceID, int power) {
+    getActuator(deviceID).setPower(power);
+  }
 }

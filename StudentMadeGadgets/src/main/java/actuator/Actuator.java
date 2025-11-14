@@ -7,4 +7,5 @@ public interface Actuator {
   }
   boolean isOn();
   boolean toggle();
+  default void setPower(int power) {};
 }
