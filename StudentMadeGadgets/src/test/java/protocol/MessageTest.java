@@ -106,8 +106,8 @@ class MessageTest {
    */
   @Test
   void testSetAndGetMessageID() {
-    message.setMessageID("abc123");
-    assertEquals("abc123", message.getMessageID());
+    message.setMessageID("GreenFN");
+    assertEquals("GreenFN", message.getMessageID());
   }
 
   /**
@@ -124,8 +124,8 @@ class MessageTest {
    */
   @Test
   void testSetAndGetTimestamp() {
-    message.setTimestamp(9999L);
-    assertEquals(9999L, message.getTimestamp());
+    message.setTimestamp(67L);
+    assertEquals(67L, message.getTimestamp());
   }
 
   /**

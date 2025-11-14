@@ -2,6 +2,7 @@ import client.ControlPanelNode;
 import java.io.IOException;
 import java.util.Scanner;
 import server.Server;
+import ui.TextBasedUi;
 
 /**
  * Javadoc placeholder.
@@ -12,6 +13,12 @@ public class Main {
    * Javadoc placeholder.
    */
   public static void main(String[] args) throws IOException {
+
+    // code for using the text based user interface
+    TextBasedUi ui = new TextBasedUi();
+    // ui.start();
+
+
     System.out.println("Welcome to SMG");
     System.out.println("To set up a server use RUN server");
     System.out.println("To enter a Control Panel use RUN cpanel");
