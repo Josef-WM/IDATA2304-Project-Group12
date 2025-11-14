@@ -25,6 +25,13 @@ public class FanActuator implements Actuator {
   }
 
   /**
+   * Returns the type of the actuator
+   */
+  public String getType() {
+    return "Fan";
+  }
+
+  /**
    * Returns the id of the fan.
    */
   public String getID() {
