@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class TextBasedUi {
 
   Scanner scanner = new Scanner(System.in);
-  ControlPanelNode activeControlPanel;
+  ControlPanelNode activeControlPanel = new ControlPanelNode("Localhost", 6767);
   /**
    * Starts the text based user interface.
    */
@@ -20,7 +20,7 @@ public class TextBasedUi {
     try {
       boolean running = true;
       while (running) {
-        if (activeControlPanel == null) {
+        if (!activeControlPanel.isConnected()) {
           displayServerConnectionMenu();
           int choice = getUserChoice();
           switch (choice) {
@@ -45,6 +45,12 @@ public class TextBasedUi {
               // TODO: List all Greenhouses on the server that
               //  'activeControlPanel' is connected to
               System.out.println("Work in progress! :)");
+              break;
+            case 2:
+              activeControlPanel.disconnect();
+              activeControlPanel = null;
+              System.out.println("You have been disconnected from the server");
+              running = false;
               break;
             default:
               System.out.println("Invalid choice. Please try again.");
@@ -82,14 +88,16 @@ public class TextBasedUi {
   private void displayControlPanelMainPage() {
     displayHeader();
     System.out.println("1. Lists all Greenhouses on the server");
+    System.out.println("2. Disconnect from server");
   }
 
   // Connects a control panel to the server and sets it to the active one
-  private void connectToServer() throws IOException {
+  private void connectToServer() {
     System.out.println("Enter a Server host's IP:");
     try {
       String hostIP = scanner.nextLine();
-      activeControlPanel = new ControlPanelNode(hostIP, 6767);
+      activeControlPanel.setHost(hostIP);
+      activeControlPanel.connect();
     } catch (Exception e) {
       System.out.println("Failed to connect to server. " + e.getMessage());
     }
@@ -102,10 +110,9 @@ public class TextBasedUi {
    * @return the user's choice, as an integer
    */
   private int getUserChoice() {
-    Scanner input = new Scanner(System.in);
     try {
-      int choice = input.nextInt();
-      input.nextLine();
+      int choice = scanner.nextInt();
+      scanner.nextLine();
       return choice;
     } catch (Exception e) {
       System.out.println("Invalid choice. Please try again.");

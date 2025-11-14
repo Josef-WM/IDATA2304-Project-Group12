@@ -10,8 +10,9 @@ import protocol.Protocol;
  * to and sending commands to the server.
  */
 public class ControlPanelNode {
-  String host = "localhost";
-  int port = 6767;
+  String host;
+  int port;
+  Socket socket;
 
   /**
    * Constructor for the ControlPanelNode class.
@@ -24,45 +25,34 @@ public class ControlPanelNode {
     this.port = port;
   }
 
+  public void setHost(String host) {
+    this.host = host;
+  }
+
+  public void setPort(int port) {
+    this.port = port;
+  }
+
   /**
    * Connects to the server, specified with the host and port.
    */
-  public void connect() throws IOException {
-    try (Socket socket = new Socket(host, port);
-         Protocol protocol = new Protocol(socket)) {
-
-      System.out.println("Connected to " + host + ":" + port);
-
-      System.out.println("Commands:");
-      System.out.println("  READ temp");
-      System.out.println("  TOGGLE fan");
-      System.out.println("  EXIT");
-      System.out.println();
-
-      Scanner scanner = new Scanner(System.in);
-
-      while (true) {
-        System.out.print("> ");
-        String input = scanner.nextLine().trim();
-
-        if (input.equalsIgnoreCase("EXIT")) {
-          protocol.sendMessage("EXIT");
-          break;
-        }
-
-        // send the command to the server
-        protocol.sendMessage(input);
-
-        // print server reply
-        String reply = protocol.readMessage();
-        if (reply == null) {
-          System.out.println("Server closed the connection.");
-          break;
-        }
-        System.out.println(reply);
-      }
+  public void connect() {
+    try {
+      socket = new Socket(host,port);
     } catch (IOException e) {
       System.out.println("Failed to connect to the server " + e.getMessage());
     }
+  }
+
+  public void disconnect() throws IOException {
+    socket.close();
+  }
+
+  public Socket getSocket() {
+    return this.socket;
+  }
+
+  public boolean isConnected() {
+    return (this.socket != null);
   }
 }
