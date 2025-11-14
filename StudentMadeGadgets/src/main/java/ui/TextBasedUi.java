@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class TextBasedUi {
 
   Scanner scanner = new Scanner(System.in);
+  ControlPanelNode activeControlPanel;
   /**
    * Starts the text based user interface.
    */
@@ -19,21 +20,35 @@ public class TextBasedUi {
     try {
       boolean running = true;
       while (running) {
-        displayServerConnectionMenu();
-        int choice = getUserChoice();
+        if (activeControlPanel == null) {
+          displayServerConnectionMenu();
+          int choice = getUserChoice();
+          switch (choice) {
+            case 1:
+              // connect to a server
+              connectToServer();
+              break;
+            case 2:
+              // exit the program
+              System.out.println("Goodbye!");
+              running = false;
+              break;
 
-        switch (choice) {
-          case 1:
-            // connect to a server
-            connectToServer();
-            break;
-          case 2:
-            // exit the program
-            running = false;
-            break;
-
-          default:
-            System.out.println("Invalid choice. Please try again.");
+            default:
+              System.out.println("Invalid choice. Please try again.");
+          }
+        } else {
+          displayControlPanelMainPage();
+          int choice = getUserChoice();
+          switch (choice) {
+            case 1:
+              // TODO: List all Greenhouses on the server that
+              //  'activeControlPanel' is connected to
+              System.out.println("Work in progress! :)");
+              break;
+            default:
+              System.out.println("Invalid choice. Please try again.");
+          }
         }
       }
     } catch (Exception e) {
@@ -61,12 +76,20 @@ public class TextBasedUi {
     System.out.print("Enter your choice: ");
   }
 
-  // Connects and creates a Control Panel to a specified server.
+  /**
+   * Displays the main control panel page
+   */
+  private void displayControlPanelMainPage() {
+    displayHeader();
+    System.out.println("1. Lists all Greenhouses on the server");
+  }
+
+  // Connects a control panel to the server and sets it to the active one
   private void connectToServer() throws IOException {
     System.out.println("Enter a Server host's IP:");
     try {
       String hostIP = scanner.nextLine();
-      ControlPanelNode controlPanelNode = new ControlPanelNode(hostIP, 6767);
+      activeControlPanel = new ControlPanelNode(hostIP, 6767);
     } catch (Exception e) {
       System.out.println("Failed to connect to server. " + e.getMessage());
     }
