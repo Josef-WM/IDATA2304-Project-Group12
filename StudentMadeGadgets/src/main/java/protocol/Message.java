@@ -54,7 +54,7 @@ public final class Message {
   }
 
   public void setMessageType(String messageType) {
-    this.source = messageType;
+    this.messageType = messageType;
   }
 
   public String getMessageID() {
