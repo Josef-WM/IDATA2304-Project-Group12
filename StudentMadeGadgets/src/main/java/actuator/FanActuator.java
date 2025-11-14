@@ -22,7 +22,7 @@ public class FanActuator implements Actuator {
   }
 
   /**
-   * Returns the id of the fan
+   * Returns the id of the fan.
    */
   public String getID() {
     return this.id;
@@ -61,6 +61,13 @@ public class FanActuator implements Actuator {
 
   public boolean isOn() {
     return this.isOn;
+  }
+
+  /**
+   * Gets the speed of the fan.
+   */
+  public float getSpeed() {
+    return this.speed;
   }
 
   /**
