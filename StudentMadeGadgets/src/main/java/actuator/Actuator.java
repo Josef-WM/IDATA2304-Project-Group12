@@ -8,4 +8,5 @@ public interface Actuator {
   boolean isOn();
   boolean toggle();
   default void setPower(int power) {};
+  default int getPower() { return -1; }
 }

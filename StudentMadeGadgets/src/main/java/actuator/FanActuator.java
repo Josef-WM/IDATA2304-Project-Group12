@@ -83,7 +83,14 @@ public class FanActuator implements Actuator {
   /**
    * sets the speed of the fan actuator.
    */
-  public void setPower(int power) {
-    this.speed = power;
+  public void setPower(int speed) {
+    this.speed = speed;
+  }
+
+  /**
+   * Gets the power of the fan actuator.
+   */
+  public int getPower() {
+    return this.speed;
   }
 }
