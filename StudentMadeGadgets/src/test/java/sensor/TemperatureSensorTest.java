@@ -4,78 +4,98 @@ import greenhouse.Greenhouse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the {@link TemperatureSensor} class.
+ * Unit tests for TemperatureSensor.
  *
- * <p>This test class validates the following:</p>
- * <ul>
- *     <li>The sensor correctly exposes its ID</li>
- *     <li>The sensor reports the proper type ("Temperature")</li>
- *     <li>The sensor reports the proper unit ("Celsius")</li>
- *     <li>The sensor reads the temperature value supplied by the associated {@link Greenhouse}</li>
- * </ul>
+ * <p>Uses reflection to set the internal temperature field in Greenhouse
+ * to keep tests deterministic and independent of the timer-based updates.</p>
  */
 class TemperatureSensorTest {
 
   private Greenhouse greenhouse;
   private TemperatureSensor sensor;
 
-  /**
-   * Initializes a new {@link Greenhouse} instance and a {@link TemperatureSensor}
-   * before each test.
-   *
-   * <p>The greenhouse starts with a default temperature of 14°C, so tests that
-   * need a different value adjust it using {@code changeTemperature(delta)}.</p>
-   */
   @BeforeEach
   void setUp() {
+    // Arrange
     greenhouse = new Greenhouse("TestHouse");
     sensor = new TemperatureSensor("temp1", greenhouse);
   }
 
   /**
-   * Ensures that {@link TemperatureSensor#getID()} returns the ID supplied in the constructor.
-   */
-  @Test
-  void testGetID() {
-    assertEquals("temp1", sensor.getID(),
-            "Sensor ID should match the constructor argument");
-  }
-
-  /**
-   * Ensures that {@link TemperatureSensor#getType()} returns the correct sensor type.
-   */
-  @Test
-  void testGetType() {
-    assertEquals("Temperature", sensor.getType(),
-            "Sensor type must be 'Temperature'");
-  }
-
-  /**
-   * Ensures that {@link TemperatureSensor#getUnit()} returns the correct unit.
-   */
-  @Test
-  void testGetUnit() {
-    assertEquals("Celsius", sensor.getUnit(),
-            "TemperatureSensor unit must be 'Celsius'");
-  }
-
-  /**
-   * Verifies that TemperatureSensor returns the temperature from the greenhouse.
+   * Helper method to set the temperature field on Greenhouse via reflection.
    *
-   * <p>The greenhouse starts at 14°C, so we increase the temperature by +6.5°C, since it has variation or temperature random
-   * by a few decimals it will sometimes fail, which are expected. </p>
+   * @param value temperature value to inject
    */
-  @Test
-  void testReadReturnsCurrentGreenhouseTemperature() {
-    // Greenhouse initial temperature = 14°C
-    greenhouse.changeTemperature(6.5); // Now expected temperature = 20.5°C
+  private void setTemperature(double value) {
+    try {
+      Field field = Greenhouse.class.getDeclaredField("temperature");
+      field.setAccessible(true);
+      field.setDouble(greenhouse, value);
+    } catch (Exception e) {
+      fail("Failed to set temperature via reflection: " + e.getMessage());
+    }
+  }
 
+  @Test
+  void getId_Positive_ReturnsConstructorValue() {
+    // Arrange done in setUp()
+
+    // Act
+    String id = sensor.getID();
+
+    // Assert
+    assertEquals("temp1", id);
+  }
+
+  @Test
+  void getType_Positive_ReturnsTemperature() {
+    // Arrange
+
+    // Act
+    String type = sensor.getType();
+
+    // Assert
+    assertEquals("Temperature", type);
+  }
+
+  @Test
+  void getUnit_Positive_ReturnsCelsius() {
+    // Arrange
+
+    // Act
+    String unit = sensor.getUnit();
+
+    // Assert
+    assertEquals("Celsius", unit);
+  }
+
+  @Test
+  void read_Positive_ReturnsGreenhouseTemperature() {
+    // Arrange
+    setTemperature(22.5);
+
+    // Act
     double value = sensor.read();
 
-    assertEquals(20.5, value, 0.0001,
-            "Sensor should return the updated greenhouse temperature");
+    // Assert
+    assertEquals(22.5, value, 0.0001);
+  }
+
+  @Test
+  void read_Negative_HandlesLowNegativeTemperature() {
+    // Arrange
+    setTemperature(-3.7);
+
+    // Act
+    double value = sensor.read();
+
+    // Assert
+    assertEquals(-3.7, value, 0.0001,
+            "Sensor should still return negative values if greenhouse is below 0°C");
   }
 }
