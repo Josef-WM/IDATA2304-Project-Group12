@@ -1,8 +1,6 @@
 package ui;
 
 import client.ControlPanelNode;
-
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -89,6 +87,7 @@ public class TextBasedUi {
     displayHeader();
     System.out.println("1. Lists all Greenhouses on the server");
     System.out.println("2. Disconnect from server");
+    System.out.print("Enter your choice: ");
   }
 
   // Connects a control panel to the server and sets it to the active one
