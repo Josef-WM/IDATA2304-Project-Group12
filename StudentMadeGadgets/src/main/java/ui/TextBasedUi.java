@@ -11,6 +11,7 @@ import java.util.Scanner;
  */
 public class TextBasedUi {
 
+  Scanner scanner = new Scanner(System.in);
   /**
    * Starts the text based user interface.
    */
@@ -18,19 +19,15 @@ public class TextBasedUi {
     try {
       boolean running = true;
       while (running) {
-        displayMenu();
+        displayServerConnectionMenu();
         int choice = getUserChoice();
 
         switch (choice) {
           case 1:
-            // list available greenhouses
+            // connect to a server
+            connectToServer();
             break;
-
           case 2:
-            connectToGreenhouse();
-            break;
-
-          case 3:
             // exit the program
             running = false;
             break;
@@ -46,23 +43,33 @@ public class TextBasedUi {
   }
 
   /**
-   * Displays the main menu.
+   * Displays application header
    */
-  private void displayMenu() {
+  public void displayHeader() {
     System.out.println("===============================");
     System.out.println("=== SMART GREENHOUSE CLIENT ===");
     System.out.println("===============================");
-    System.out.println("1. List Available Greenhouses");
-    System.out.println("2. Connect to a Greenhouse");
-    System.out.println("3. Exit");
+  }
+
+  /**
+   * Displays server connection menu.
+   */
+  private void displayServerConnectionMenu() {
+    displayHeader();
+    System.out.println("1. Connect to a server");
+    System.out.println("2. Exit");
     System.out.print("Enter your choice: ");
   }
 
-  // not fully implemented yet, just connects to
-  // the server on localhost:6767
-  private void connectToGreenhouse() throws IOException {
-    ControlPanelNode controlPanelNode = new ControlPanelNode("localhost", 6767);
-    controlPanelNode.connect();
+  // Connects and creates a Control Panel to a specified server.
+  private void connectToServer() throws IOException {
+    System.out.println("Enter a Server host's IP:");
+    try {
+      String hostIP = scanner.nextLine();
+      ControlPanelNode controlPanelNode = new ControlPanelNode(hostIP, 6767);
+    } catch (Exception e) {
+      System.out.println("Failed to connect to server. " + e.getMessage());
+    }
   }
 
   /**
