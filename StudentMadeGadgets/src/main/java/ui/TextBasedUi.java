@@ -1,5 +1,8 @@
 package ui;
 
+import client.ControlPanelNode;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -24,7 +27,7 @@ public class TextBasedUi {
             break;
 
           case 2:
-            // connect to a greenhouse
+            connectToGreenhouse();
             break;
 
           case 3:
@@ -53,6 +56,13 @@ public class TextBasedUi {
     System.out.println("2. Connect to a Greenhouse");
     System.out.println("3. Exit");
     System.out.print("Enter your choice: ");
+  }
+
+  // not fully implemented yet, just connects to
+  // the server on localhost:6767
+  private void connectToGreenhouse() throws IOException {
+    ControlPanelNode controlPanelNode = new ControlPanelNode("localhost", 6767);
+    controlPanelNode.connect();
   }
 
   /**
