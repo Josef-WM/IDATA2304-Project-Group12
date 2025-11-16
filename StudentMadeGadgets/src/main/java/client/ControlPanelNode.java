@@ -49,6 +49,7 @@ public class ControlPanelNode {
   // Disconnects the panel from the server
   public void disconnect() throws IOException {
     socket.close();
+    socket = null;
   }
 
   // Returns the connection socket
@@ -61,6 +62,6 @@ public class ControlPanelNode {
    * Returns False if the panel is not connected to a server
    */
   public boolean isConnected() {
-    return (this.socket != null);
+    return this.socket != null && socket.isConnected() && !socket.isClosed();
   }
 }

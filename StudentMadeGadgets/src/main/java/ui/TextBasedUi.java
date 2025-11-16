@@ -46,9 +46,7 @@ public class TextBasedUi {
               break;
             case 2:
               activeControlPanel.disconnect();
-              activeControlPanel = null;
               System.out.println("You have been disconnected from the server");
-              running = false;
               break;
             default:
               System.out.println("Invalid choice. Please try again.");
