@@ -42,7 +42,7 @@ public class ControlPanelNode {
     try {
       socket = new Socket(host,port);
     } catch (IOException e) {
-      System.out.println("Failed to connect to the server " + e.getMessage());
+      System.out.println("Failed to connect to the server: " + e.getMessage());
     }
   }
 

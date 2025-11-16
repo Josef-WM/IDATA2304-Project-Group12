@@ -2,28 +2,28 @@ package server;
 
 import actuator.FanActuator;
 import greenhouse.Greenhouse;
+import greenhouse.GreenhouseRegistry;
 import protocol.Protocol;
 import sensor.TemperatureSensor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 /**
  * Javadoc placeholder.
  */
 public class Server {
 
-  private static final Greenhouse greenhouse = new Greenhouse("Greenhouse A");
-  private static final TemperatureSensor tempSensor = new TemperatureSensor("TEMP-A", greenhouse);
-  private static final FanActuator fan = new FanActuator("1", greenhouse);
+  private static GreenhouseRegistry greenhouseRegistry = new GreenhouseRegistry();
 
   /**
-   * Alternate way to run a server
+   * Force start a server
    */
   public static void main(String[] args) throws IOException {
     runServer();
   }
-  
+
   /**
    * Starts a new server on port 6767
    */
@@ -55,48 +55,9 @@ public class Server {
           System.out.println("A client has disconnected: " + socket.getRemoteSocketAddress());
           break;
         }
-
-        String reply = handleCommand(message);
-        protocol.sendMessage(reply);
       }
     } catch (IOException e) {
       System.out.println("Client error: " + e.getMessage());
     }
-  }
-
-  /**
-   * Javadoc placeholder.
-   */
-  private static String handleCommand(String message) {
-    String[] parts = message.split("\\s+");
-    if (parts.length < 2) {
-      return "ERROR: Command must have at least one argument (Example: READ temp)";
-    }
-
-    String verb = parts[0].toUpperCase();
-    String target = parts[1].toUpperCase();
-
-    return switch (verb) {
-      case "READ" -> {
-        if (target.equals("TEMP")) {
-          double value = tempSensor.read();
-          yield "Temperature: " + value + " " + tempSensor.getUnit();
-        }
-        yield "ERROR: Unknown READ target: " + target;
-      }
-      case "TOGGLE" -> {
-        if (target.equals("FAN")) {
-          if (fan.isOn()) {
-            fan.turnOff();
-            yield "Fan turned OFF";
-          } else {
-            fan.turnOn();
-            yield "Fan turned ON";
-          }
-        }
-        yield "ERROR: Unknown TOGGLE target: " + target;
-      }
-      default -> "ERROR: Unknown command: " + verb;
-    };
   }
 }

@@ -10,6 +10,7 @@ import java.util.TimerTask;
  * Javadoc placeholder.
  */
 public class Greenhouse {
+  private int greenhouseId;
   private String greenhouseName;
   private ArrayList<SensorNode> sensorNodes;
 
@@ -23,7 +24,8 @@ public class Greenhouse {
   /**
    * Constructor for the Greenhouse class.
    */
-  public Greenhouse(String name) {
+  public Greenhouse(int id, String name) {
+    this.greenhouseId = id;
     this.greenhouseName = name;
     this.temperature = 14;
     this.humidity = 60;
@@ -31,6 +33,10 @@ public class Greenhouse {
     this.sensorNodes = new ArrayList<>();
 
     startGradualUpdater();
+  }
+
+  public int getGreenhouseId() {
+    return this.greenhouseId;
   }
 
   private void startGradualUpdater() {

@@ -1,6 +1,8 @@
 package ui;
 
 import client.ControlPanelNode;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -16,41 +18,11 @@ public class TextBasedUi {
    */
   public void start() {
     try {
-      boolean running = true;
-      while (running) {
+      while (true) {
         if (!activeControlPanel.isConnected()) {
-          displayServerConnectionMenu();
-          int choice = getUserChoice();
-          switch (choice) {
-            case 1:
-              // connect to a server
-              connectToServer();
-              break;
-            case 2:
-              // exit the program
-              System.out.println("Goodbye!");
-              running = false;
-              break;
-
-            default:
-              System.out.println("Invalid choice. Please try again.");
-          }
+          serverConnectionMenu();
         } else {
           displayControlPanelMainPage();
-          int choice = getUserChoice();
-          switch (choice) {
-            case 1:
-              // TODO: List all Greenhouses on the server that
-              //  'activeControlPanel' is connected to
-              System.out.println("Work in progress! :)");
-              break;
-            case 2:
-              activeControlPanel.disconnect();
-              System.out.println("You have been disconnected from the server");
-              break;
-            default:
-              System.out.println("Invalid choice. Please try again.");
-          }
         }
       }
     } catch (Exception e) {
@@ -62,30 +34,55 @@ public class TextBasedUi {
   /**
    * Displays application header
    */
-  public void displayHeader() {
+  public void displayHeader(String title) {
     System.out.println("===============================");
-    System.out.println("=== SMART GREENHOUSE CLIENT ===");
+    System.out.println("=== " + title + " ===");
     System.out.println("===============================");
   }
 
   /**
    * Displays server connection menu.
    */
-  private void displayServerConnectionMenu() {
-    displayHeader();
+  private void serverConnectionMenu() {
+    displayHeader("SMART GREENHOUSE CLIENT");
     System.out.println("1. Connect to a server");
     System.out.println("2. Exit");
-    System.out.print("Enter your choice: ");
+    int choice = getUserChoice("Enter choice: ");
+
+    switch (choice) {
+      case 1 -> connectToServer();
+      case 2 -> exit();
+      default -> System.out.println("Invalid choice!");
+    }
+  }
+
+  private void exit() {
+    System.out.println("Goodbye!");
+    System.exit(0);
   }
 
   /**
    * Displays the main control panel page
    */
   private void displayControlPanelMainPage() {
-    displayHeader();
+    displayHeader("SMART GREENHOUSE CLIENT");
     System.out.println("1. Lists all Greenhouses on the server");
     System.out.println("2. Disconnect from server");
-    System.out.print("Enter your choice: ");
+    int choice = getUserChoice("Enter choice: ");
+
+    switch (choice) {
+      case 1 -> System.out.println("Work in progress :(");
+      case 2 -> disconnect();
+      default -> System.out.println("Invalid choice!");
+    }
+  }
+
+  private void disconnect() {
+    try {
+      activeControlPanel.disconnect();
+    } catch (IOException e) {
+      System.out.println("Error while disconnecting control panel");
+    }
   }
 
   // Connects your control panel to a server
@@ -106,15 +103,14 @@ public class TextBasedUi {
    *
    * @return the user's choice, as an integer
    */
-  private int getUserChoice() {
-    try {
-      int choice = scanner.nextInt();
-      scanner.nextLine();
-      return choice;
-    } catch (Exception e) {
-      System.out.println("Invalid choice. Please try again.");
+  private int getUserChoice(String prompt) {
+    System.out.println(prompt);
+    while (!scanner.hasNextInt()) {
+      System.out.println("Invalid input. " + prompt);
+      scanner.next();
     }
-
-    return 0;
+    int value = scanner.nextInt();
+    scanner.nextLine();
+    return value;
   }
 }
