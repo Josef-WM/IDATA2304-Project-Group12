@@ -1,14 +1,10 @@
 package server;
 
-import actuator.FanActuator;
-import greenhouse.Greenhouse;
 import greenhouse.GreenhouseRegistry;
 import protocol.Protocol;
-import sensor.TemperatureSensor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 
 /**
  * Javadoc placeholder.
