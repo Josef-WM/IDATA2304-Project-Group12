@@ -22,7 +22,7 @@ class TemperatureSensorTest {
   @BeforeEach
   void setUp() {
     // Arrange
-    greenhouse = new Greenhouse("TestHouse");
+    greenhouse = new Greenhouse(1,"TestHouse");
     sensor = new TemperatureSensor("temp1", greenhouse);
   }
 

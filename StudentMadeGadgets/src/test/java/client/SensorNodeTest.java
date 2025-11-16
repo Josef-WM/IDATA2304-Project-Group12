@@ -100,7 +100,7 @@ class SensorNodeTest {
   @BeforeEach
   void setUp() {
     // Arrange
-    node = new SensorNode(new Greenhouse("TestHouse"));
+    node = new SensorNode(new Greenhouse(1,"TestHouse"));
   }
 
   @Test
