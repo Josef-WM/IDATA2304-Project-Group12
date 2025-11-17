@@ -2,6 +2,7 @@ package ui;
 
 import client.ControlPanelNode;
 import protocol.command.GreenhouseListData;
+import protocol.command.Information;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -69,7 +70,8 @@ public class TextBasedUi {
     displayHeader("SMART GREENHOUSE CLIENT");
     System.out.println("1. Lists all Greenhouses on the server");
     System.out.println("2. Select a greenhouse");
-    System.out.println("3. Disconnect from server");
+    System.out.println("3. Create a greenhouse");
+    System.out.println("4. Disconnect from server");
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
@@ -80,9 +82,19 @@ public class TextBasedUi {
         }
       }
       case 2 -> System.out.println("Work in progress :'(");
-      case 3 -> disconnect();
+      case 3 -> createGreenhouseMenu();
+      case 4 -> disconnect();
       default -> System.out.println("Invalid choice!");
     }
+  }
+
+  public void createGreenhouseMenu() throws IOException {
+    System.out.println("Choose greenhouse name: ");
+    String name = scanner.nextLine();
+
+    Information information = activeControlPanel.createGreenhouse(name);
+
+    System.out.println(information.getInformation());
   }
 
   private void disconnect() {

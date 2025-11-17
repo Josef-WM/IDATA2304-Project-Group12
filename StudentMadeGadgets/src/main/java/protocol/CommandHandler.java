@@ -1,25 +1,42 @@
 package protocol;
 
 import greenhouse.Greenhouse;
+import protocol.command.CreateGreenhouse;
 import protocol.command.GreenhouseListData;
+import protocol.command.Information;
 import server.Server;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class CommandHandler {
 
   public static String handleCommand(String message) {
     Message messageFromJSON = JSONHandler.deserializeFromJSONToMessage(message);
+
+    Message reply = new Message();
+    reply.setMessageID(String.valueOf(UUID.randomUUID()));
+    reply.setTimestamp(System.currentTimeMillis());
+    reply.setCorrelationID(messageFromJSON.getMessageID());
+    reply.setSource("Server");
+
     switch (messageFromJSON.getMessageType()) {
       case "GET_ALL_GREENHOUSES" -> {
-        Message reply = new Message();
-        reply.setTimestamp(13L);
         ArrayList<Greenhouse> greenhouses = Server.getGreenhouseRegistry().getAllGreenhouses();
         reply.setBody(new GreenhouseListData(greenhouses));
         reply.setMessageType("GREENHOUSE_LIST_DATA");
-        reply.setMessageID("99999999999999999999");
-        reply.setCorrelationID(messageFromJSON.getMessageID());
-        reply.setSource("Server");
+        reply.setDestination(messageFromJSON.getSource());
+        String replyJson = JSONHandler.serializeMessageToJSON(reply);
+        return replyJson;
+      }
+      case "CREATE_GREENHOUSE" -> {
+        CreateGreenhouse createGreenhouse = (CreateGreenhouse) messageFromJSON.getBody();
+        String name = createGreenhouse.getName();
+
+        Server.getGreenhouseRegistry().addGreenhouse(name);
+
+        reply.setMessageType("INFORMATION");
+        reply.setBody(new Information(name + " was added as a greenhouse."));
         reply.setDestination(messageFromJSON.getSource());
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;

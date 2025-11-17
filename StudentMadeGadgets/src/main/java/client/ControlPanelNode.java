@@ -6,7 +6,9 @@ import protocol.CommandHandler;
 import protocol.JSONHandler;
 import protocol.Message;
 import protocol.Protocol;
+import protocol.command.CreateGreenhouse;
 import protocol.command.GreenhouseListData;
+import protocol.command.Information;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -87,5 +89,21 @@ public class ControlPanelNode {
     Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
     GreenhouseListData greenhouseListData = (GreenhouseListData) replyMessage.getBody();
     return greenhouseListData;
+  }
+
+  public Information createGreenhouse(String name) throws IOException {
+    Message message = new Message();
+    message.setMessageType("CREATE_GREENHOUSE");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new CreateGreenhouse(name));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    Information information = (Information) replyMessage.getBody();
+    return information;
   }
 }

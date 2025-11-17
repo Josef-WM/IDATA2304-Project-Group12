@@ -48,7 +48,9 @@ public class Server {
       String message;
       while ((message = protocol.readMessage()) != null) {
         message = message.trim();
+        System.out.println(message);
         String reply = commandHandler.handleCommand(message);
+        System.out.println(reply);
         protocol.sendMessage(reply);
       }
     } catch (IOException e) {

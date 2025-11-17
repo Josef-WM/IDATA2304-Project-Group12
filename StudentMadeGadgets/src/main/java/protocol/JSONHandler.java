@@ -62,6 +62,8 @@ public class JSONHandler {
       case "DATA_REQUEST" -> gson.fromJson(bodyJson, DataRequest.class);
       case "SENSOR_DATA" -> gson.fromJson(bodyJson, SensorData.class);
       case "GREENHOUSE_LIST_DATA" -> gson.fromJson(bodyJson, GreenhouseListData.class);
+      case "CREATE_GREENHOUSE" -> gson.fromJson(bodyJson, CreateGreenhouse.class);
+      case "INFORMATION" -> gson.fromJson(bodyJson, Information.class);
       default -> null;
     };
   }
