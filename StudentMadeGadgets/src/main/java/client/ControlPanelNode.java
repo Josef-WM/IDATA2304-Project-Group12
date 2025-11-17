@@ -1,18 +1,27 @@
 package client;
 
+import com.google.gson.JsonObject;
+import greenhouse.Greenhouse;
+import protocol.CommandHandler;
+import protocol.JSONHandler;
+import protocol.Message;
+import protocol.Protocol;
+import protocol.command.GreenhouseListData;
+
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
-import protocol.Protocol;
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * ControlPanelNode class, includes methods for connecting
  * to and sending commands to the server.
  */
 public class ControlPanelNode {
-  String host;
-  int port;
-  Socket socket;
+  private String host;
+  private int port;
+  private Socket socket;
+  private int id;
 
   /**
    * Constructor for the ControlPanelNode class.
@@ -23,6 +32,7 @@ public class ControlPanelNode {
   public ControlPanelNode(String host, int port) {
     this.host = host;
     this.port = port;
+    this.id = 1;
   }
 
   // Set the control panel's connection host
@@ -63,5 +73,19 @@ public class ControlPanelNode {
    */
   public boolean isConnected() {
     return this.socket != null && socket.isConnected() && !socket.isClosed();
+  }
+
+  public GreenhouseListData getAllGreenhouses() throws IOException {
+    Message message = new Message();
+    message.setMessageType("GET_ALL_GREENHOUSES");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    GreenhouseListData greenhouseListData = (GreenhouseListData) replyMessage.getBody();
+    return greenhouseListData;
   }
 }

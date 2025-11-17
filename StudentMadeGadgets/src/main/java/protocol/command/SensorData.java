@@ -1,6 +1,6 @@
 package protocol.command;
 
-public class SensorData extends Command {
+public class SensorData implements Command {
   private String sensorType;
   private double data;
   private String unit;

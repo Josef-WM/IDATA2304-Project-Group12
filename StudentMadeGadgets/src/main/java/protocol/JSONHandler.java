@@ -16,20 +16,44 @@ public class JSONHandler {
   public static Message deserializeFromJSONToMessage(String json) {
     Gson gson = new Gson();
 
-    JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-    String type = String.valueOf(jsonObject.get("type"));
+    // Parse the whole JSON as a JsonObject
+    JsonObject root = gson.fromJson(json, JsonObject.class);
 
-    Message message = gson.fromJson(json, Message.class);
+    // Create the Message object
+    Message message = new Message();
 
-    JsonElement bodyElement = jsonObject.get("body");
-    if (bodyElement != null && bodyElement.isJsonObject()) {
-      message.setBody(desirializeBody(bodyElement.getAsJsonObject(), type));
+    // Basic fields
+    if (root.has("source") && !root.get("source").isJsonNull()) {
+      message.setSource(root.get("source").getAsString());
+    }
+    if (root.has("destination") && !root.get("destination").isJsonNull()) {
+      message.setDestination(root.get("destination").getAsString());
+    }
+    String messageType = root.get("messageType").getAsString();
+    message.setMessageType(messageType);
+
+    if (root.has("messageID") && !root.get("messageID").isJsonNull()) {
+      message.setMessageID(root.get("messageID").getAsString());
+    }
+    if (root.has("correlationID") && !root.get("correlationID").isJsonNull()) {
+      message.setCorrelationID(root.get("correlationID").getAsString());
+    }
+    if (root.has("timestamp") && !root.get("timestamp").isJsonNull()) {
+      message.setTimestamp(root.get("timestamp").getAsLong());
     }
 
-    return gson.fromJson(json, message.getClass());
+    // Body – this is the important part
+    if (root.has("body") && root.get("body").isJsonObject()) {
+      JsonObject bodyJson = root.getAsJsonObject("body");
+      Command body = deserializeBody(bodyJson, messageType);
+      message.setBody(body);
+    }
+
+    return message;
   }
 
-  public static Command desirializeBody(JsonObject bodyJson, String messageType) {
+
+  public static Command deserializeBody(JsonObject bodyJson, String messageType) {
     Gson gson = new Gson();
 
     return switch (messageType) {
@@ -37,6 +61,7 @@ public class JSONHandler {
       case "ACTUATOR_DATA" -> gson.fromJson(bodyJson, ActuatorData.class);
       case "DATA_REQUEST" -> gson.fromJson(bodyJson, DataRequest.class);
       case "SENSOR_DATA" -> gson.fromJson(bodyJson, SensorData.class);
+      case "GREENHOUSE_LIST_DATA" -> gson.fromJson(bodyJson, GreenhouseListData.class);
       default -> null;
     };
   }

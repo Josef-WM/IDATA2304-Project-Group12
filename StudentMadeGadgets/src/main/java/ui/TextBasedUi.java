@@ -1,6 +1,7 @@
 package ui;
 
 import client.ControlPanelNode;
+import protocol.command.GreenhouseListData;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -64,15 +65,22 @@ public class TextBasedUi {
   /**
    * Displays the main control panel page
    */
-  private void displayControlPanelMainPage() {
+  private void displayControlPanelMainPage() throws IOException {
     displayHeader("SMART GREENHOUSE CLIENT");
     System.out.println("1. Lists all Greenhouses on the server");
-    System.out.println("2. Disconnect from server");
+    System.out.println("2. Select a greenhouse");
+    System.out.println("3. Disconnect from server");
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
-      case 1 -> System.out.println("Work in progress :(");
-      case 2 -> disconnect();
+      case 1 -> {
+        GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+        for (int i = 0; i < greenhouseListData.getGreenhouses().size(); i++) {
+          System.out.println(i+1 + ". " + greenhouseListData.getGreenhouses().get(i).getGreenhouseName());
+        }
+      }
+      case 2 -> System.out.println("Work in progress :'(");
+      case 3 -> disconnect();
       default -> System.out.println("Invalid choice!");
     }
   }

@@ -1,6 +1,6 @@
 package protocol.command;
 
-public class ActuatorData extends Command {
+public class ActuatorData implements Command {
   private String actuatorType;
   private boolean isOn;
   private int power;

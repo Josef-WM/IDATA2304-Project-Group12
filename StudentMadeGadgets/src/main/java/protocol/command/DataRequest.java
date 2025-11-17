@@ -1,6 +1,6 @@
 package protocol.command;
 
-public class DataRequest extends Command {
+public class DataRequest implements Command {
   private String deviceID;
   private String dataType;
 

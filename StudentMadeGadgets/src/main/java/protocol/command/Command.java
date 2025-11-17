@@ -1,4 +1,4 @@
 package protocol.command;
 
-public abstract class Command {
+public interface Command {
 }

@@ -1,5 +1,7 @@
 package protocol;
 
+import protocol.command.Command;
+
 /**
  * Javadoc placeholder.
  */
@@ -10,9 +12,9 @@ public final class Message {
   private String messageID;
   private String correlationID;
   private long timestamp;
-  private Object body;
+  private Command body;
 
-  public Message(String source, String destination, String messageType, String messageID, String correlationID, Long timestamp, Object body) {
+  public Message(String source, String destination, String messageType, String messageID, String correlationID, Long timestamp, Command body) {
     this.source = source;
     this.destination = destination;
     this.messageType = messageType;
@@ -22,7 +24,7 @@ public final class Message {
     this.body = body;
   }
 
-  public Message(String source, String destination, String messageType, String messageID, Long timestamp, Object body) {
+  public Message(String source, String destination, String messageType, String messageID, Long timestamp, Command body) {
     this.source = source;
     this.destination = destination;
     this.messageType = messageType;
@@ -81,11 +83,11 @@ public final class Message {
     this.timestamp = timestamp;
   }
 
-  public Object getBody() {
+  public Command getBody() {
     return this.body;
   }
 
-  public void setBody(Object body) {
+  public void setBody(Command body) {
     this.body = body;
   }
 }

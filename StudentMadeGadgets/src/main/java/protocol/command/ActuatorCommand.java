@@ -4,7 +4,7 @@ import actuator.Actuator;
 
 import java.util.ArrayList;
 
-public class ActuatorCommand extends Command{
+public class ActuatorCommand implements Command {
   private ArrayList<Actuator> actuators;
   private int power;
   private boolean turnOn;

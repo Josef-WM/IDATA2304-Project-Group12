@@ -1,10 +1,13 @@
 package server;
 
+import greenhouse.Greenhouse;
 import greenhouse.GreenhouseRegistry;
+import protocol.CommandHandler;
 import protocol.Protocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Javadoc placeholder.
@@ -12,7 +15,7 @@ import java.net.Socket;
 public class Server {
 
   private static GreenhouseRegistry greenhouseRegistry = new GreenhouseRegistry();
-
+  private static CommandHandler commandHandler;
   /**
    * Force start a server
    */
@@ -24,6 +27,7 @@ public class Server {
    * Starts a new server on port 6767
    */
   public static void runServer() throws IOException {
+    greenhouseRegistry.addGreenhouse("Josef");
     try (ServerSocket serverSocket = new ServerSocket(6767)) {
       System.out.println("Server is now listening on 6767");
 
@@ -44,16 +48,15 @@ public class Server {
       String message;
       while ((message = protocol.readMessage()) != null) {
         message = message.trim();
-        System.out.println("Got: " + message);
-
-        if (message.equals("EXIT")) {
-          protocol.sendMessage("Goodbye");
-          System.out.println("A client has disconnected: " + socket.getRemoteSocketAddress());
-          break;
-        }
+        String reply = commandHandler.handleCommand(message);
+        protocol.sendMessage(reply);
       }
     } catch (IOException e) {
       System.out.println("Client error: " + e.getMessage());
     }
+  }
+
+  public static GreenhouseRegistry getGreenhouseRegistry() {
+    return greenhouseRegistry;
   }
 }

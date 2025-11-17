@@ -18,8 +18,8 @@ public class Greenhouse {
   private int light;
   private int humidity;
 
-  private final Random random = new Random();
-  private final Timer timer = new Timer(true);
+  private final transient Random random = new Random();
+  private final transient Timer timer = new Timer(true);
 
   /**
    * Constructor for the Greenhouse class.
