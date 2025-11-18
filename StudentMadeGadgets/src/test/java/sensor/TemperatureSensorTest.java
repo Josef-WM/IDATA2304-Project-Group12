@@ -9,10 +9,27 @@ import java.lang.reflect.Field;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for TemperatureSensor.
+ * <body>
+ *   <h1>Tests the class TemperatureSensor</h1>
+ *   <p>The following is tested:</p>
  *
- * <p>Uses reflection to set the internal temperature field in Greenhouse
- * to keep tests deterministic and independent of the timer-based updates.</p>
+ *   <h2>Positive tests:</h2>
+ *   <ul>
+ *     <li>\`getID()\` returns the constructor-provided sensor id</li>
+ *     <li>\`getType()\` returns "Temperature"</li>
+ *     <li>\`getUnit()\` returns "Celsius"</li>
+ *     <li>\`read()\` returns the current temperature from the associated \`Greenhouse\`</li>
+ *   </ul>
+ *
+ *   <h2>Negative tests:</h2>
+ *   <ul>
+ *     <li>\`read()\` correctly handles low negative temperatures reported by the \`Greenhouse\`</li>
+ *   </ul>
+ *
+ *   <p>Note: Tests use reflection to set the private temperature field on \`Greenhouse\`
+ *   to keep execution deterministic and independent of timer-based updates.</p>
+ * </body>
+ * </html>
  */
 class TemperatureSensorTest {
 
@@ -82,7 +99,8 @@ class TemperatureSensorTest {
     // Assert
     assertEquals("Celsius", unit);
   }
-/**
+
+  /**
    * Tests that read() returns the current greenhouse temperature.
    */
   @Test
@@ -96,7 +114,8 @@ class TemperatureSensorTest {
     // Assert
     assertEquals(22.5, value, 0.0001);
   }
-/**
+
+  /**
    * Tests that read() handles negative temperature values.
    */
   @Test
