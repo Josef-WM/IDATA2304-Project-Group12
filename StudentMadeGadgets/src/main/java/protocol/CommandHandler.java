@@ -1,5 +1,6 @@
 package protocol;
 
+import actuator.Actuator;
 import client.SensorNode;
 import greenhouse.Greenhouse;
 import javafx.util.Pair;
@@ -77,6 +78,34 @@ public class CommandHandler {
               }
 
               reply.setBody(new SensorData(sensorDataHashMap));
+              reply.setDestination(messageFromJSON.getSource());
+
+              String replyJson = JSONHandler.serializeMessageToJSON(reply);
+              return replyJson;
+            } else {
+              Sensor sensor = greenhouse.getSensorNode().getSensor(deviceID);
+              reply.setBody(new SensorData(sensor.getID(), sensor.read(), sensor.getUnit()));
+              reply.setDestination(messageFromJSON.getSource());
+
+              String replyJson = JSONHandler.serializeMessageToJSON(reply);
+              return replyJson;
+            }
+          }
+          case "ACTUATOR" -> {
+            reply.setMessageType("ACTUATOR_DATA");
+
+            if (Objects.equals(deviceID, "ALL")) {
+              HashMap<String, Pair<Boolean, Integer>> actuatorDataHashMap = new HashMap<>();
+              HashMap<String, Actuator> actuators = greenhouse.getSensorNode().getActuators();
+
+              for (Map.Entry<String, Actuator> entry : actuators.entrySet()) {
+                String actuatorID = entry.getKey();
+                Actuator actuator = entry.getValue();
+
+                actuatorDataHashMap.put(actuatorID, new Pair<>(actuator.isOn(), actuator.getPower()));
+              }
+
+              reply.setBody(new ActuatorData(actuatorDataHashMap));
               reply.setDestination(messageFromJSON.getSource());
 
               String replyJson = JSONHandler.serializeMessageToJSON(reply);

@@ -1,18 +1,27 @@
 package protocol.command;
 
+import javafx.util.Pair;
+
+import java.util.HashMap;
+
 public class ActuatorData implements Command {
-  private String actuatorType;
+  private HashMap<String, Pair<Boolean, Integer>> actuatorDataHashMap;
+  private String actuatorID;
   private boolean isOn;
   private int power;
 
-  public ActuatorData(String actuatorType, boolean isOn, int power) {
-    this.actuatorType = actuatorType;
+  public ActuatorData(String actuatorID, boolean isOn, int power) {
+    this.actuatorID = actuatorID;
     this.isOn = isOn;
     this.power = power;
   }
 
-  public String getActuatorType() {
-    return this.actuatorType;
+  public ActuatorData(HashMap<String, Pair<Boolean, Integer>> actuatorDataHashMap) {
+    this.actuatorDataHashMap = actuatorDataHashMap;
+  }
+
+  public String getActuatorID() {
+    return this.actuatorID;
   }
 
   public boolean isOn() {
@@ -21,5 +30,9 @@ public class ActuatorData implements Command {
 
   public int getPower() {
     return this.power;
+  }
+
+  public HashMap<String, Pair<Boolean, Integer>> getActuatorDataHashMap() {
+    return this.actuatorDataHashMap;
   }
 }
