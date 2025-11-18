@@ -23,7 +23,7 @@ class GreenhouseTest {
   @BeforeEach
   void setUp() {
     // Arrange
-    greenhouse = new Greenhouse(1,"TestHouse");
+    greenhouse = new Greenhouse("TestHouse");
     cancelTimer();
   }
 
@@ -41,6 +41,12 @@ class GreenhouseTest {
     }
   }
 
+  /**
+   * Helper method to set a double field on Greenhouse via reflection.
+   *
+   * @param fieldName
+   * @param value
+   */
   private void setDoubleField(String fieldName, double value) {
     try {
       Field field = Greenhouse.class.getDeclaredField(fieldName);
@@ -51,6 +57,12 @@ class GreenhouseTest {
     }
   }
 
+  /**
+   * Helper method to set an int field on Greenhouse via reflection.
+   *
+   * @param fieldName
+   * @param value
+   */
   private void setIntField(String fieldName, int value) {
     try {
       Field field = Greenhouse.class.getDeclaredField(fieldName);
@@ -61,6 +73,9 @@ class GreenhouseTest {
     }
   }
 
+  /**
+   * Tests that the constructor sets initial values correctly.
+   */
   @Test
   void constructor_Positive_SetsInitialValues() {
     // Arrange done in setUp()
@@ -78,6 +93,9 @@ class GreenhouseTest {
     assertEquals(1000, light);
   }
 
+  /**
+   * Tests that setGreenhouseName changes the name correctly.
+   */
   @Test
   void setGreenhouseName_Positive_ChangesName() {
     // Arrange
@@ -89,6 +107,9 @@ class GreenhouseTest {
     assertEquals("NewName", greenhouse.getGreenhouseName());
   }
 
+  /**
+   * Tests that setGreenhouseName allows setting the name to null.
+   */
   @Test
   void setGreenhouseName_Negative_AllowsNullName() {
     // Arrange
@@ -101,6 +122,9 @@ class GreenhouseTest {
             "Greenhouse should allow setting name to null (no validation implemented)");
   }
 
+  /**
+   * Tests that changeTemperature correctly updates the temperature.
+   */
   @Test
   void changeTemperature_Positive_IncreasesTemperature() {
     // Arrange
@@ -113,6 +137,9 @@ class GreenhouseTest {
     assertEquals(15.5, greenhouse.getTemperature(), 0.0001);
   }
 
+  /**
+   * Tests that changeTemperature correctly decreases the temperature.
+   */
   @Test
   void changeTemperature_Negative_DecreasesTemperature() {
     // Arrange
@@ -125,6 +152,9 @@ class GreenhouseTest {
     assertEquals(7.0, greenhouse.getTemperature(), 0.0001);
   }
 
+  /**
+   * Tests that changeHumidity correctly updates the humidity within bounds.
+   */
   @Test
   void changeHumidity_Positive_WithinBounds() {
     // Arrange
@@ -137,6 +167,9 @@ class GreenhouseTest {
     assertEquals(60, greenhouse.getHumidity());
   }
 
+  /**
+   * Tests that changeHumidity does not exceed upper bound of 100 or go below 0.
+   */
   @Test
   void changeHumidity_Negative_DoesNotExceedUpperBound() {
     // Arrange
@@ -150,6 +183,9 @@ class GreenhouseTest {
             "Humidity should not exceed 100 even after large positive change");
   }
 
+  /**
+   * Tests that changeHumidity does not go below 0.
+   */
   @Test
   void changeHumidity_Negative_DoesNotGoBelowZero() {
     // Arrange
@@ -163,6 +199,9 @@ class GreenhouseTest {
             "Humidity should not go below 0 even after large negative change");
   }
 
+  /**
+   * Tests that changeLight correctly updates the light level.
+   */
   @Test
   void changeLight_Positive_IncreasesLight() {
     // Arrange
@@ -175,6 +214,9 @@ class GreenhouseTest {
     assertEquals(1500, greenhouse.getLight());
   }
 
+  /**
+   * Tests that changeLight correctly decreases the light level.
+   */
   @Test
   void changeLight_Negative_AllowsDecreaseBelowInitial() {
     // Arrange
@@ -187,6 +229,9 @@ class GreenhouseTest {
     assertEquals(300, greenhouse.getLight());
   }
 
+  /**
+   * Tests that adding a SensorNode increases the internal list size.
+   */
   @Test
   void addSensorNode_Positive_IncreasesListSize() {
     // Arrange
@@ -207,6 +252,9 @@ class GreenhouseTest {
     }
   }
 
+  /**
+   * Tests that removing a SensorNode decreases the internal list size.
+   */
   @Test
   void removeSensorNode_Negative_RemovingUnknownNodeDoesNotCrash() {
     // Arrange

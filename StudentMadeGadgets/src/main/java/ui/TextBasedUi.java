@@ -76,18 +76,54 @@ public class TextBasedUi {
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
-      case 1 -> {
-        GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
-        for (int i = 0; i < greenhouseListData.getGreenhouses().size(); i++) {
-          System.out.println(i+1 + ". " + greenhouseListData.getGreenhouses().get(i).getGreenhouseName() + "(#" + greenhouseListData.getGreenhouses().get(i).getGreenhouseId() + ")");
-        }
-      }
-      case 2 -> System.out.println("Work in progress :'(");
+      case 1 -> listAllGreenhouses();
+      case 2 -> selectGreenhouseMenu();
       case 3 -> createGreenhouseMenu();
       case 4 -> removeGreenhouseMenu();
       case 5 -> disconnect();
       default -> System.out.println("Invalid choice!");
     }
+  }
+
+  private void listAllGreenhouses() throws IOException {
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+    for (int i = 0; i < greenhouseListData.getGreenhouses().size(); i++) {
+      System.out.println(i + 1 + ". " + greenhouseListData.getGreenhouses().get(i).getGreenhouseName() + "(#" + greenhouseListData.getGreenhouses().get(i).getGreenhouseId() + ")");
+    }
+  }
+
+  private void selectGreenhouseMenu() throws IOException {
+    displayHeader("Available Greenhouses");
+    listAllGreenhouses();
+
+    int choice = getUserChoice("Select greenhouse: ");
+    GreenhouseControlMenu(choice);
+  }
+
+  private void GreenhouseControlMenu(int greenhouseId) {
+    displayHeader("Connected to Greenhouse #" + greenhouseId);
+    System.out.println("1. View Sensor Data");
+    System.out.println("2. View / Change Actuator Status");
+    System.out.println("3. Back to Main Menu");
+
+    int choice = getUserChoice("Enter choice: ");
+
+    switch (choice) {
+      case 1 -> viewSensorDataMenu(greenhouseId);
+      case 2 -> viewChangeActuatorStatusMenu(greenhouseId);
+      case 3 -> exit();
+      default -> System.out.println("Invalid choice!");
+    }
+  }
+
+  private void viewSensorDataMenu(int greenhouseId) {
+    displayHeader("Sensor Data for Greenhouse #" + greenhouseId);
+    System.out.println("Work in progress :'(");
+  }
+
+  private void viewChangeActuatorStatusMenu(int greenhouseId) {
+    displayHeader("Actuator Status for Greenhouse #" + greenhouseId);
+    System.out.println("Work in progress :'(");
   }
 
   public void createGreenhouseMenu() throws IOException {
