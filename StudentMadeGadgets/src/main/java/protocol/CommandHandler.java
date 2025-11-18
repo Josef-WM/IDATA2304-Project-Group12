@@ -125,8 +125,7 @@ public class CommandHandler {
         }
       }
       default -> {
-        System.out.println("No message type found! LOLOLOL!");
-        return "No message type found";
+        return "Message type not found";
       }
     }
   }

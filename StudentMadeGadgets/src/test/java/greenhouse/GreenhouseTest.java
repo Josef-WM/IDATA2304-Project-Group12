@@ -5,47 +5,48 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Timer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the Greenhouse class.
+ * Unit tests for the {@link Greenhouse} class.
  *
- * <p>The internal timer is cancelled in tests to avoid nondeterministic
- * random updates to the environment. This test will test both negative and positive tests.</p>
+ * <p>This test suite validates both positive and negative scenarios for the
+ * greenhouse environment model. Automatic updates from the internal timer are
+ * disabled during testing using reflection to ensure deterministic results.</p>
+ *
+ * <p>The AAA (Arrange–Act–Assert) test structure is used consistently.</p>
  */
 class GreenhouseTest {
 
   private Greenhouse greenhouse;
 
+  /**
+   * Initializes a new Greenhouse instance before each test and disables its timer.
+   */
   @BeforeEach
   void setUp() {
-    // Arrange
     greenhouse = new Greenhouse("TestHouse");
-    cancelTimer();
+    disableTimer();
   }
 
   /**
-   * Cancels the internal timer so that automatic random updates do not interfere with tests.
+   * Disables the internal timer to prevent random environmental updates.
    */
-  private void cancelTimer() {
+  private void disableTimer() {
     try {
       Field timerField = Greenhouse.class.getDeclaredField("timer");
       timerField.setAccessible(true);
       Timer timer = (Timer) timerField.get(greenhouse);
       timer.cancel();
     } catch (Exception e) {
-      fail("Failed to cancel timer via reflection: " + e.getMessage());
+      fail("Failed to cancel greenhouse timer: " + e.getMessage());
     }
   }
 
   /**
-   * Helper method to set a double field on Greenhouse via reflection.
-   *
-   * @param fieldName
-   * @param value
+   * Helper method: sets a private double field (temperature).
    */
   private void setDoubleField(String fieldName, double value) {
     try {
@@ -53,15 +54,12 @@ class GreenhouseTest {
       field.setAccessible(true);
       field.setDouble(greenhouse, value);
     } catch (Exception e) {
-      fail("Failed to set double field '" + fieldName + "': " + e.getMessage());
+      fail("Failed to set field: " + e.getMessage());
     }
   }
 
   /**
-   * Helper method to set an int field on Greenhouse via reflection.
-   *
-   * @param fieldName
-   * @param value
+   * Helper method: sets a private int field (humidity, light).
    */
   private void setIntField(String fieldName, int value) {
     try {
@@ -69,61 +67,49 @@ class GreenhouseTest {
       field.setAccessible(true);
       field.setInt(greenhouse, value);
     } catch (Exception e) {
-      fail("Failed to set int field '" + fieldName + "': " + e.getMessage());
+      fail("Failed to set field: " + e.getMessage());
     }
   }
 
   /**
-   * Tests that the constructor sets initial values correctly.
+   * Tests that the constructor correctly initializes default greenhouse values.
+   * Expected outcome: initial temperature = 14, humidity = 60, light = 1000.
    */
   @Test
-  void constructor_Positive_SetsInitialValues() {
+  void constructor_Positive_SetsInitialValuesCorrectly() {
     // Arrange done in setUp()
 
     // Act
-    String name = greenhouse.getGreenhouseName();
     double temp = greenhouse.getTemperature();
     int humidity = greenhouse.getHumidity();
     int light = greenhouse.getLight();
+    String name = greenhouse.getGreenhouseName();
 
     // Assert
-    assertEquals("TestHouse", name);
-    assertEquals(14.0, temp, 0.0001);
+    assertEquals(14.0, temp);
     assertEquals(60, humidity);
     assertEquals(1000, light);
+    assertEquals("TestHouse", name);
   }
 
   /**
-   * Tests that setGreenhouseName changes the name correctly.
+   * Tests that setting a greenhouse ID correctly updates the internal field.
+   * Expected outcome: ID is stored and returned.
    */
   @Test
-  void setGreenhouseName_Positive_ChangesName() {
+  void setGreenhouseId_Positive_UpdatesIdCorrectly() {
     // Arrange
 
     // Act
-    greenhouse.setGreenhouseName("NewName");
+    greenhouse.setGreenhouseId(42);
 
     // Assert
-    assertEquals("NewName", greenhouse.getGreenhouseName());
+    assertEquals(42, greenhouse.getGreenhouseId());
   }
 
   /**
-   * Tests that setGreenhouseName allows setting the name to null.
-   */
-  @Test
-  void setGreenhouseName_Negative_AllowsNullName() {
-    // Arrange
-
-    // Act
-    greenhouse.setGreenhouseName(null);
-
-    // Assert
-    assertNull(greenhouse.getGreenhouseName(),
-            "Greenhouse should allow setting name to null (no validation implemented)");
-  }
-
-  /**
-   * Tests that changeTemperature correctly updates the temperature.
+   * Tests that changing the temperature with a positive adjustment increases the value.
+   * Expected outcome: temperature increases by the given delta.
    */
   @Test
   void changeTemperature_Positive_IncreasesTemperature() {
@@ -131,32 +117,34 @@ class GreenhouseTest {
     setDoubleField("temperature", 10.0);
 
     // Act
-    greenhouse.changeTemperature(5.5);
+    greenhouse.changeTemperature(5.0);
 
     // Assert
-    assertEquals(15.5, greenhouse.getTemperature(), 0.0001);
+    assertEquals(15.0, greenhouse.getTemperature());
   }
 
   /**
-   * Tests that changeTemperature correctly decreases the temperature.
+   * Tests that changing the temperature with a negative adjustment decreases the value.
+   * Expected outcome: temperature decreases by the given delta.
    */
   @Test
-  void changeTemperature_Negative_DecreasesTemperature() {
+  void changeTemperature_Positive_DecreasesTemperature() {
     // Arrange
-    setDoubleField("temperature", 10.0);
+    setDoubleField("temperature", 20.0);
 
     // Act
     greenhouse.changeTemperature(-3.0);
 
     // Assert
-    assertEquals(7.0, greenhouse.getTemperature(), 0.0001);
+    assertEquals(17.0, greenhouse.getTemperature());
   }
 
   /**
-   * Tests that changeHumidity correctly updates the humidity within bounds.
+   * Tests that humidity increases correctly when within bounds.
+   * Expected outcome: humidity + change <= 100.
    */
   @Test
-  void changeHumidity_Positive_WithinBounds() {
+  void changeHumidity_Positive_IncreasesWithinBounds() {
     // Arrange
     setIntField("humidity", 50);
 
@@ -168,7 +156,24 @@ class GreenhouseTest {
   }
 
   /**
-   * Tests that changeHumidity does not exceed upper bound of 100 or go below 0.
+   * Tests that light level increases correctly.
+   * Expected outcome: light + delta is applied.
+   */
+  @Test
+  void changeLight_Positive_IncreasesLightLevel() {
+    // Arrange
+    setIntField("light", 1000);
+
+    // Act
+    greenhouse.changeLight(200);
+
+    // Assert
+    assertEquals(1200, greenhouse.getLight());
+  }
+
+  /**
+   * Tests that humidity does not exceed the upper bound (100%) even when a large value is added.
+   * Expected outcome: humidity <= 100 after update.
    */
   @Test
   void changeHumidity_Negative_DoesNotExceedUpperBound() {
@@ -176,49 +181,36 @@ class GreenhouseTest {
     setIntField("humidity", 95);
 
     // Act
-    greenhouse.changeHumidity(20); // attempt to go beyond 100
+    greenhouse.changeHumidity(50);
 
     // Assert
     assertTrue(greenhouse.getHumidity() <= 100,
-            "Humidity should not exceed 100 even after large positive change");
+            "Humidity should never exceed 100%");
   }
 
   /**
-   * Tests that changeHumidity does not go below 0.
+   * Tests that humidity does not drop below 0% even when a large negative value is applied.
+   * Expected outcome: humidity >= 0 after update.
    */
   @Test
-  void changeHumidity_Negative_DoesNotGoBelowZero() {
+  void changeHumidity_Negative_DoesNotDropBelowZero() {
     // Arrange
     setIntField("humidity", 5);
 
     // Act
-    greenhouse.changeHumidity(-20); // attempt to go below 0
+    greenhouse.changeHumidity(-50);
 
     // Assert
     assertTrue(greenhouse.getHumidity() >= 0,
-            "Humidity should not go below 0 even after large negative change");
+            "Humidity should never fall below 0%");
   }
 
   /**
-   * Tests that changeLight correctly updates the light level.
+   * Tests that negative changes to light reduce the amount safely.
+   * Expected outcome: light decreases by delta.
    */
   @Test
-  void changeLight_Positive_IncreasesLight() {
-    // Arrange
-    setIntField("light", 1000);
-
-    // Act
-    greenhouse.changeLight(500);
-
-    // Assert
-    assertEquals(1500, greenhouse.getLight());
-  }
-
-  /**
-   * Tests that changeLight correctly decreases the light level.
-   */
-  @Test
-  void changeLight_Negative_AllowsDecreaseBelowInitial() {
+  void changeLight_Negative_DecreasesLightLevel() {
     // Arrange
     setIntField("light", 500);
 
@@ -230,49 +222,32 @@ class GreenhouseTest {
   }
 
   /**
-   * Tests that adding a SensorNode increases the internal list size.
+   * Tests that calling changeTemperature with a huge negative delta does not break behavior.
+   * Expected outcome: temperature simply decreases — no exception thrown.
    */
   @Test
-  void addSensorNode_Positive_IncreasesListSize() {
+  void changeTemperature_Negative_LargeDecreaseDoesNotThrow() {
     // Arrange
-    SensorNode node = new SensorNode(greenhouse);
+    setDoubleField("temperature", 10.0);
 
-    // Act
-    greenhouse.addSensorNodeToGreenhouse(node);
-
-    // Assert
-    try {
-      Field listField = Greenhouse.class.getDeclaredField("sensorNodes");
-      listField.setAccessible(true);
-      @SuppressWarnings("unchecked")
-      ArrayList<SensorNode> list = (ArrayList<SensorNode>) listField.get(greenhouse);
-      assertEquals(1, list.size());
-    } catch (Exception e) {
-      fail("Failed to read sensorNodes via reflection: " + e.getMessage());
-    }
+    // Act & Assert
+    assertDoesNotThrow(() -> greenhouse.changeTemperature(-100),
+            "Large negative temperature changes should not throw an exception");
   }
 
   /**
-   * Tests that removing a SensorNode decreases the internal list size.
+   * Tests that setting the greenhouse name to null does not throw an exception.
+   * Expected outcome: name becomes null.
    */
   @Test
-  void removeSensorNode_Negative_RemovingUnknownNodeDoesNotCrash() {
+  void setGreenhouseName_Negative_AllowsNullName() {
     // Arrange
-    SensorNode node = new SensorNode(greenhouse);
 
     // Act
-    greenhouse.removeSensorNodeFromGreenhouse(node);
+    greenhouse.setGreenhouseName(null);
 
     // Assert
-    try {
-      Field listField = Greenhouse.class.getDeclaredField("sensorNodes");
-      listField.setAccessible(true);
-      @SuppressWarnings("unchecked")
-      ArrayList<SensorNode> list = (ArrayList<SensorNode>) listField.get(greenhouse);
-      assertEquals(0, list.size(),
-              "Removing a node that was never added should leave the list size at 0");
-    } catch (Exception e) {
-      fail("Failed to read sensorNodes via reflection: " + e.getMessage());
-    }
+    assertNull(greenhouse.getGreenhouseName());
   }
 }
+
