@@ -23,7 +23,7 @@ class GreenhouseTest {
   @BeforeEach
   void setUp() {
     // Arrange
-    greenhouse = new Greenhouse(1,"TestHouse");
+    greenhouse = new Greenhouse("TestHouse");
     cancelTimer();
   }
 
