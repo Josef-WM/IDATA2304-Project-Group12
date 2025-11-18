@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SensorNodeTest {
 
   private SensorNode node;
+  private Greenhouse greenhouse;
 
   /**
    * Initializes a fresh SensorNode before each test.
@@ -23,7 +24,8 @@ class SensorNodeTest {
    */
   @BeforeEach
   void setUp() {
-    node = new SensorNode(new Greenhouse("TestHouse"));
+    node = new SensorNode();
+    greenhouse = new Greenhouse("TestHouse");
   }
 
   /**
@@ -84,8 +86,8 @@ class SensorNodeTest {
   void toggleActuator_Positive_TogglesOnAndOff() {
     ActuatorTest actuator = new ActuatorTest("a1");
     node.addActuatorToNode(actuator);
-    boolean firstToggle = node.toggleActuator("a1");
-    boolean secondToggle = node.toggleActuator("a1");
+    boolean firstToggle = node.toggleActuator("a1", greenhouse);
+    boolean secondToggle = node.toggleActuator("a1", greenhouse);
     assertTrue(firstToggle, "First toggle should turn actuator ON");
     assertFalse(secondToggle, "Second toggle should turn actuator OFF");
     assertFalse(actuator.isOn(), "Actuator should be OFF after two toggles");

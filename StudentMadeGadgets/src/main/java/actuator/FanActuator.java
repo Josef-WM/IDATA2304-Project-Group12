@@ -6,7 +6,6 @@ import greenhouse.Greenhouse;
  * Represents a fan, acts as an actuator in a greenhouse.
  */
 public class FanActuator implements Actuator {
-  private final Greenhouse greenhouse;
   private String ID;
   private boolean isOn;
   private int speed;
@@ -15,11 +14,9 @@ public class FanActuator implements Actuator {
   /**
    * constructor for the FanActuator class.
    */
-  public FanActuator(String ID, Greenhouse greenhouse) {
-    this.ID = ID;
+  public FanActuator() {
     this.isOn = false;
     this.speed = 0;
-    this.greenhouse = greenhouse;
     this.heatDifference = 0;
 
   }
@@ -43,34 +40,34 @@ public class FanActuator implements Actuator {
   }
 
   /**
-   * turns on the fan actuator.
+   * turns on the actuator.
    */
-  public void turnOn() {
+  public void turnOn(Greenhouse greenhouse) {
     this.heatDifference = this.heatDifference - 5*(1+speed*0.2);
     greenhouse.changeTemperature(this.heatDifference);
     isOn = true;
   }
 
   /**
-   * turns off the fan actuator.
+   * turns off the actuator.
    */
-  public void turnOff() {
+  public void turnOff(Greenhouse greenhouse) {
     greenhouse.changeTemperature(-this.heatDifference);
     this.heatDifference = 0;
     isOn = false;
   }
 
   /**
-   * Toggles the fan
+   * Toggles the actuator
    * Turning it on if off
    * And off if on.
    */
-  public boolean toggle() {
+  public boolean toggle(Greenhouse greenhouse) {
     if (isOn) {
-      turnOff();
+      turnOff(greenhouse);
       return false;
     } else {
-      turnOn();
+      turnOn(greenhouse);
       return true;
     }
   }

@@ -29,6 +29,7 @@ public class Server {
   public static void runServer() throws IOException {
     try (ServerSocket serverSocket = new ServerSocket(6767)) {
       System.out.println("Server is now listening on 6767");
+      greenhouseRegistry.addGreenhouse("Magnus");
 
       while (true) {
         Socket socket = serverSocket.accept();

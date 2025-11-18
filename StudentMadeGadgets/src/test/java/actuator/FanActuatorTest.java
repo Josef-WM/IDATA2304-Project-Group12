@@ -12,7 +12,7 @@ class FanActuatorTest {
   @Test void checkIfNewFanActuatorHasZeroSpeed() {
     String id = "67";
     Greenhouse greenhouse = new Greenhouse("TestGreenhouse");
-    FanActuator fanActuator = new FanActuator(id, greenhouse);
+    FanActuator fanActuator = new FanActuator();
 
     assertEquals(0, fanActuator.getSpeed());
   }

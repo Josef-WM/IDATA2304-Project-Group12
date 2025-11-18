@@ -10,15 +10,13 @@ import java.util.HashMap;
  * Javadoc placeholder.
  */
 public class SensorNode {
-  private Greenhouse greenhouse;
   private HashMap<String, Actuator> actuators;
   private HashMap<String, Sensor> sensors;
 
   /**
    * Constructor for the SensorNode class.
    */
-  public SensorNode(Greenhouse greenhouse) {
-    this.greenhouse = greenhouse;
+  public SensorNode() {
     this.actuators = new HashMap<>();
     this.sensors = new HashMap<>();
   }
@@ -93,8 +91,8 @@ public class SensorNode {
     return this.sensors;
   }
 
-  public boolean toggleActuator(String deviceID) {
-    return getActuator(deviceID).toggle();
+  public boolean toggleActuator(String deviceID, Greenhouse greenhouse) {
+    return getActuator(deviceID).toggle(greenhouse);
   }
 
   public void setActuatorPower(String deviceID, int power) {

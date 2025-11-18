@@ -123,12 +123,12 @@ public class ControlPanelNode {
     return information;
   }
 
-  public ActuatorData getAllActuatorData(int greenhouseID) throws IOException {
+  public ActuatorData getAllActuatorData(int greenhouseId) throws IOException {
     Message message = new Message();
     message.setMessageType("DATA_REQUEST");
     message.setMessageID(String.valueOf(UUID.randomUUID()));
     message.setTimestamp(System.currentTimeMillis());
-    message.setBody(new DataRequest(greenhouseID, "ALL", "ACTUATOR"));
+    message.setBody(new DataRequest(greenhouseId, "ALL", "ACTUATOR"));
     String jsonMessage = JSONHandler.serializeMessageToJSON(message);
     Protocol protocol = new Protocol(this.socket);
     protocol.sendMessage(jsonMessage);
@@ -137,5 +137,21 @@ public class ControlPanelNode {
     Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
     ActuatorData actuatorData = (ActuatorData) replyMessage.getBody();
     return actuatorData;
+  }
+
+  public Information addActuatorToSensorNode(int greenhouseId, String actuatorType) throws IOException {
+    Message message = new Message();
+    message.setMessageType("ADD_ACTUATOR");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new AddActuator(greenhouseId, actuatorType));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    Information information = (Information) replyMessage.getBody();
+    return information;
   }
 }

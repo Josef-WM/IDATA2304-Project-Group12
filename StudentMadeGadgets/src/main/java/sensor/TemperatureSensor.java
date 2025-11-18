@@ -9,8 +9,7 @@ public class TemperatureSensor implements Sensor {
   private String ID;
   private final Greenhouse greenhouse;
 
-  public TemperatureSensor(String ID, Greenhouse greenhouse) {
-    this.ID = ID;
+  public TemperatureSensor(Greenhouse greenhouse) {
     this.greenhouse = greenhouse;
   }
 

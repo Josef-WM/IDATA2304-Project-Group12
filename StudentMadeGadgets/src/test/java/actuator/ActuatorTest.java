@@ -1,5 +1,7 @@
 package actuator;
 
+import greenhouse.Greenhouse;
+
 /**
  * Test implementation of {@link Actuator} used in unit tests, which are
  * needed to refactor SensorNodeTest Class.
@@ -54,7 +56,7 @@ public class ActuatorTest implements Actuator {
    * @return
    */
   @Override
-  public boolean toggle() {
+  public boolean toggle(Greenhouse greenhouse) {
     on = !on;
     return on;
   }

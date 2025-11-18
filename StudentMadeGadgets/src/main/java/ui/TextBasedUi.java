@@ -109,7 +109,14 @@ public class TextBasedUi {
     listAllGreenhouses();
 
     int choice = getUserChoice("Select greenhouse: ");
-    greenhouseControlMenu(choice);
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+
+    if (choice <= greenhouseListData.getGreenhouses().size()) {
+      greenhouseControlMenu(choice);
+    } else {
+      System.out.println("Invalid greenhouse selected");
+      displayControlPanelMainPage();
+    }
   }
 
   /**
@@ -119,14 +126,18 @@ public class TextBasedUi {
     displayHeader("Connected to Greenhouse #" + greenhouseId);
     System.out.println("1. View Sensor Data");
     System.out.println("2. View / Change Actuator Status");
-    System.out.println("3. Back to Main Menu");
+    System.out.println("3. Add sensor to sensor node");
+    System.out.println("4. Add actuator to sensor node");
+    System.out.println("5. Back to Main Menu");
 
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> viewSensorDataMenu(greenhouseId);
       case 2 -> viewChangeActuatorStatusMenu(greenhouseId);
-      case 3 -> exit();
+      case 3 -> addActuatorToSensorNodeMenu(greenhouseId);
+      case 4 -> addActuatorToSensorNodeMenu(greenhouseId);
+      case 5 -> exit();
       default -> System.out.println("Invalid choice!");
     }
   }
@@ -155,6 +166,27 @@ public class TextBasedUi {
     }
 
     System.out.println("Work in progress :'(");
+  }
+
+  private void addActuatorToSensorNodeMenu(int greenhouseId) throws IOException {
+    displayHeader("Add actuator to sensor node in greenhouse " + greenhouseId);
+
+    System.out.println("1. Fan");
+    System.out.println("2. Heater");
+    System.out.println("3. Light");
+    System.out.println("4. Sprinkler");
+    System.out.println("5. Back to Main Menu");
+
+    int choice = getUserChoice("Enter choice: ");
+
+    switch (choice) {
+      case 1 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Fan");
+      case 2 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Heater");
+      case 3 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Light");
+      case 4 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Sprinkler");
+      case 5 -> greenhouseControlMenu(greenhouseId);
+      default -> System.out.println("Invalid choice!");
+    }
   }
 
   /**

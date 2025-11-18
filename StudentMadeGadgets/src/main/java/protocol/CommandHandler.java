@@ -1,6 +1,6 @@
 package protocol;
 
-import actuator.Actuator;
+import actuator.*;
 import client.SensorNode;
 import greenhouse.Greenhouse;
 import javafx.util.Pair;
@@ -30,6 +30,7 @@ public class CommandHandler {
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;
       }
+
       case "CREATE_GREENHOUSE" -> {
         CreateGreenhouse createGreenhouse = (CreateGreenhouse) messageFromJSON.getBody();
         String name = createGreenhouse.getName();
@@ -42,6 +43,7 @@ public class CommandHandler {
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;
       }
+
       case "REMOVE_GREENHOUSE" -> {
         RemoveGreenhouse removeGreenhouse = (RemoveGreenhouse) messageFromJSON.getBody();
         int id = removeGreenhouse.getId();
@@ -54,6 +56,7 @@ public class CommandHandler {
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;
       }
+
       case "DATA_REQUEST" -> {
         DataRequest dataRequest = (DataRequest) messageFromJSON.getBody();
         int greenhouseID = dataRequest.getGreenhouseID();
@@ -91,6 +94,7 @@ public class CommandHandler {
               return replyJson;
             }
           }
+
           case "ACTUATOR" -> {
             reply.setMessageType("ACTUATOR_DATA");
 
@@ -119,11 +123,40 @@ public class CommandHandler {
               return replyJson;
             }
           }
+
           default ->  {
             return "Device type not found";
           }
         }
       }
+
+      case "ADD_ACTUATOR" -> {
+        AddActuator addActuator = (AddActuator) messageFromJSON.getBody();
+        int greenhouseId = addActuator.getGreenhouseId();
+        String actuatorType = addActuator.getActuatorType();
+
+        Greenhouse greenhouse = Server.getGreenhouseRegistry().getGreenhouse(greenhouseId);
+        Actuator actuator;
+
+        switch (actuatorType) {
+          case "Fan" -> actuator = new FanActuator();
+          case "Heater" -> actuator = new HeaterActuator();
+          case "Light" -> actuator = new LightActuator();
+          case "Sprinkler" -> actuator = new SprinklerActuator();
+          default -> {
+            return "Actuator type not found";
+            }
+        }
+
+        greenhouse.getSensorNode().addActuatorToNode(actuator);
+
+        reply.setMessageType("INFORMATION");
+        reply.setBody(new Information("Actuator with id " + actuator.getID() + " was added to sensor node"));
+        reply.setDestination(messageFromJSON.getSource());
+        String replyJson = JSONHandler.serializeMessageToJSON(reply);
+        return replyJson;
+      }
+
       default -> {
         return "Message type not found";
       }
