@@ -11,10 +11,6 @@ public class DataRequest implements Command {
     this.deviceType = deviceType;
   }
 
-  public DataRequest(String deviceID) {
-    this.deviceID = deviceID;
-  }
-
   public int getGreenhouseID() {
     return this.greenhouseID;
   }

@@ -2,18 +2,17 @@ package client;
 
 import com.google.gson.JsonObject;
 import greenhouse.Greenhouse;
+import javafx.util.Pair;
 import protocol.CommandHandler;
 import protocol.JSONHandler;
 import protocol.Message;
 import protocol.Protocol;
-import protocol.command.CreateGreenhouse;
-import protocol.command.GreenhouseListData;
-import protocol.command.Information;
-import protocol.command.RemoveGreenhouse;
+import protocol.command.*;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -122,5 +121,21 @@ public class ControlPanelNode {
     Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
     Information information = (Information) replyMessage.getBody();
     return information;
+  }
+
+  public ActuatorData getAllActuatorData(int greenhouseID) throws IOException {
+    Message message = new Message();
+    message.setMessageType("DATA_REQUEST");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new DataRequest(greenhouseID, "ALL", "ACTUATOR"));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    ActuatorData actuatorData = (ActuatorData) replyMessage.getBody();
+    return actuatorData;
   }
 }

@@ -2,7 +2,11 @@ package ui;
 
 import client.ControlPanelNode;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+
+import javafx.util.Pair;
 import protocol.command.GreenhouseListData;
 import protocol.command.Information;
 
@@ -111,7 +115,7 @@ public class TextBasedUi {
   /**
    * Menu for controlling a greenhouse.
    */
-  private void greenhouseControlMenu(int greenhouseId) {
+  private void greenhouseControlMenu(int greenhouseId) throws IOException {
     displayHeader("Connected to Greenhouse #" + greenhouseId);
     System.out.println("1. View Sensor Data");
     System.out.println("2. View / Change Actuator Status");
@@ -138,8 +142,18 @@ public class TextBasedUi {
   /**
    * Menu for viewing/changing actuator status.
    */
-  private void viewChangeActuatorStatusMenu(int greenhouseId) {
-    displayHeader("Actuator Status for Greenhouse #" + greenhouseId);
+  private void viewChangeActuatorStatusMenu(int greenhouseId) throws IOException {
+    displayHeader("Actuator Status for Greenhouse " + greenhouseId);
+    HashMap<String, Pair<Boolean, Integer>> actuatorData = activeControlPanel.getAllActuatorData(greenhouseId).getActuatorDataHashMap();
+
+    int index = 1;
+    for (Map.Entry<String, Pair<Boolean, Integer>> entry : actuatorData.entrySet()) {
+      String actuatorID = entry.getKey();
+      Pair<Boolean, Integer> actuatorInfo = entry.getValue();
+
+      System.out.println(index + ". " + actuatorID + ": [" + actuatorInfo.getKey() + "] Power: " + actuatorInfo.getValue());
+    }
+
     System.out.println("Work in progress :'(");
   }
 
