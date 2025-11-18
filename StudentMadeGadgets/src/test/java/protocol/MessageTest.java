@@ -2,138 +2,224 @@ package protocol;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import protocol.command.Command;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the {@link Message} class.
+ * Unit tests for the Message class.
  *
- * <p>This class verifies that:</p>
- * <ul>
- *     <li>Constructors correctly assign all fields</li>
- *     <li>Getters return the expected values</li>
- *     <li>Setters correctly update values</li>
- * </ul>
+ * <p>This test suite verifies correct behavior for both positive and negative scenarios.
+ * It follows the Arrange–Act–Assert (AAA) structure and includes tests for constructors,
+ * setters, and handling of null values.</p>
  */
 class MessageTest {
 
-  private Message message;
+  private Message emptyMessage;
 
   /**
-   * Creates a fresh {@link Message} instance before each test.
+   * Minimal concrete implementation of Command for testing purposes.
+   */
+  private static class DummyCommand implements Command {
+    private final String value;
+    DummyCommand(String value) { this.value = value; }
+    public String getValue() { return value; }
+  }
+
+  /**
+   * Initializes a fresh Message object before every test.
    */
   @BeforeEach
   void setUp() {
-    message = new Message();
+    emptyMessage = new Message();
   }
 
   /**
-   * Tests the constructor that includes correlationID.
+   * Tests that the constructor with correlation ID correctly sets all fields.
    */
   @Test
-  void testFullConstructor() {
+  void constructorWithCorrelationId_Positive_SetsAllFieldsCorrectly() {
+    // Arrange
+    Command cmd = new DummyCommand("test");
+
+    // Act
     Message msg = new Message(
-            "nodeA",
-            "nodeB",
+            "node1",
+            "controlPanel",
             "sensor_data",
-            "msg123",
-            "corr456",
-            1000L,
-            "payload"
+            "msg001",
+            "corr001",
+            123L,
+            cmd
     );
 
-    assertEquals("nodeA", msg.getSource());
-    assertEquals("nodeB", msg.getDestination());
+    // Assert
+    assertEquals("node1", msg.getSource());
+    assertEquals("controlPanel", msg.getDestination());
     assertEquals("sensor_data", msg.getMessageType());
-    assertEquals("msg123", msg.getMessageID());
-    assertEquals("corr456", msg.getCorrelationID());
-    assertEquals(1000L, msg.getTimestamp());
-    assertEquals("payload", msg.getBody());
+    assertEquals("msg001", msg.getMessageID());
+    assertEquals("corr001", msg.getCorrelationID());
+    assertEquals(123L, msg.getTimestamp());
+    assertEquals(cmd, msg.getBody());
   }
 
   /**
-   * Tests the constructor without correlationID.
+   * Tests the constructor WITHOUT a correlation ID,
+   * ensuring correlationID remains null.
    */
   @Test
-  void testConstructorWithoutCorrelationID() {
+  void constructorWithoutCorrelationId_Positive_CreatesMessageSuccessfully() {
+    // Arrange
+    Command cmd = new DummyCommand("abc");
+
+    // Act
     Message msg = new Message(
-            "nodeA",
-            "nodeB",
+            "node2",
+            "server",
             "command",
-            "msg789",
-            2000L,
-            42
+            "msg777",
+            456L,
+            cmd
     );
 
-    assertEquals("nodeA", msg.getSource());
-    assertEquals("nodeB", msg.getDestination());
+    // Assert
+    assertEquals("node2", msg.getSource());
+    assertEquals("server", msg.getDestination());
     assertEquals("command", msg.getMessageType());
-    assertEquals("msg789", msg.getMessageID());
-    assertEquals(2000L, msg.getTimestamp());
-    assertEquals(42, msg.getBody());
+    assertEquals("msg777", msg.getMessageID());
+    assertEquals(456L, msg.getTimestamp());
+    assertEquals(cmd, msg.getBody());
     assertNull(msg.getCorrelationID());
   }
 
   /**
-   * Tests setter and getter for source.
+   * Tests that all setter methods correctly update their fields with valid values.
    */
   @Test
-  void testSetAndGetSource() {
-    message.setSource("sensor1");
-    assertEquals("sensor1", message.getSource());
+  void setters_Positive_UpdateFieldsSuccessfully() {
+    // Arrange
+    DummyCommand cmd = new DummyCommand("body");
+
+    // Act
+    emptyMessage.setSource("A");
+    emptyMessage.setDestination("B");
+    emptyMessage.setMessageType("update");
+    emptyMessage.setMessageID("id001");
+    emptyMessage.setCorrelationID("corrX");
+    emptyMessage.setTimestamp(999L);
+    emptyMessage.setBody(cmd);
+
+    // Assert
+    assertEquals("A", emptyMessage.getSource());
+    assertEquals("B", emptyMessage.getDestination());
+    assertEquals("update", emptyMessage.getMessageType());
+    assertEquals("id001", emptyMessage.getMessageID());
+    assertEquals("corrX", emptyMessage.getCorrelationID());
+    assertEquals(999L, emptyMessage.getTimestamp());
+    assertEquals(cmd, emptyMessage.getBody());
   }
 
   /**
-   * Tests setter and getter for destination.
+   * Tests that all string-based fields and the body field accept null values,
+   * and that the timestamp remains at its default (0L).
    */
   @Test
-  void testSetAndGetDestination() {
-    message.setDestination("control1");
-    assertEquals("control1", message.getDestination());
+  void setters_Negative_AllowNullValuesExceptTimestamp() {
+    // Arrange
+
+    // Act
+    emptyMessage.setSource(null);
+    emptyMessage.setDestination(null);
+    emptyMessage.setMessageType(null);
+    emptyMessage.setMessageID(null);
+    emptyMessage.setCorrelationID(null);
+    // timestamp is NOT set to null (illegal)
+    emptyMessage.setBody(null);
+
+    // Assert
+    assertNull(emptyMessage.getSource());
+    assertNull(emptyMessage.getDestination());
+    assertNull(emptyMessage.getMessageType());
+    assertNull(emptyMessage.getMessageID());
+    assertNull(emptyMessage.getCorrelationID());
+    assertEquals(0L, emptyMessage.getTimestamp(),
+            "Timestamp should remain at default (0L) because it cannot be null");
+    assertNull(emptyMessage.getBody());
   }
 
   /**
-   * Tests setter and getter for messageType.
+   * Tests that setting the timestamp to null throws a NullPointerException,
+   * since the underlying field is a primitive long.
    */
   @Test
-  void testSetAndGetMessageType() {
-    message.setMessageType("update");
-    assertEquals("update", message.getMessageType());
+  void setTimestamp_Negative_NullValueThrowsNullPointerException() {
+    // Arrange
+
+    // Act & Assert
+    assertThrows(NullPointerException.class,
+            () -> emptyMessage.setTimestamp(null),
+            "Setting timestamp to null must throw NullPointerException");
   }
 
   /**
-   * Tests setter and getter for messageID.
+   * Tests that a null body is accepted by the constructor.
    */
   @Test
-  void testSetAndGetMessageID() {
-    message.setMessageID("GreenFN");
-    assertEquals("GreenFN", message.getMessageID());
+  void constructor_Negative_AllowsNullBody() {
+    // Arrange
+
+    // Act
+    Message msg = new Message(
+            "nodeX",
+            "nodeY",
+            "event",
+            "msg123",
+            null,
+            500L,
+            null
+    );
+
+    // Assert
+    assertNull(msg.getBody());
   }
 
   /**
-   * Tests setter and getter for correlationID.
+   * Tests that the constructor accepts null values for all string fields.
    */
   @Test
-  void testSetAndGetCorrelationID() {
-    message.setCorrelationID("corr001");
-    assertEquals("corr001", message.getCorrelationID());
+  void constructor_Negative_AllowsNullStrings() {
+    // Arrange
+
+    // Act
+    Message msg = new Message(
+            null,   // source
+            null,   // destination
+            null,   // type
+            null,   // messageID
+            null,   // correlation ID
+            0L,
+            new DummyCommand("x")
+    );
+
+    // Assert
+    assertNull(msg.getSource());
+    assertNull(msg.getDestination());
+    assertNull(msg.getMessageType());
+    assertNull(msg.getMessageID());
+    assertNull(msg.getCorrelationID());
   }
 
   /**
-   * Tests setter and getter for timestamp.
+   * Tests that empty strings are allowed for messageID.
    */
   @Test
-  void testSetAndGetTimestamp() {
-    message.setTimestamp(67L);
-    assertEquals(67L, message.getTimestamp());
-  }
+  void setMessageID_Negative_AllowsEmptyString() {
+    // Arrange
 
-  /**
-   * Tests setter and getter for body.
-   */
-  @Test
-  void testSetAndGetBody() {
-    message.setBody("data_payload");
-    assertEquals("data_payload", message.getBody());
+    // Act
+    emptyMessage.setMessageID("");
+
+    // Assert
+    assertEquals("", emptyMessage.getMessageID());
   }
 }

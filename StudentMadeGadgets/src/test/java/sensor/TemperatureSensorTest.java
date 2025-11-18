@@ -22,7 +22,7 @@ class TemperatureSensorTest {
   @BeforeEach
   void setUp() {
     // Arrange
-    greenhouse = new Greenhouse(1,"TestHouse");
+    greenhouse = new Greenhouse("TestHouse");
     sensor = new TemperatureSensor("temp1", greenhouse);
   }
 
@@ -41,6 +41,9 @@ class TemperatureSensorTest {
     }
   }
 
+  /**
+   * Tests that getID() returns the correct constructor value.
+   */
   @Test
   void getId_Positive_ReturnsConstructorValue() {
     // Arrange done in setUp()
@@ -52,6 +55,9 @@ class TemperatureSensorTest {
     assertEquals("temp1", id);
   }
 
+  /**
+   * Tests that getType() returns "Temperature".
+   */
   @Test
   void getType_Positive_ReturnsTemperature() {
     // Arrange
@@ -63,6 +69,9 @@ class TemperatureSensorTest {
     assertEquals("Temperature", type);
   }
 
+  /**
+   * Tests that getUnit() returns "Celsius".
+   */
   @Test
   void getUnit_Positive_ReturnsCelsius() {
     // Arrange
@@ -73,7 +82,9 @@ class TemperatureSensorTest {
     // Assert
     assertEquals("Celsius", unit);
   }
-
+/**
+   * Tests that read() returns the current greenhouse temperature.
+   */
   @Test
   void read_Positive_ReturnsGreenhouseTemperature() {
     // Arrange
@@ -85,7 +96,9 @@ class TemperatureSensorTest {
     // Assert
     assertEquals(22.5, value, 0.0001);
   }
-
+/**
+   * Tests that read() handles negative temperature values.
+   */
   @Test
   void read_Negative_HandlesLowNegativeTemperature() {
     // Arrange

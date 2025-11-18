@@ -1,112 +1,37 @@
 package client;
 
 import actuator.Actuator;
+import actuator.ActuatorTest;
 import greenhouse.Greenhouse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sensor.Sensor;
+import sensor.SensorTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the SensorNode class.
+ * Unit tests for the {@link SensorNode} class.
  *
- * <p>Uses small inner test implementations of Sensor and Actuator
- * to verify SensorNode behavior without external mocking libraries.</p>
+ * <p>Tests both positive (expected) and negative (edge/error) scenarios
+ * using the Arrange–Act–Assert pattern.</p>
  */
 class SensorNodeTest {
 
   private SensorNode node;
 
-  /**
-   * Simple test implementation of Sensor.
-   */
-  private static class TestSensor implements Sensor {
-    private final String id;
-    private final double value;
-
-    TestSensor(String id, double value) {
-      this.id = id;
-      this.value = value;
-    }
-
-    @Override
-    public String getID() {
-      return id;
-    }
-
-    @Override
-    public String getType() {
-      return "TestSensor";
-    }
-
-    @Override
-    public String getUnit() {
-      return "units";
-    }
-
-    @Override
-    public double read() {
-      return value;
-    }
-  }
-
-  /**
-   * Test implementation of Actuator.
-   */
-  private static class TestActuator implements Actuator {
-    private final String id;
-    private boolean on = false;
-    private int power = 0;
-
-    TestActuator(String id) {
-      this.id = id;
-    }
-
-    @Override
-    public String getID() {
-      return id;
-    }
-
-    @Override
-    public String getType() {
-      return "TestActuator";
-    }
-
-    @Override
-    public boolean isOn() {
-      return on;
-    }
-
-    @Override
-    public boolean toggle() {
-      on = !on;
-      return on;
-    }
-
-    @Override
-    public void setPower(int power) {
-      this.power = power;
-    }
-
-    /**
-     * Helper for tests to read back power level.
-     */
-    public int getPower() {
-      return power;
-    }
-  }
-
   @BeforeEach
   void setUp() {
     // Arrange
-    node = new SensorNode(new Greenhouse(1,"TestHouse"));
+    node = new SensorNode(new Greenhouse("TestHouse"));
   }
+
+  // ---------------- POSITIVE TESTS ----------------
 
   @Test
   void addSensor_Positive_CanRetrieveById() {
     // Arrange
-    Sensor sensor = new TestSensor("s1", 42.0);
+    Sensor sensor = new SensorTest("s1", 42.0);
 
     // Act
     node.addSensorToNode(sensor);
@@ -117,9 +42,9 @@ class SensorNodeTest {
   }
 
   @Test
-  void removeSensor_Positive_RemovesSensorFromNode() {
+  void removeSensor_Positive_SensorIsRemovedFromNode() {
     // Arrange
-    Sensor sensor = new TestSensor("s1", 10.0);
+    Sensor sensor = new SensorTest("s1", 10.0);
     node.addSensorToNode(sensor);
 
     // Act
@@ -127,8 +52,66 @@ class SensorNodeTest {
     Sensor result = node.getSensor("s1");
 
     // Assert
-    assertNull(result);
+    assertNull(result, "Sensor should be null after being removed");
   }
+
+  @Test
+  void addActuator_Positive_CanRetrieveById() {
+    // Arrange
+    ActuatorTest actuator = new ActuatorTest("a1");
+
+    // Act
+    node.addActuatorToNode(actuator);
+    Actuator result = node.getActuator("a1");
+
+    // Assert
+    assertEquals(actuator, result);
+  }
+
+  @Test
+  void removeActuator_Positive_ActuatorIsRemovedFromNode() {
+    // Arrange
+    ActuatorTest actuator = new ActuatorTest("a1");
+    node.addActuatorToNode(actuator);
+
+    // Act
+    node.removeActuatorFromNode(actuator);
+    Actuator result = node.getActuator("a1");
+
+    // Assert
+    assertNull(result, "Actuator should be null after being removed");
+  }
+
+  @Test
+  void toggleActuator_Positive_TogglesOnAndOff() {
+    // Arrange
+    ActuatorTest actuator = new ActuatorTest("a1");
+    node.addActuatorToNode(actuator);
+
+    // Act
+    boolean firstToggle = node.toggleActuator("a1");
+    boolean secondToggle = node.toggleActuator("a1");
+
+    // Assert
+    assertTrue(firstToggle, "First toggle should turn actuator ON");
+    assertFalse(secondToggle, "Second toggle should turn actuator OFF");
+    assertFalse(actuator.isOn(), "Actuator should be OFF after two toggles");
+  }
+
+  @Test
+  void setActuatorPower_Positive_UpdatesPowerOnActuator() {
+    // Arrange
+    ActuatorTest actuator = new ActuatorTest("a1");
+    node.addActuatorToNode(actuator);
+
+    // Act
+    node.setActuatorPower("a1", 75);
+
+    // Assert
+    assertEquals(75, actuator.getPower());
+  }
+
+  // ---------------- NEGATIVE TESTS ----------------
 
   @Test
   void getSensor_Negative_UnknownIdReturnsNull() {
@@ -142,57 +125,40 @@ class SensorNodeTest {
   }
 
   @Test
-  void addActuator_Positive_CanRetrieveById() {
-    // Arrange
-    TestActuator actuator = new TestActuator("a1");
-
-    // Act
-    node.addActuatorToNode(actuator);
-    Actuator result = node.getActuator("a1");
-
-    // Assert
-    assertEquals(actuator, result);
-  }
-
-  @Test
-  void removeActuator_Positive_RemovesActuatorFromNode() {
-    // Arrange
-    TestActuator actuator = new TestActuator("a1");
-    node.addActuatorToNode(actuator);
-
-    // Act
-    node.removeActuatorFromNode(actuator);
-    Actuator result = node.getActuator("a1");
-
-    // Assert
-    assertNull(result);
-  }
-
-  @Test
   void getActuator_Negative_UnknownIdReturnsNull() {
     // Arrange
 
     // Act
-    Actuator result = node.getActuator("doesNotExist");
+    Actuator result = node.getActuator("unknown");
 
     // Assert
     assertNull(result, "Unknown actuator ID should return null");
   }
 
   @Test
-  void toggleActuator_Positive_TogglesOnAndOff() {
+  void removeSensor_Negative_RemovingUnknownSensorDoesNotThrow() {
     // Arrange
-    TestActuator actuator = new TestActuator("a1");
-    node.addActuatorToNode(actuator);
+    Sensor sensor = new SensorTest("s999", 0.0);
 
-    // Act
-    boolean firstToggleState = node.toggleActuator("a1");
-    boolean secondToggleState = node.toggleActuator("a1");
+    // Act (no exception should be thrown)
+    node.removeSensorFromNode(sensor);
 
     // Assert
-    assertTrue(firstToggleState, "First toggle should turn the actuator on");
-    assertFalse(secondToggleState, "Second toggle should turn the actuator off");
-    assertFalse(actuator.isOn(), "Actuator should be off after two toggles");
+    assertNull(node.getSensor("s999"),
+            "Removing a sensor that was never added should still leave it as null");
+  }
+
+  @Test
+  void removeActuator_Negative_RemovingUnknownActuatorDoesNotThrow() {
+    // Arrange
+    ActuatorTest actuator = new ActuatorTest("a999");
+
+    // Act (no exception should be thrown)
+    node.removeActuatorFromNode(actuator);
+
+    // Assert
+    assertNull(node.getActuator("a999"),
+            "Removing an actuator that was never added should still leave it as null");
   }
 
   @Test
@@ -202,20 +168,7 @@ class SensorNodeTest {
     // Act & Assert
     assertThrows(NullPointerException.class,
             () -> node.toggleActuator("unknown"),
-            "Toggling unknown actuator ID currently results in a NullPointerException");
-  }
-
-  @Test
-  void setActuatorPower_Positive_UpdatesActuatorPower() {
-    // Arrange
-    TestActuator actuator = new TestActuator("a1");
-    node.addActuatorToNode(actuator);
-
-    // Act
-    node.setActuatorPower("a1", 75);
-
-    // Assert
-    assertEquals(75, actuator.getPower());
+            "toggleActuator on unknown ID currently results in NullPointerException");
   }
 
   @Test
@@ -225,6 +178,6 @@ class SensorNodeTest {
     // Act & Assert
     assertThrows(NullPointerException.class,
             () -> node.setActuatorPower("unknown", 50),
-            "Setting power on an unknown actuator ID currently throws NullPointerException");
+            "setActuatorPower on unknown ID currently results in NullPointerException");
   }
 }
