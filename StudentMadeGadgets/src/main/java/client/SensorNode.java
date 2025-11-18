@@ -63,6 +63,14 @@ public class SensorNode {
     return sensors.get(deviceID);
   }
 
+  public HashMap<String, Actuator> getActuators() {
+    return this.actuators;
+  }
+
+  public HashMap<String, Sensor> getSensors() {
+    return this.sensors;
+  }
+
   public boolean toggleActuator(String deviceID) {
     return getActuator(deviceID).toggle();
   }

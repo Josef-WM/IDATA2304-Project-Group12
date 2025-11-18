@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class Greenhouse {
   private int greenhouseId;
   private String greenhouseName;
-  private ArrayList<SensorNode> sensorNodes;
+  private SensorNode sensorNode;
 
   private double temperature;
   private int light;
@@ -29,7 +29,6 @@ public class Greenhouse {
     this.temperature = 14;
     this.humidity = 60;
     this.light = 1000;
-    this.sensorNodes = new ArrayList<>();
 
     startGradualUpdater();
   }
@@ -72,15 +71,12 @@ public class Greenhouse {
   /**
    * Javadoc placeholder.
    */
-  public void addSensorNodeToGreenhouse(SensorNode sensorNode) {
-    this.sensorNodes.add(sensorNode);
+  public void setSensorNode(SensorNode sensorNode) {
+    this.sensorNode = sensorNode;
   }
 
-  /**
-   * Javadoc placeholder.
-   */
-  public void removeSensorNodeFromGreenhouse(SensorNode sensorNode) {
-    this.sensorNodes.remove(sensorNode);
+  public SensorNode getSensorNode() {
+    return this.sensorNode;
   }
 
   /**

@@ -18,6 +18,10 @@ public class GreenhouseRegistry {
     }
   }
 
+  public Greenhouse getGreenhouse(int ID) {
+    return this.greenhouses.get(ID-1);
+  }
+
   public synchronized boolean removeGreenhouse(int id) {
     boolean result = greenhouses.removeIf(greenhouse -> greenhouse.getGreenhouseId() == id);
     updateList();

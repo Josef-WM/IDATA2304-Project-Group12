@@ -1,14 +1,13 @@
 package protocol;
 
+import client.SensorNode;
 import greenhouse.Greenhouse;
-import protocol.command.CreateGreenhouse;
-import protocol.command.GreenhouseListData;
-import protocol.command.Information;
-import protocol.command.RemoveGreenhouse;
+import javafx.util.Pair;
+import protocol.command.*;
+import sensor.Sensor;
 import server.Server;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 
 public class CommandHandler {
 
@@ -53,6 +52,45 @@ public class CommandHandler {
         reply.setDestination(messageFromJSON.getSource());
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;
+      }
+      case "DATA_REQUEST" -> {
+        DataRequest dataRequest = (DataRequest) messageFromJSON.getBody();
+        int greenhouseID = dataRequest.getGreenhouseID();
+        Greenhouse greenhouse = Server.getGreenhouseRegistry().getGreenhouse(greenhouseID);
+        String deviceID = dataRequest.getDeviceID();
+        String deviceType = dataRequest.getdeviceType();
+
+
+        switch (deviceType) {
+          case "SENSOR" -> {
+            reply.setMessageType("SENSOR_DATA");
+
+            if (Objects.equals(deviceID, "ALL")) {
+              HashMap<String, Pair<Double, String>> sensorDataHashMap = new HashMap<>();
+              HashMap<String, Sensor> sensors = greenhouse.getSensorNode().getSensors();
+
+              for (Map.Entry<String, Sensor> entry : sensors.entrySet()) {
+                String sensorID = entry.getKey();
+                Sensor sensor = entry.getValue();
+
+                sensorDataHashMap.put(sensorID, new Pair<>(sensor.read(), sensor.getUnit()));
+              }
+
+              reply.setBody(new SensorData(sensorDataHashMap));
+              reply.setDestination(messageFromJSON.getSource());
+
+              String replyJson = JSONHandler.serializeMessageToJSON(reply);
+              return replyJson;
+            } else {
+              Sensor sensor = greenhouse.getSensorNode().getSensor(deviceID);
+              reply.setBody(new SensorData(sensor.getID(), sensor.read(), sensor.getUnit()));
+              reply.setDestination(messageFromJSON.getSource());
+
+              String replyJson = JSONHandler.serializeMessageToJSON(reply);
+              return replyJson;
+            }
+          }
+        }
       }
       default -> {
         System.out.println("No message type found! LOLOLOL!");
