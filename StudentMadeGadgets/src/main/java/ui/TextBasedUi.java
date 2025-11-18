@@ -71,7 +71,8 @@ public class TextBasedUi {
     System.out.println("1. Lists all Greenhouses on the server");
     System.out.println("2. Select a greenhouse");
     System.out.println("3. Create a greenhouse");
-    System.out.println("4. Disconnect from server");
+    System.out.println("4. Remove a greenhouse");
+    System.out.println("5. Disconnect from server");
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
@@ -83,7 +84,8 @@ public class TextBasedUi {
       }
       case 2 -> System.out.println("Work in progress :'(");
       case 3 -> createGreenhouseMenu();
-      case 4 -> disconnect();
+      case 4 -> removeGreenhouseMenu();
+      case 5 -> disconnect();
       default -> System.out.println("Invalid choice!");
     }
   }
@@ -93,6 +95,14 @@ public class TextBasedUi {
     String name = scanner.nextLine();
 
     Information information = activeControlPanel.createGreenhouse(name);
+
+    System.out.println(information.getInformation());
+  }
+
+  public void removeGreenhouseMenu() throws IOException {
+    int id = getUserChoice("Enter ID of greenhouse to remove: ");
+
+    Information information = activeControlPanel.removeGreenhouse(id);
 
     System.out.println(information.getInformation());
   }

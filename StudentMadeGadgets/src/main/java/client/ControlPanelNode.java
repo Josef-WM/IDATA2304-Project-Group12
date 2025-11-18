@@ -9,6 +9,7 @@ import protocol.Protocol;
 import protocol.command.CreateGreenhouse;
 import protocol.command.GreenhouseListData;
 import protocol.command.Information;
+import protocol.command.RemoveGreenhouse;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -97,6 +98,22 @@ public class ControlPanelNode {
     message.setMessageID(String.valueOf(UUID.randomUUID()));
     message.setTimestamp(System.currentTimeMillis());
     message.setBody(new CreateGreenhouse(name));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    Information information = (Information) replyMessage.getBody();
+    return information;
+  }
+
+  public Information removeGreenhouse(int id) throws IOException {
+    Message message = new Message();
+    message.setMessageType("REMOVE_GREENHOUSE");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new RemoveGreenhouse(id));
     String jsonMessage = JSONHandler.serializeMessageToJSON(message);
     Protocol protocol = new Protocol(this.socket);
     protocol.sendMessage(jsonMessage);

@@ -4,6 +4,7 @@ import greenhouse.Greenhouse;
 import protocol.command.CreateGreenhouse;
 import protocol.command.GreenhouseListData;
 import protocol.command.Information;
+import protocol.command.RemoveGreenhouse;
 import server.Server;
 
 import java.util.ArrayList;
@@ -37,6 +38,18 @@ public class CommandHandler {
 
         reply.setMessageType("INFORMATION");
         reply.setBody(new Information(name + " was added as a greenhouse."));
+        reply.setDestination(messageFromJSON.getSource());
+        String replyJson = JSONHandler.serializeMessageToJSON(reply);
+        return replyJson;
+      }
+      case "REMOVE_GREENHOUSE" -> {
+        RemoveGreenhouse removeGreenhouse = (RemoveGreenhouse) messageFromJSON.getBody();
+        int id = removeGreenhouse.getId();
+
+        Server.getGreenhouseRegistry().removeGreenhouse(id);
+
+        reply.setMessageType("INFORMATION");
+        reply.setBody(new Information("Greenhouse with id: " + id + " was removed."));
         reply.setDestination(messageFromJSON.getSource());
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;
