@@ -10,25 +10,36 @@ import java.util.HashMap;
  * Javadoc placeholder.
  */
 public class SensorNode {
-  Greenhouse greenhouse;
-  HashMap<String, Actuator> actuators;
-  HashMap<String, Sensor> sensors;
+  private Greenhouse greenhouse;
+  private HashMap<String, Actuator> actuators;
+  private HashMap<String, Sensor> sensors;
 
   /**
    * Constructor for the SensorNode class.
    */
   public SensorNode(Greenhouse greenhouse) {
     this.greenhouse = greenhouse;
-    this.actuators = new HashMap<String, Actuator>();
-    this.sensors = new HashMap<String, Sensor>();
+    this.actuators = new HashMap<>();
+    this.sensors = new HashMap<>();
   }
 
   /**
    * Adds a sensor to the node.
    * @param sensor the sensor to add
    */
-  public void addSensorToNode(Sensor sensor) {
-    this.sensors.put(sensor.getID(), sensor);
+  public String addSensorToNode(Sensor sensor) {
+    String sensorType = sensor.getType();
+
+    int count = 1;
+    String uniqueID;
+    do {
+      uniqueID = sensorType + "-" + count;
+      count++;
+    } while (sensors.containsKey(uniqueID));
+
+    sensor.setID(uniqueID);
+    this.sensors.put(uniqueID, sensor);
+    return uniqueID;
   }
 
   /**

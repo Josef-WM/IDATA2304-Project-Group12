@@ -2,6 +2,7 @@ package sensor;
 
 public interface Sensor {
   String getID();
+  void setID(String ID);
   String getType();
   String getUnit();
   double read();

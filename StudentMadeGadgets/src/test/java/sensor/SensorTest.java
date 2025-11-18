@@ -6,16 +6,16 @@ package sensor;
  */
 public class SensorTest implements Sensor {
 
-  private final String id;
-  private final double value;
+  private String ID;
+  private double value;
 
   /**
    * Constructor for SensorTest.
-   * @param id
+   * @param ID
    * @param value
    */
-  public SensorTest(String id, double value) {
-    this.id = id;
+  public SensorTest(String ID, double value) {
+    this.ID = ID;
     this.value = value;
   }
 
@@ -25,7 +25,11 @@ public class SensorTest implements Sensor {
    */
   @Override
   public String getID() {
-    return id;
+    return ID;
+  }
+
+  public void setID(String ID) {
+    this.ID = ID;
   }
 
   /**

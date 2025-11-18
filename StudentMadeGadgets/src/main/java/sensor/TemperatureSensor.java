@@ -6,16 +6,21 @@ import greenhouse.Greenhouse;
  * Javadoc placeholder.
  */
 public class TemperatureSensor implements Sensor {
-  private final String id;
+  private String ID;
   private final Greenhouse greenhouse;
 
-  public TemperatureSensor(String id, Greenhouse greenhouse) {
-    this.id = id;
+  public TemperatureSensor(String ID, Greenhouse greenhouse) {
+    this.ID = ID;
     this.greenhouse = greenhouse;
   }
 
   @Override public String getID() {
-    return id;
+    return ID;
+  }
+
+  @Override
+  public void setID(String ID) {
+    this.ID = ID;
   }
 
   @Override public String getType() {
