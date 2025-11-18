@@ -27,7 +27,6 @@ public class Server {
    * Starts a new server on port 6767
    */
   public static void runServer() throws IOException {
-    greenhouseRegistry.addGreenhouse("Josef");
     try (ServerSocket serverSocket = new ServerSocket(6767)) {
       System.out.println("Server is now listening on 6767");
 
