@@ -7,7 +7,7 @@ import greenhouse.Greenhouse;
  */
 public class FanActuator implements Actuator {
   private final Greenhouse greenhouse;
-  private final String id;
+  private String ID;
   private boolean isOn;
   private int speed;
   private double heatDifference;
@@ -15,8 +15,8 @@ public class FanActuator implements Actuator {
   /**
    * constructor for the FanActuator class.
    */
-  public FanActuator(String id, Greenhouse greenhouse) {
-    this.id = id;
+  public FanActuator(String ID, Greenhouse greenhouse) {
+    this.ID = ID;
     this.isOn = false;
     this.speed = 0;
     this.greenhouse = greenhouse;
@@ -35,7 +35,11 @@ public class FanActuator implements Actuator {
    * Returns the id of the fan.
    */
   public String getID() {
-    return this.id;
+    return this.ID;
+  }
+
+  public void setID(String ID) {
+    this.ID = ID;
   }
 
   /**

@@ -2,6 +2,7 @@ package actuator;
 
 public interface Actuator {
   String getID();
+  void setID(String ID);
   String getType();
   boolean isOn();
   boolean toggle();

@@ -54,8 +54,19 @@ public class SensorNode {
    * Adds an actuator to the node.
    * @param actuator the actuator to add to the node
    */
-  public void addActuatorToNode(Actuator actuator) {
-    this.actuators.put(actuator.getID(), actuator);
+  public String addActuatorToNode(Actuator actuator) {
+    String actuatorType = actuator.getType();
+
+    int count = 1;
+    String uniqueID;
+    do {
+      uniqueID = actuatorType + "-" + count;
+      count++;
+    } while (actuators.containsKey(uniqueID));
+
+    actuator.setID(uniqueID);
+    this.actuators.put(uniqueID, actuator);
+    return uniqueID;
   }
 
   /**

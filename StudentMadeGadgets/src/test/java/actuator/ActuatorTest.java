@@ -6,16 +6,16 @@ package actuator;
  */
 public class ActuatorTest implements Actuator {
 
-  private final String id;
+  private String ID;
   private boolean on = false;
   private int power = 0;
 
   /**
    * Constructor for ActuatorTest.
-   * @param id
+   * @param ID
    */
-  public ActuatorTest(String id) {
-    this.id = id;
+  public ActuatorTest(String ID) {
+    this.ID = ID;
   }
 
   /**
@@ -24,7 +24,11 @@ public class ActuatorTest implements Actuator {
    */
   @Override
   public String getID() {
-    return id;
+    return ID;
+  }
+
+  public void setID(String ID) {
+    this.ID = ID;
   }
 
   /**
