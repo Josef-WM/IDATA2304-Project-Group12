@@ -24,8 +24,7 @@ public class Greenhouse {
   /**
    * Constructor for the Greenhouse class.
    */
-  public Greenhouse(int id, String name) {
-    this.greenhouseId = id;
+  public Greenhouse(String name) {
     this.greenhouseName = name;
     this.temperature = 14;
     this.humidity = 60;
@@ -33,6 +32,10 @@ public class Greenhouse {
     this.sensorNodes = new ArrayList<>();
 
     startGradualUpdater();
+  }
+
+  public void setGreenhouseId(int id) {
+    this.greenhouseId = id;
   }
 
   public int getGreenhouseId() {

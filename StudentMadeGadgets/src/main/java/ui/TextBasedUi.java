@@ -79,7 +79,7 @@ public class TextBasedUi {
       case 1 -> {
         GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
         for (int i = 0; i < greenhouseListData.getGreenhouses().size(); i++) {
-          System.out.println(i+1 + ". " + greenhouseListData.getGreenhouses().get(i).getGreenhouseName());
+          System.out.println(i+1 + ". " + greenhouseListData.getGreenhouses().get(i).getGreenhouseName() + "(#" + greenhouseListData.getGreenhouses().get(i).getGreenhouseId() + ")");
         }
       }
       case 2 -> System.out.println("Work in progress :'(");
