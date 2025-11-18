@@ -90,6 +90,9 @@ public class CommandHandler {
               return replyJson;
             }
           }
+          default ->  {
+            return "Device type not found";
+          }
         }
       }
       default -> {
