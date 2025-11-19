@@ -276,16 +276,15 @@ public class TextBasedUi {
     System.out.println("1. Humidity");
     System.out.println("2. Light");
     System.out.println("3. Temperature");
-    System.out.println("4 Back to Main Menu");
+    System.out.println("4. Back to Main Menu");
 
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
-      case 1 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Fan");
-      case 2 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Heater");
-      case 3 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Light");
-      case 4 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Sprinkler");
-      case 5 -> greenhouseControlMenu(greenhouseId);
+      case 1 -> activeControlPanel.addSensorToSensorNode(greenhouseId, "Humidity");
+      case 2 -> activeControlPanel.addSensorToSensorNode(greenhouseId, "Light");
+      case 3 -> activeControlPanel.addSensorToSensorNode(greenhouseId, "Temperature");
+      case 4 -> greenhouseControlMenu(greenhouseId);
       default -> System.out.println("Invalid choice!");
     }
     greenhouseControlMenu(greenhouseId);
