@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
 import javafx.util.Pair;
 import protocol.command.ActuatorData;
 import protocol.command.GreenhouseListData;
@@ -46,6 +45,7 @@ public class TextBasedUi {
    * Displays application header.
    */
   private void displayHeader(String title) {
+    clearScreen();
     System.out.println("===============================");
     System.out.println("=== " + title + " ===");
     System.out.println("===============================");
