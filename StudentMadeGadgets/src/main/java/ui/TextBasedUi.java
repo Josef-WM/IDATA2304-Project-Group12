@@ -196,6 +196,7 @@ public class TextBasedUi {
       case 5 -> greenhouseControlMenu(greenhouseId);
       default -> System.out.println("Invalid choice!");
     }
+    greenhouseControlMenu(greenhouseId);
   }
 
   /**
