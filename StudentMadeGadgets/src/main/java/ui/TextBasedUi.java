@@ -159,7 +159,11 @@ public class TextBasedUi {
       Pair<Double, String> sensorInfo = entry.getValue();
 
       System.out.println(index + ". " + sensorID + ": " + sensorInfo.getKey() + " " + sensorInfo.getValue());
+
+      index++;
     }
+
+    pressEnterToContinue();
     greenhouseControlMenu(greenhouseId);
   }
 
@@ -184,14 +188,23 @@ public class TextBasedUi {
         powerState = "OFF";
       }
 
-      System.out.println(index + ". " + actuatorID + ": [" + powerState + "] Power: " + actuatorInfo.getValue());
+      String powerLevel;
+      switch (actuatorInfo.getValue()) {
+        case 0 -> powerLevel = "LOW";
+        case 1 -> powerLevel = "MEDIUM";
+        case 2 -> powerLevel = "HIGH";
+        default -> powerLevel = "";
+      }
+
+      System.out.println(index + ". " + actuatorID + ": [" + powerState + "] Power: " + powerLevel);
+      index++;
     }
 
-    int choice = getUserChoice("Select actuator (or " + actuatorData.size() + " to quit): ");
+    int choice = getUserChoice("Select actuator (or " + (actuatorData.size()+1) + " to quit): ");
     if (choice <= actuatorData.size()) {
       actuatorControlMenu(greenhouseId, actuatorIds.get(choice-1));
     } else {
-      displayControlPanelMainPage();
+      greenhouseControlMenu(greenhouseId);
     }
 
     greenhouseControlMenu(greenhouseId);

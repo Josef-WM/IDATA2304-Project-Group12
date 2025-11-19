@@ -160,7 +160,7 @@ public class CommandHandler {
         return replyJson;
       }
 
-      case "SENSOR_ACTUATOR" -> {
+      case "ADD_SENSOR" -> {
         AddSensor addSensor = (AddSensor) messageFromJSON.getBody();
         int greenhouseId = addSensor.getGreenhouseId();
         String actuatorType = addSensor.getSensorType();
