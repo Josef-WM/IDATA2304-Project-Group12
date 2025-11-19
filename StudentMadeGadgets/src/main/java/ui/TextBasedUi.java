@@ -17,6 +17,7 @@ import protocol.command.Information;
  */
 public class TextBasedUi {
 
+  TextHelper textHelper =  new TextHelper();
   private boolean running = true;
   Scanner scanner = new Scanner(System.in);
   ControlPanelNode activeControlPanel = new ControlPanelNode("Localhost", 6767);
@@ -28,10 +29,10 @@ public class TextBasedUi {
     try {
       while (running) {
         if (!activeControlPanel.isConnected()) {
-          clearScreen();
+          textHelper.clearScreen();
           serverConnectionMenu();
         } else {
-          clearScreen();
+          textHelper.clearScreen();
           displayControlPanelMainPage();
         }
       }
@@ -41,21 +42,13 @@ public class TextBasedUi {
     }
   }
 
-  /**
-   * Displays application header.
-   */
-  private void displayHeader(String title) {
-    clearScreen();
-    System.out.println("===============================");
-    System.out.println("=== " + title + " ===");
-    System.out.println("===============================");
-  }
+
 
   /**
    * Displays server connection menu.
    */
   private void serverConnectionMenu() {
-    displayHeader("SMART GREENHOUSE CLIENT");
+    textHelper.displayHeader("🌿 SMART GREENHOUSE CLIENT 🌿");
     System.out.println("1. Connect to a server");
     System.out.println("2. Exit");
     int choice = getUserChoice("Enter choice: ");
@@ -76,7 +69,7 @@ public class TextBasedUi {
    * Displays the main control panel page.
    */
   private void displayControlPanelMainPage() throws IOException {
-    displayHeader("SMART GREENHOUSE CLIENT");
+    textHelper.displayHeader("SMART GREENHOUSE CLIENT");
     System.out.println("1. Lists all Greenhouses on the server");
     System.out.println("2. Select a greenhouse");
     System.out.println("3. Create a greenhouse");
@@ -109,7 +102,7 @@ public class TextBasedUi {
    * Selects a greenhouse to control.
    */
   private void selectGreenhouseMenu() throws IOException {
-    displayHeader("Available Greenhouses");
+    textHelper.displayHeader("Available Greenhouses:");
     listAllGreenhouses();
 
     int choice = getUserChoice("Select greenhouse: ");
@@ -127,7 +120,7 @@ public class TextBasedUi {
    * Menu for controlling a greenhouse.
    */
   private void greenhouseControlMenu(int greenhouseId) throws IOException {
-    displayHeader("Connected to Greenhouse #" + greenhouseId);
+    textHelper.displayHeader("Connected to Greenhouse: " + greenhouseId);
     System.out.println("1. View Sensor Data");
     System.out.println("2. View / Change Actuator Status");
     System.out.println("3. Add sensor to sensor node");
@@ -150,7 +143,7 @@ public class TextBasedUi {
    * Menu for viewing sensor data.
    */
   private void viewSensorDataMenu(int greenhouseId) throws IOException {
-    displayHeader("Sensor Data for Greenhouse #" + greenhouseId);
+    textHelper.displayHeader("Sensor Data for Greenhouse #" + greenhouseId);
     HashMap<String, Pair<Double, String>> sensorData = activeControlPanel.getAllSensorData(greenhouseId).getSensorDataHashMap();
 
     int index = 1;
@@ -171,7 +164,7 @@ public class TextBasedUi {
    * Menu for viewing/changing actuator status.
    */
   private void viewChangeActuatorStatusMenu(int greenhouseId) throws IOException {
-    displayHeader("Actuator Status for Greenhouse " + greenhouseId);
+    textHelper.displayHeader("Actuator Status for Greenhouse " + greenhouseId);
     HashMap<String, Pair<Boolean, Integer>> actuatorData = activeControlPanel.getAllActuatorData(greenhouseId).getActuatorDataHashMap();
 
     ArrayList<String> actuatorIds = new ArrayList<>();
@@ -230,7 +223,7 @@ public class TextBasedUi {
       case 2 -> highPowerSelected = " [SELECTED]";
     }
 
-    displayHeader("Change status of actuator " + actuatorId);
+    textHelper.displayHeader("Change status of actuator " + actuatorId);
     System.out.println("1. Toggle power status: (Currently [" + powerState + "])");
     System.out.println("2. Select LOW power" + lowPowerSelected);
     System.out.println("3. Select MEDIUM power" + mediumPowerSelected);
@@ -262,7 +255,7 @@ public class TextBasedUi {
   }
 
   private void addActuatorToSensorNodeMenu(int greenhouseId) throws IOException {
-    displayHeader("Add actuator to sensor node in greenhouse " + greenhouseId);
+    textHelper.displayHeader("Add actuator to sensor node in greenhouse " + greenhouseId);
 
     System.out.println("1. Fan");
     System.out.println("2. Heater");
@@ -341,7 +334,7 @@ public class TextBasedUi {
    * Method to connect the control panel to a server.
    */
   private void connectToServer() {
-    clearScreen();
+    textHelper.clearScreen();
     System.out.println("Enter a Server host's IP:");
     try {
       String host = scanner.nextLine();
@@ -372,24 +365,5 @@ public class TextBasedUi {
   public void pressEnterToContinue() {
     System.out.println("Press enter to continue...");
     scanner.nextLine();
-  }
-
-  /**
-   * Clears the screen, works on multiple operating systems.
-   */
-  public static void clearScreen() {
-    try {
-      String os = System.getProperty("os.name").toLowerCase();
-      if (os.contains("windows")) {
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-      } else if (os.contains("linux") || os.contains("mac")) {
-        new ProcessBuilder("clear").inheritIO().start().waitFor();
-      } else {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-      }
-    } catch (final Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 }
