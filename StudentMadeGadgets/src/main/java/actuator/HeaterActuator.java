@@ -3,57 +3,48 @@ package actuator;
 import greenhouse.Greenhouse;
 
 /**
- * Heater actuator class that implements the Actuator interface.
- * will be used to control the heater in the greenhouse.
+ * Represents a heater, acts as an actuator in a greenhouse.
  */
 public class HeaterActuator implements Actuator {
   private String ID;
   private boolean isOn;
+  private int power;
+  private double heatDifference;
 
   /**
-   * constructor for the HeatActuator class.
+   * constructor for the HeaterActuator class.
    */
   public HeaterActuator() {
     this.isOn = false;
-  }
+    this.power = 0;
+    this.heatDifference = 0;
 
-  /**
-   * Returns the id of the heater.
-   */
-  @Override
-  public String getID() {
-    return this.ID;
-  }
-
-  /**
-   * Sets the id of the heater.
-   * @param ID
-   */
-  @Override
-  public void setID(String ID) {
-    this.ID = ID;
   }
 
   /**
    * Returns the type of the actuator
    */
-  @Override
   public String getType() {
     return "Heater";
   }
 
   /**
-   * Returns whether the actuator is on.
+   * Returns the id of the actuator.
    */
-  @Override
-  public boolean isOn() {
-    return this.isOn;
+  public String getID() {
+    return this.ID;
+  }
+
+  public void setID(String ID) {
+    this.ID = ID;
   }
 
   /**
    * turns on the actuator.
    */
   public void turnOn(Greenhouse greenhouse) {
+    this.heatDifference = this.heatDifference + 5*(1+ power *0.2);
+    greenhouse.changeTemperature(this.heatDifference);
     isOn = true;
   }
 
@@ -61,6 +52,8 @@ public class HeaterActuator implements Actuator {
    * turns off the actuator.
    */
   public void turnOff(Greenhouse greenhouse) {
+    greenhouse.changeTemperature(-this.heatDifference);
+    this.heatDifference = 0;
     isOn = false;
   }
 
@@ -79,14 +72,34 @@ public class HeaterActuator implements Actuator {
     }
   }
 
-  /**
-   * Sets the state of the actuator.
-   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);
     } else {
       turnOff(greenhouse);
     }
+  }
+
+  /**
+   * Returns the isOn() state.
+   *
+   * @return boolean isOn() state
+   */
+  public boolean isOn() {
+    return this.isOn;
+  }
+
+  /**
+   * Gets the power of the actuator.
+   */
+  public int getPower() {
+    return this.power;
+  }
+
+  /**
+   * sets the speed of the actuator.
+   */
+  public void setPower(int speed) {
+    this.power = speed;
   }
 }

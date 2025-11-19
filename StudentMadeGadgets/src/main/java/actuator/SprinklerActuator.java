@@ -3,57 +3,48 @@ package actuator;
 import greenhouse.Greenhouse;
 
 /**
- * Sprinkler actuator class that implements the Actuator interface.
- * will be used to control the sprinkler in the greenhouse.
+ * Represents a heater, acts as an actuator in a greenhouse.
  */
 public class SprinklerActuator implements Actuator {
   private String ID;
   private boolean isOn;
+  private int power;
+  private int humidityDifference;
 
   /**
-   * constructor for the SprinklerActuator class.
+   * constructor for the HeaterActuator class.
    */
   public SprinklerActuator() {
     this.isOn = false;
-  }
+    this.power = 0;
+    this.humidityDifference = 0;
 
-  /**
-   * Returns the id of the sprinkler.
-   */
-  @Override
-  public String getID() {
-    return this.ID;
-  }
-
-  /**
-   * Sets the id of the sprinkler.
-   * @param ID
-   */
-  @Override
-  public void setID(String ID) {
-    this.ID = ID;
   }
 
   /**
    * Returns the type of the actuator
    */
-  @Override
   public String getType() {
-    return "Light";
+    return "Humidity";
   }
 
   /**
-   * Returns whether the actuator is on.
+   * Returns the id of the actuator.
    */
-  @Override
-  public boolean isOn() {
-    return this.isOn;
+  public String getID() {
+    return this.ID;
+  }
+
+  public void setID(String ID) {
+    this.ID = ID;
   }
 
   /**
    * turns on the actuator.
    */
   public void turnOn(Greenhouse greenhouse) {
+    this.humidityDifference = this.humidityDifference + 10*(1+ power *2);
+    greenhouse.changeHumidity(this.humidityDifference);
     isOn = true;
   }
 
@@ -61,6 +52,8 @@ public class SprinklerActuator implements Actuator {
    * turns off the actuator.
    */
   public void turnOff(Greenhouse greenhouse) {
+    greenhouse.changeHumidity(-this.humidityDifference);
+    this.humidityDifference = 0;
     isOn = false;
   }
 
@@ -79,16 +72,34 @@ public class SprinklerActuator implements Actuator {
     }
   }
 
-  /**
-   * Sets the state of the actuator.
-   * @param state
-   * @param greenhouse
-   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);
     } else {
       turnOff(greenhouse);
     }
+  }
+
+  /**
+   * Returns the isOn() state.
+   *
+   * @return boolean isOn() state
+   */
+  public boolean isOn() {
+    return this.isOn;
+  }
+
+  /**
+   * Gets the power of the actuator.
+   */
+  public int getPower() {
+    return this.power;
+  }
+
+  /**
+   * sets the speed of the actuator.
+   */
+  public void setPower(int speed) {
+    this.power = speed;
   }
 }
