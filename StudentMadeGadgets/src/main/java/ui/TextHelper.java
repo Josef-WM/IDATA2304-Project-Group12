@@ -25,6 +25,11 @@ public class TextHelper {
     }
   }
 
+  public void printTextWithColour(String text, String colour) {
+    System.out.print("\033[41m");
+    System.out.println(text);
+  }
+
   /**
    * Displays application header.
    */

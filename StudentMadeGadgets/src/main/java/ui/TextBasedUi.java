@@ -51,6 +51,9 @@ public class TextBasedUi {
     textHelper.displayHeader("🌿 SMART GREENHOUSE CLIENT 🌿");
     System.out.println("1. Connect to a server");
     System.out.println("2. Exit");
+
+    textHelper.printTextWithColour("this is red text", "green");
+
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
@@ -277,7 +280,7 @@ public class TextBasedUi {
   }
 
   private void addSensorToSensorNodeMenu(int greenhouseId) throws IOException {
-    displayHeader("Add sensor to sensor node in greenhouse " + greenhouseId);
+    textHelper.displayHeader("Add sensor to sensor node in greenhouse " + greenhouseId);
 
     System.out.println("1. Humidity");
     System.out.println("2. Light");
