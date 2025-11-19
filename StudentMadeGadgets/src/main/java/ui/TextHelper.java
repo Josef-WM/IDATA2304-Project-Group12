@@ -8,6 +8,8 @@ import java.util.Scanner;
  */
 public class TextHelper {
 
+  Scanner scanner = new Scanner(System.in);
+
   /**
    * Clears the screen, works on multiple operating systems.
    */
@@ -92,8 +94,24 @@ public class TextHelper {
    * invoked before clearing the screen.
    */
   public void pressEnterToContinue() {
-    Scanner scanner = new Scanner(System.in);
     printTextWithColour("Press any key to continue...", "yellow");
     scanner.nextLine();
+  }
+
+  /**
+   * Method for getting the user's
+   * choice from the menu.
+   *
+   * @return the user's choice, as an integer
+   */
+  public int getUserChoice(String prompt) {
+    printTextWithColour(prompt, "blue");
+    while (!scanner.hasNextInt()) {
+      printTextWithColour("Invalid input. " + prompt, "red");
+      scanner.next();
+    }
+    int value = scanner.nextInt();
+    scanner.nextLine();
+    return value;
   }
 }

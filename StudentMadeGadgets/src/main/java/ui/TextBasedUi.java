@@ -52,7 +52,7 @@ public class TextBasedUi {
     System.out.println("1. Connect to a server");
     System.out.println("2. Exit");
 
-    int choice = getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> connectToServer();
@@ -77,7 +77,7 @@ public class TextBasedUi {
     System.out.println("4. Remove a greenhouse");
     System.out.println("5. Disconnect from server");
     System.out.println();
-    int choice = getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> {
@@ -110,7 +110,7 @@ public class TextBasedUi {
     textHelper.displayHeader("Available Greenhouses:", "green");
     listAllGreenhouses();
 
-    int choice = getUserChoice("Select greenhouse: ");
+    int choice = textHelper.getUserChoice("Select greenhouse: ");
     GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
 
     if (choice <= greenhouseListData.getGreenhouses().size()) {
@@ -132,7 +132,7 @@ public class TextBasedUi {
     System.out.println("4. Add actuator to sensor node");
     System.out.println("5. Back to Main Menu");
 
-    int choice = getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> viewSensorDataMenu(greenhouseId);
@@ -198,7 +198,7 @@ public class TextBasedUi {
       index++;
     }
 
-    int choice = getUserChoice("Select actuator (or " + (actuatorData.size()+1) + " to quit): ");
+    int choice = textHelper.getUserChoice("Select actuator (or " + (actuatorData.size()+1) + " to quit): ");
     if (choice <= actuatorData.size()) {
       actuatorControlMenu(greenhouseId, actuatorIds.get(choice-1));
     } else {
@@ -235,7 +235,7 @@ public class TextBasedUi {
     System.out.println("4. Select HIGH power" + highPowerSelected);
     System.out.println("5. Back to Main Menu");
 
-    int choice = getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> {
@@ -268,7 +268,7 @@ public class TextBasedUi {
     System.out.println("4. Sprinkler");
     System.out.println("5. Back to Main Menu");
 
-    int choice = getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Fan");
@@ -289,7 +289,7 @@ public class TextBasedUi {
     System.out.println("3. Temperature");
     System.out.println("4. Back to Main Menu");
 
-    int choice = getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ");
 
     switch (choice) {
       case 1 -> activeControlPanel.addSensorToSensorNode(greenhouseId, "Humidity");
@@ -317,7 +317,7 @@ public class TextBasedUi {
    * Menu for removing a greenhouse from the server.
    */
   private void removeGreenhouseMenu() throws IOException {
-    int id = getUserChoice("Enter ID of greenhouse to remove: ");
+    int id = textHelper.getUserChoice("Enter ID of greenhouse to remove: ");
 
     Information information = activeControlPanel.removeGreenhouse(id);
 
@@ -348,22 +348,5 @@ public class TextBasedUi {
     } catch (Exception e) {
       System.out.println("Failed to connect to server. " + e.getMessage());
     }
-  }
-
-  /**
-   * Method for getting the user's
-   * choice from the menu.
-   *
-   * @return the user's choice, as an integer
-   */
-  private int getUserChoice(String prompt) {
-    textHelper.printTextWithColour(prompt, "blue");
-    while (!scanner.hasNextInt()) {
-      System.out.println("Invalid input. " + prompt);
-      scanner.next();
-    }
-    int value = scanner.nextInt();
-    scanner.nextLine();
-    return value;
   }
 }
