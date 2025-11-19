@@ -105,6 +105,7 @@ public class TextBasedUi {
    * Selects a greenhouse to control.
    */
   private void selectGreenhouseMenu() throws IOException {
+    clearScreen();
     displayHeader("Available Greenhouses");
     listAllGreenhouses();
 
@@ -263,5 +264,22 @@ public class TextBasedUi {
     int value = scanner.nextInt();
     scanner.nextLine();
     return value;
+  }
+
+  /**
+   * Clears the screen, works on multiple operating systems.
+   */
+  public static void clearScreen() {
+    System.out.println("RUNNING CLEAR SCREEN THINGY:");
+    try {
+      if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+      } else {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+      }
+    } catch (final Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
