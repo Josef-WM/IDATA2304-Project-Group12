@@ -40,7 +40,7 @@ class TemperatureSensorTest {
   void setUp() {
     // Arrange
     greenhouse = new Greenhouse("TestHouse");
-    sensor = new TemperatureSensor("temp1", greenhouse);
+    sensor = new TemperatureSensor( greenhouse);
   }
 
   /**
