@@ -1,5 +1,7 @@
 package ui;
 
+import java.util.Scanner;
+
 /**
  * Class with a few helpful methods to be used
  * with the text based user interface.
@@ -29,24 +31,45 @@ public class TextHelper {
    * Method for printing out coloured text.
    *
    * @param text text to print
-   * @param colour colour to use. Can be either red, or blue
+   * @param colour colour to use. Can be either red, green, yellow, blue, magenta, or cyan.
    */
   public void printTextWithColour(String text, String colour) {
 
     switch (colour) {
       case "red":
         System.out.print("\033[31m");
+        break;
+
+      case "green":
+        System.out.print("\033[32m");
+        break;
+
+      case "yellow":
+        System.out.print("\033[33m");
+        break;
 
       case "blue":
         System.out.print("\033[34m");
+        break;
+
+      case "magenta":
+        System.out.print("\033[35m");
+        break;
+
+      case "cyan":
+        System.out.print("\033[36");
+        break;
+
+      default:
     }
     System.out.println(text);
+    System.out.print("\033[0m");
   }
 
   /**
    * Displays application header.
    */
-  public void displayHeader(String title) {
+  public void displayHeader(String title, String colour) {
     clearScreen();
     int len = title.length();
 
@@ -56,11 +79,21 @@ public class TextHelper {
     }
     System.out.println();
 
-    System.out.println(title);
+    printTextWithColour(title, colour);
 
     for (int i = 0; i < len; i++) {
       System.out.print("=");
     }
     System.out.println();
+  }
+
+  /**
+   * Method to wait for user interaction, usually
+   * invoked before clearing the screen.
+   */
+  public void pressEnterToContinue() {
+    Scanner scanner = new Scanner(System.in);
+    printTextWithColour("Press any key to continue...", "yellow");
+    scanner.nextLine();
   }
 }
