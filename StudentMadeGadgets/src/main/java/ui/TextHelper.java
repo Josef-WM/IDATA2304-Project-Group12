@@ -74,7 +74,7 @@ public class TextHelper {
 
       default:
     }
-    System.out.println(text);
+    System.out.print(text);
     System.out.print("\033[0m");
   }
 
@@ -89,9 +89,10 @@ public class TextHelper {
     for (int i = 0; i < len; i++) {
       System.out.print("=");
     }
-    System.out.println();
 
+    System.out.println();
     printTextWithColour(title, colour);
+    System.out.println();
 
     for (int i = 0; i < len; i++) {
       System.out.print("=");
@@ -114,14 +115,23 @@ public class TextHelper {
    *
    * @return the user's choice, as an integer
    */
-  public int getUserChoice(String prompt) {
+  public int getUserChoice(String prompt, int maxChoice) {
     printTextWithColour(prompt, "blue");
-    while (!scanner.hasNextInt()) {
-      printTextWithColour("Invalid input. " + prompt, "red");
-      scanner.next();
+
+    while (true) {
+      String input = scanner.nextLine();
+
+      try {
+        int value = Integer.parseInt(input);
+
+        if (value >= 0 && value <= maxChoice) {
+          return value;
+        }
+
+        printTextWithColour("Invalid input. " + prompt, "red");
+      } catch (NumberFormatException e) {
+        printTextWithColour("Invalid input. " + prompt, "red");
+      }
     }
-    int value = scanner.nextInt();
-    scanner.nextLine();
-    return value;
   }
 }

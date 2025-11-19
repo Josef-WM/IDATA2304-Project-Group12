@@ -9,7 +9,6 @@ public class HeaterActuator implements Actuator {
   private String ID;
   private boolean isOn;
   private int power;
-  private double heatDifference;
 
   /**
    * constructor for the HeaterActuator class.
@@ -17,8 +16,6 @@ public class HeaterActuator implements Actuator {
   public HeaterActuator() {
     this.isOn = false;
     this.power = 0;
-    this.heatDifference = 0;
-
   }
 
   /**
@@ -43,18 +40,20 @@ public class HeaterActuator implements Actuator {
    * turns on the actuator.
    */
   public void turnOn(Greenhouse greenhouse) {
-    this.heatDifference = this.heatDifference + 5*(1+ power *0.2);
-    greenhouse.changeTemperature(this.heatDifference);
-    isOn = true;
+    if (!isOn) {
+      greenhouse.changeTemperature(getEffect());
+      isOn = true;
+    }
   }
 
   /**
    * turns off the actuator.
    */
   public void turnOff(Greenhouse greenhouse) {
-    greenhouse.changeTemperature(-this.heatDifference);
-    this.heatDifference = 0;
-    isOn = false;
+    if (isOn) {
+      greenhouse.changeTemperature(-getEffect());
+      isOn = false;
+    }
   }
 
   /**
@@ -99,7 +98,17 @@ public class HeaterActuator implements Actuator {
   /**
    * sets the speed of the actuator.
    */
-  public void setPower(int speed) {
-    this.power = speed;
+  public void setPower(int power, Greenhouse greenhouse) {
+    double oldEffect = getEffect();
+    this.power = power;
+    double newEffect = getEffect();
+
+    if (isOn) {
+      greenhouse.changeTemperature(newEffect - oldEffect);
+    }
+  }
+
+  public double getEffect() {
+    return (3 + (2*this.power));
   }
 }

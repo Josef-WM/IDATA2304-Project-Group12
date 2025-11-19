@@ -9,7 +9,7 @@ public interface Actuator {
   boolean isOn();
   void setState(boolean state, Greenhouse greenhouse);
   boolean toggle(Greenhouse greenhouse);
-  default void setPower(int power) {};
+  void setPower(int power, Greenhouse greenhouse);
   default int getPower() { return -1; }
 
   default String format() {

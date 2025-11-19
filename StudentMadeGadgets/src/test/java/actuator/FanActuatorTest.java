@@ -139,7 +139,7 @@ class FanActuatorTest {
   void turnOn_Positive_CoolsGreenhouseAndSetsOn() {
     // Arrange
     setTemperature(25.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
 
     // Act
     actuator.turnOn(greenhouse);
@@ -159,7 +159,7 @@ class FanActuatorTest {
   void turnOff_Positive_RestoresTemperatureAndSetsOff() {
     // Arrange
     setTemperature(25.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // temp -> 20
 
     // Act
@@ -179,7 +179,7 @@ class FanActuatorTest {
   void toggle_Positive_TogglesFromOffToOnAndCools() {
     // Arrange
     setTemperature(30.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
 
     // Act
     boolean result = actuator.toggle(greenhouse);
@@ -198,7 +198,7 @@ class FanActuatorTest {
   void toggle_Positive_TogglesFromOnToOffAndRestoresTemp() {
     // Arrange
     setTemperature(30.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // temp -> 25
 
     // Act
@@ -218,7 +218,7 @@ class FanActuatorTest {
   void setState_Positive_TurnsOnAndCools() {
     // Arrange
     setTemperature(22.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
 
     // Act
     actuator.setState(true, greenhouse);
@@ -236,7 +236,7 @@ class FanActuatorTest {
   void setState_Positive_TurnsOffAndRestoresTemp() {
     // Arrange
     setTemperature(22.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // 22 -> 17
 
     // Act
@@ -256,14 +256,14 @@ class FanActuatorTest {
   void setPower_Positive_ChangesCoolingEffect() {
     // Arrange
     setTemperature(30.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // speed 0
 
     double tempAfterSpeed0 = getTemperature(); // expect 25
     actuator.turnOff(greenhouse); // back to 30
 
     // Act
-    actuator.setPower(2); // higher speed
+    actuator.setPower(2, greenhouse); // higher speed
     actuator.turnOn(greenhouse);
     double tempAfterSpeed2 = getTemperature();
 
@@ -292,7 +292,7 @@ class FanActuatorTest {
   void turnOn_Negative_MultipleCallsAccumulateCooling() {
     // Arrange
     setTemperature(20.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
 
     // Act
     actuator.turnOn(greenhouse); // 20 -> 15
@@ -313,7 +313,7 @@ class FanActuatorTest {
   void turnOff_Negative_RepeatedCallsDoNotChangeTempWhenAlreadyOff() {
     // Arrange
     setTemperature(20.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // 20 -> 15
     actuator.turnOff(greenhouse); // 15 -> 20
 
@@ -333,7 +333,7 @@ class FanActuatorTest {
   void toggle_Negative_RepeatedToggleAlternatesState() {
     // Arrange
     setTemperature(25.0);
-    actuator.setPower(0);
+    actuator.setPower(0, greenhouse);
 
     // Act
     actuator.toggle(greenhouse); // ON

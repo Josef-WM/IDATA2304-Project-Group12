@@ -156,7 +156,7 @@ class SensorNodeTest {
     String id = node.addActuatorToNode(actuator);
 
     // Act
-    node.setActuatorPower(id, 75);
+    node.setActuatorPower(id, 75, greenhouse);
 
     // Assert
     assertEquals(75, actuator.getPower());
@@ -247,6 +247,6 @@ class SensorNodeTest {
 
     // Act & Assert
     assertThrows(NullPointerException.class,
-            () -> node.setActuatorPower("unknown", 50));
+            () -> node.setActuatorPower("unknown", 50, greenhouse));
   }
 }

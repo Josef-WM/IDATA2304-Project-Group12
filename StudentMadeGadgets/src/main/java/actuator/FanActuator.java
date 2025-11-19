@@ -8,17 +8,14 @@ import greenhouse.Greenhouse;
 public class FanActuator implements Actuator {
   private String ID;
   private boolean isOn;
-  private int speed;
-  private double heatDifference;
+  private int power;
 
   /**
    * constructor for the FanActuator class.
    */
   public FanActuator() {
     this.isOn = false;
-    this.speed = 0;
-    this.heatDifference = 0;
-
+    this.power = 0;
   }
 
   /**
@@ -43,18 +40,20 @@ public class FanActuator implements Actuator {
    * turns on the actuator.
    */
   public void turnOn(Greenhouse greenhouse) {
-    this.heatDifference = this.heatDifference - 5*(1+speed*0.2);
-    greenhouse.changeTemperature(this.heatDifference);
-    isOn = true;
+    if (!isOn) {
+      greenhouse.changeTemperature(getEffect());
+      isOn = true;
+    }
   }
 
   /**
    * turns off the actuator.
    */
   public void turnOff(Greenhouse greenhouse) {
-    greenhouse.changeTemperature(-this.heatDifference);
-    this.heatDifference = 0;
-    isOn = false;
+    if (isOn) {
+      greenhouse.changeTemperature(-getEffect());
+      isOn = false;
+    }
   }
 
   /**
@@ -90,23 +89,26 @@ public class FanActuator implements Actuator {
   }
 
   /**
-   * Gets the speed of the fan.
-   */
-  public float getSpeed() {
-    return this.speed;
-  }
-
-  /**
    * sets the speed of the fan actuator.
    */
-  public void setPower(int speed) {
-    this.speed = speed;
+  public void setPower(int power, Greenhouse greenhouse) {
+    double oldEffect = getEffect();
+    this.power = power;
+    double newEffect = getEffect();
+
+    if (isOn) {
+      greenhouse.changeTemperature(newEffect - oldEffect);
+    }
   }
 
   /**
    * Gets the power of the fan actuator.
    */
   public int getPower() {
-    return this.speed;
+    return this.power;
+  }
+
+  public double getEffect() {
+    return (-3 - (2*this.power));
   }
 }

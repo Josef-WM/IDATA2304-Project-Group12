@@ -70,7 +70,7 @@ public class ActuatorTest implements Actuator {
    * @param power
    */
   @Override
-  public void setPower(int power) {
+  public void setPower(int power, Greenhouse greenhouse) {
     this.power = power;
   }
 

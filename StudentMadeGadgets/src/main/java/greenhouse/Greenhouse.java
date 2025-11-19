@@ -30,7 +30,7 @@ public class Greenhouse {
     this.humidity = 60;
     this.light = 1000;
 
-    startGradualUpdater();
+    //startGradualUpdater();
   }
 
   public void setGreenhouseId(int id) {

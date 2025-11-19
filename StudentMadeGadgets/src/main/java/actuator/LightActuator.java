@@ -9,7 +9,6 @@ public class LightActuator implements Actuator {
   private String ID;
   private boolean isOn;
   private int power;
-  private int lightDifference;
 
   /**
    * constructor for the HeaterActuator class.
@@ -17,8 +16,6 @@ public class LightActuator implements Actuator {
   public LightActuator() {
     this.isOn = false;
     this.power = 0;
-    this.lightDifference = 0;
-
   }
 
   /**
@@ -43,18 +40,20 @@ public class LightActuator implements Actuator {
    * turns on the actuator.
    */
   public void turnOn(Greenhouse greenhouse) {
-    this.lightDifference = this.lightDifference + 500*(1+ power *2);
-    greenhouse.changeLight(this.lightDifference);
-    isOn = true;
+    if (!isOn) {
+      greenhouse.changeLight(getEffect());
+      isOn = true;
+    }
   }
 
   /**
    * turns off the actuator.
    */
   public void turnOff(Greenhouse greenhouse) {
-    greenhouse.changeLight(-this.lightDifference);
-    this.lightDifference = 0;
-    isOn = false;
+    if (isOn) {
+      greenhouse.changeLight(-getEffect());
+      isOn = false;
+    }
   }
 
   /**
@@ -99,7 +98,17 @@ public class LightActuator implements Actuator {
   /**
    * sets the speed of the actuator.
    */
-  public void setPower(int speed) {
-    this.power = speed;
+  public void setPower(int power, Greenhouse greenhouse) {
+    int oldEffect = getEffect();
+    this.power = power;
+    int newEffect = getEffect();
+
+    if (isOn) {
+      greenhouse.changeLight(newEffect - oldEffect);
+    }
+  }
+
+  public int getEffect() {
+    return (500 + (300*this.power));
   }
 }

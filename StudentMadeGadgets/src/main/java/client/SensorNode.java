@@ -128,7 +128,7 @@ public class SensorNode {
    * @param deviceID the device ID of the actuator
    * @param power the power to set the actuator to
    */
-  public void setActuatorPower(String deviceID, int power) {
-    getActuator(deviceID).setPower(power);
+  public void setActuatorPower(String deviceID, int power, Greenhouse greenhouse) {
+    getActuator(deviceID).setPower(power, greenhouse);
   }
 }

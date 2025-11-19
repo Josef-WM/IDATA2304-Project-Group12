@@ -21,6 +21,7 @@ public class TextBasedUi {
   private boolean running = true;
   Scanner scanner = new Scanner(System.in);
   ControlPanelNode activeControlPanel = new ControlPanelNode("Localhost", 6767);
+  String selectedMenu = "SERVER_CONNECTION";
 
   /**
    * Starts the text based user interface.
@@ -28,36 +29,54 @@ public class TextBasedUi {
   public void start() {
     try {
       while (running) {
-        if (!activeControlPanel.isConnected()) {
-          textHelper.clearScreen();
-          serverConnectionMenu();
-        } else {
-          textHelper.clearScreen();
-          displayControlPanelMainPage();
+        switch (selectedMenu) {
+          case "SERVER_CONNECTION" -> {
+            serverConnectionMenu("");
+          }
+          case "CONTROL_PANEL_MAIN_PAGE" -> {
+            displayControlPanelMainPage();
+          }
         }
       }
     } catch (Exception e) {
-      System.out.println("An error occurred:");
-      System.out.println(e.getMessage());
+      System.out.println("An error occurred:" + e.getMessage());
     }
   }
-
-
 
   /**
    * Displays server connection menu.
    */
-  private void serverConnectionMenu() {
-    textHelper.displayHeader("🌿 SMART GREENHOUSE CLIENT 🌿", "red");
+  private void serverConnectionMenu(String extras) {
+    textHelper.displayHeader("SMART GREENHOUSE CLIENT", "green");
     System.out.println("1. Connect to a server");
     System.out.println("2. Exit");
 
-    int choice = textHelper.getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ", 2);
 
     switch (choice) {
       case 1 -> connectToServer();
       case 2 -> exit();
-      default -> System.out.println("Invalid choice!");
+      default -> {
+        serverConnectionMenu("Invalid choice!");
+      }
+    }
+  }
+
+  /**
+   * Method to connect the control panel to a server.
+   */
+  private void connectToServer() {
+    textHelper.clearScreen();
+    System.out.println("Enter a Server host's IP (leave empty for localhost):");
+    try {
+      String host = scanner.nextLine();
+      activeControlPanel.setHost(host);
+      activeControlPanel.connect();
+      if (activeControlPanel.isConnected()) {
+        selectedMenu = "CONTROL_PANEL_MAIN_PAGE";
+      }
+    } catch (Exception e) {
+      System.out.println("Failed to connect to server. " + e.getMessage());
     }
   }
 
@@ -70,14 +89,14 @@ public class TextBasedUi {
    * Displays the main control panel page.
    */
   private void displayControlPanelMainPage() throws IOException {
-    textHelper.displayHeader("🌿 SMART GREENHOUSE CLIENT 🌿", "red");
+    textHelper.displayHeader("SMART GREENHOUSE CLIENT", "green");
     System.out.println("1. Lists all Greenhouses on the server");
     System.out.println("2. Select a greenhouse");
     System.out.println("3. Create a greenhouse");
     System.out.println("4. Remove a greenhouse");
     System.out.println("5. Disconnect from server");
     System.out.println();
-    int choice = textHelper.getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ", 5);
 
     switch (choice) {
       case 1 -> {
@@ -89,6 +108,18 @@ public class TextBasedUi {
       case 4 -> removeGreenhouseMenu();
       case 5 -> disconnect();
       default -> System.out.println("Invalid choice!");
+    }
+  }
+
+  /**
+   * Method to disconnect from the server.
+   */
+  private void disconnect() {
+    try {
+      activeControlPanel.disconnect();
+      selectedMenu = "SERVER_CONNECTION";
+    } catch (IOException e) {
+      System.out.println("Error while disconnecting control panel");
     }
   }
 
@@ -110,7 +141,7 @@ public class TextBasedUi {
     textHelper.displayHeader("Available Greenhouses:", "green");
     listAllGreenhouses();
 
-    int choice = textHelper.getUserChoice("Select greenhouse: ");
+    int choice = textHelper.getUserChoice("Select greenhouse: ", 255);
     GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
 
     if (choice <= greenhouseListData.getGreenhouses().size()) {
@@ -132,14 +163,14 @@ public class TextBasedUi {
     System.out.println("4. Add actuator to sensor node");
     System.out.println("5. Back to Main Menu");
 
-    int choice = textHelper.getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ", 5);
 
     switch (choice) {
       case 1 -> viewSensorDataMenu(greenhouseId);
       case 2 -> viewChangeActuatorStatusMenu(greenhouseId);
       case 3 -> addSensorToSensorNodeMenu(greenhouseId);
       case 4 -> addActuatorToSensorNodeMenu(greenhouseId);
-      case 5 -> exit();
+      case 5 -> selectedMenu = "CONTROL_PANEL_MAIN_PAGE";
       default -> System.out.println("Invalid choice!");
     }
   }
@@ -198,7 +229,7 @@ public class TextBasedUi {
       index++;
     }
 
-    int choice = textHelper.getUserChoice("Select actuator (or " + (actuatorData.size()+1) + " to quit): ");
+    int choice = textHelper.getUserChoice("Select actuator (or " + (actuatorData.size()+1) + " to quit): ", (actuatorData.size()+1));
     if (choice <= actuatorData.size()) {
       actuatorControlMenu(greenhouseId, actuatorIds.get(choice-1));
     } else {
@@ -235,7 +266,7 @@ public class TextBasedUi {
     System.out.println("4. Select HIGH power" + highPowerSelected);
     System.out.println("5. Back to Main Menu");
 
-    int choice = textHelper.getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ", 5);
 
     switch (choice) {
       case 1 -> {
@@ -268,7 +299,7 @@ public class TextBasedUi {
     System.out.println("4. Sprinkler");
     System.out.println("5. Back to Main Menu");
 
-    int choice = textHelper.getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ", 5);
 
     switch (choice) {
       case 1 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Fan");
@@ -289,7 +320,7 @@ public class TextBasedUi {
     System.out.println("3. Temperature");
     System.out.println("4. Back to Main Menu");
 
-    int choice = textHelper.getUserChoice("Enter choice: ");
+    int choice = textHelper.getUserChoice("Enter choice: ", 4);
 
     switch (choice) {
       case 1 -> activeControlPanel.addSensorToSensorNode(greenhouseId, "Humidity");
@@ -317,36 +348,10 @@ public class TextBasedUi {
    * Menu for removing a greenhouse from the server.
    */
   private void removeGreenhouseMenu() throws IOException {
-    int id = textHelper.getUserChoice("Enter ID of greenhouse to remove: ");
+    int id = textHelper.getUserChoice("Enter ID of greenhouse to remove: ", 255);
 
     Information information = activeControlPanel.removeGreenhouse(id);
 
     System.out.println(information.getInformation());
-  }
-
-  /**
-   * Method to disconnect from the server.
-   */
-  private void disconnect() {
-    try {
-      activeControlPanel.disconnect();
-    } catch (IOException e) {
-      System.out.println("Error while disconnecting control panel");
-    }
-  }
-
-  /**
-   * Method to connect the control panel to a server.
-   */
-  private void connectToServer() {
-    textHelper.clearScreen();
-    System.out.println("Enter a Server host's IP:");
-    try {
-      String host = scanner.nextLine();
-      activeControlPanel.setHost(host);
-      activeControlPanel.connect();
-    } catch (Exception e) {
-      System.out.println("Failed to connect to server. " + e.getMessage());
-    }
   }
 }

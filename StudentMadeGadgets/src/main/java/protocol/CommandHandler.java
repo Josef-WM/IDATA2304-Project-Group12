@@ -193,7 +193,7 @@ public class CommandHandler {
         Greenhouse greenhouse = Server.getGreenhouseRegistry().getGreenhouse(greenhouseId);
         if (actuatorCommand.getPower() != -1) {
           int actuatorPower = actuatorCommand.getPower();
-          greenhouse.getSensorNode().setActuatorPower(actuatorId, actuatorPower);
+          greenhouse.getSensorNode().setActuatorPower(actuatorId, actuatorPower, greenhouse);
         } else {
           boolean actuatorState = actuatorCommand.isTurnOn();
           greenhouse.getSensorNode().setActuatorState(actuatorId, greenhouse, actuatorState);

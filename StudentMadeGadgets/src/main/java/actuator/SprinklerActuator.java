@@ -25,7 +25,7 @@ public class SprinklerActuator implements Actuator {
    * Returns the type of the actuator
    */
   public String getType() {
-    return "Humidity";
+    return "Sprinkler";
   }
 
   /**
@@ -43,18 +43,20 @@ public class SprinklerActuator implements Actuator {
    * turns on the actuator.
    */
   public void turnOn(Greenhouse greenhouse) {
-    this.humidityDifference = this.humidityDifference + 10*(1+ power *2);
-    greenhouse.changeHumidity(this.humidityDifference);
-    isOn = true;
+    if (!isOn) {
+      greenhouse.changeHumidity(getEffect());
+      isOn = true;
+    }
   }
 
   /**
    * turns off the actuator.
    */
   public void turnOff(Greenhouse greenhouse) {
-    greenhouse.changeHumidity(-this.humidityDifference);
-    this.humidityDifference = 0;
-    isOn = false;
+    if (isOn) {
+      greenhouse.changeHumidity(-getEffect());
+      isOn = false;
+    }
   }
 
   /**
@@ -99,7 +101,17 @@ public class SprinklerActuator implements Actuator {
   /**
    * sets the speed of the actuator.
    */
-  public void setPower(int speed) {
-    this.power = speed;
+  public void setPower(int power, Greenhouse greenhouse) {
+    int oldEffect = getEffect();
+    this.power = power;
+    int newEffect = getEffect();
+
+    if (isOn) {
+      greenhouse.changeHumidity(newEffect - oldEffect);
+    }
+  }
+
+  public int getEffect() {
+    return (10 + (10*this.power));
   }
 }
