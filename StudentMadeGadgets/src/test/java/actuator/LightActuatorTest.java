@@ -9,40 +9,39 @@ import java.lang.reflect.Field;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the {@link HeaterActuator} class.
+ * Unit tests for the {@link LightActuator} class.
  *
- * <p>This test suite validates all actuator behavior including:
+ * <p>Tests validate the following functionality:
  * <ul>
- *     <li>ID handling</li>
- *     <li>getType()</li>
+ *     <li>ID assignment and retrieval</li>
  *     <li>Initial OFF state</li>
- *     <li>turnOn() / turnOff()</li>
+ *     <li>turnOn() and turnOff()</li>
  *     <li>toggle() behavior</li>
- *     <li>setState()</li>
- *     <li>Negative tests for unset ID and repeated calls</li>
+ *     <li>setState(boolean)</li>
+ *     <li>Negative tests for repeated operations and unset ID</li>
  * </ul>
  * </p>
  *
- * <p>Greenhouse internal timer is disabled to avoid nondeterministic tests.</p>
+ * <p>Greenhouse timer is disabled during tests for deterministic behavior.</p>
  */
-class HeaterActuatorTest {
+class LightActuatorTest {
 
-  private HeaterActuator actuator;
+  private LightActuator actuator;
   private Greenhouse greenhouse;
 
   /**
-   * Sets up a deterministic Greenhouse and a fresh HeaterActuator.
+   * Initializes a new LightActuator and a deterministic Greenhouse
+   * instance before each test.
    */
   @BeforeEach
   void setUp() {
-    actuator = new HeaterActuator();
+    actuator = new LightActuator();
     greenhouse = new Greenhouse("TestHouse");
     disableTimer();
   }
 
   /**
-   * Disables the automatic timer inside Greenhouse.
-   * Prevents random temperature/light updates during tests.
+   * Disables the automatic timer in Greenhouse to prevent random light changes.
    */
   private void disableTimer() {
     try {
@@ -56,36 +55,34 @@ class HeaterActuatorTest {
   }
 
   /**
-   * Tests that the heater reports the correct type.
-   * Expected: "Heater".
+   * Tests that getType() returns "Light".
    */
   @Test
-  void getType_Positive_ReturnsHeater() {
-    assertEquals("Heater", actuator.getType());
+  void getType_Positive_ReturnsLight() {
+    assertEquals("Light", actuator.getType());
   }
 
   /**
-   * Tests that the actuator ID is stored and retrieved correctly.
+   * Tests that ID is stored and returned correctly.
    */
   @Test
   void setAndGetID_Positive_StoresIDCorrectly() {
     // Arrange
-    actuator.setID("Heater-1");
+    actuator.setID("Light-1");
 
     // Act
     String id = actuator.getID();
 
     // Assert
-    assertEquals("Heater-1", id);
+    assertEquals("Light-1", id);
   }
 
   /**
-   * Tests that the actuator starts in the OFF state.
-   * Expected: isOn() = false.
+   * Tests that the actuator starts OFF by default.
    */
   @Test
   void constructor_Positive_StartsOff() {
-    assertFalse(actuator.isOn(), "Heater should start OFF");
+    assertFalse(actuator.isOn(), "Light actuator should start OFF");
   }
 
   /**
@@ -93,12 +90,7 @@ class HeaterActuatorTest {
    */
   @Test
   void turnOn_Positive_SetsStateToOn() {
-    // Arrange
-
-    // Act
     actuator.turnOn(greenhouse);
-
-    // Assert
     assertTrue(actuator.isOn());
   }
 
@@ -118,13 +110,10 @@ class HeaterActuatorTest {
   }
 
   /**
-   * Tests that toggle() turns the actuator ON when it is OFF.
-   * Expected: returns true, isOn() = true.
+   * Tests that toggle() switches state from OFF to ON.
    */
   @Test
   void toggle_Positive_TogglesFromOffToOn() {
-    // Arrange
-
     // Act
     boolean result = actuator.toggle(greenhouse);
 
@@ -134,8 +123,7 @@ class HeaterActuatorTest {
   }
 
   /**
-   * Tests that toggle() turns the actuator OFF when it is ON.
-   * Expected: returns false, isOn() = false.
+   * Tests that toggle() switches state from ON to OFF.
    */
   @Test
   void toggle_Positive_TogglesFromOnToOff() {
@@ -155,12 +143,7 @@ class HeaterActuatorTest {
    */
   @Test
   void setState_Positive_TurnsOn() {
-    // Arrange
-
-    // Act
     actuator.setState(true, greenhouse);
-
-    // Assert
     assertTrue(actuator.isOn());
   }
 
@@ -180,8 +163,7 @@ class HeaterActuatorTest {
   }
 
   /**
-   * Tests that getID() returns null if no ID was ever set.
-   * Expected: null.
+   * Tests that getID() returns null when ID has not been assigned.
    */
   @Test
   void getID_Negative_ReturnsNullWhenUnset() {
@@ -189,50 +171,34 @@ class HeaterActuatorTest {
   }
 
   /**
-   * Tests that calling turnOff() multiple times does not break state.
-   * Expected: still OFF.
+   * Tests that calling turnOff() multiple times keeps actuator OFF.
    */
   @Test
   void turnOff_Negative_MultipleCallsKeepStateOff() {
-    // Arrange
-
-    // Act
     actuator.turnOff(greenhouse);
     actuator.turnOff(greenhouse);
-
-    // Assert
     assertFalse(actuator.isOn());
   }
 
   /**
-   * Tests that calling turnOn() multiple times does not break state.
-   * Expected: still ON.
+   * Tests that calling turnOn() multiple times keeps actuator ON.
    */
   @Test
   void turnOn_Negative_MultipleCallsKeepStateOn() {
-    // Arrange
-
-    // Act
     actuator.turnOn(greenhouse);
     actuator.turnOn(greenhouse);
-
-    // Assert
     assertTrue(actuator.isOn());
   }
 
   /**
-   * Tests toggling repeatedly maintains proper alternating behavior.
+   * Tests that repeated toggle() calls alternate between states correctly.
    */
   @Test
   void toggle_Negative_RepeatedToggleFlipsState() {
-    // Arrange
-
-    // Act
     actuator.toggle(greenhouse); // ON
     actuator.toggle(greenhouse); // OFF
     actuator.toggle(greenhouse); // ON
 
-    // Assert
-    assertTrue(actuator.isOn(), "Final state should be ON after odd number of toggles");
+    assertTrue(actuator.isOn(), "Final state should be ON after odd toggles");
   }
 }

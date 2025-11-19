@@ -1,7 +1,10 @@
 package actuator;
 
 import greenhouse.Greenhouse;
-
+/**
+ * Light actuator class that implements the Actuator interface.
+ * will be used to control the light in the greenhouse.
+ */
 public class LightActuator implements Actuator {
   private String ID;
   private boolean isOn;
@@ -13,21 +16,34 @@ public class LightActuator implements Actuator {
     this.isOn = false;
   }
 
+  /**
+   * Returns the id of the light.
+   */
   @Override
   public String getID() {
     return this.ID;
   }
 
+  /**
+   * Sets the id of the light.
+   * @param ID
+   */
   @Override
   public void setID(String ID) {
     this.ID = ID;
   }
 
+  /**
+   * Returns the type of the actuator
+   */
   @Override
   public String getType() {
     return "Light";
   }
 
+  /**
+   * Returns whether the actuator is on.
+   */
   @Override
   public boolean isOn() {
     return this.isOn;
@@ -62,6 +78,9 @@ public class LightActuator implements Actuator {
     }
   }
 
+  /**
+   * Sets the state of the actuator.
+   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);
