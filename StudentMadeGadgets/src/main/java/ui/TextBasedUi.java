@@ -27,8 +27,10 @@ public class TextBasedUi {
     try {
       while (running) {
         if (!activeControlPanel.isConnected()) {
+          clearScreen();
           serverConnectionMenu();
         } else {
+          clearScreen();
           displayControlPanelMainPage();
         }
       }
@@ -94,11 +96,13 @@ public class TextBasedUi {
    * Lists all greenhouses.
    */
   private void listAllGreenhouses() throws IOException {
+    clearScreen();
     GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
     for (int i = 0; i < greenhouseListData.getGreenhouses().size(); i++) {
       String greenhouseName = greenhouseListData.getGreenhouses().get(i).getGreenhouseName();
       System.out.println(i + 1 + ". " + greenhouseName);
     }
+    pressEnterToContinue();
   }
 
   /**
@@ -246,6 +250,7 @@ public class TextBasedUi {
    * Method to connect the control panel to a server.
    */
   private void connectToServer() {
+    clearScreen();
     System.out.println("Enter a Server host's IP:");
     try {
       String host = scanner.nextLine();
@@ -282,7 +287,6 @@ public class TextBasedUi {
    * Clears the screen, works on multiple operating systems.
    */
   public static void clearScreen() {
-    System.out.println("RUNNING CLEAR SCREEN THINGY:");
     try {
       if (System.getProperty("os.name").toLowerCase().contains("windows")) {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
