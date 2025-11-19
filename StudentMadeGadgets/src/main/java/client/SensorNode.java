@@ -7,7 +7,7 @@ import sensor.Sensor;
 import java.util.HashMap;
 
 /**
- * Javadoc placeholder.
+ * This class represents a sensor node that can hold multiple sensors and actuators.
  */
 public class SensorNode {
   private HashMap<String, Actuator> actuators;
@@ -75,26 +75,55 @@ public class SensorNode {
     this.actuators.remove(actuator.getID());
   }
 
+  /**
+   * Gets an actuator by its device ID.
+   * @param deviceID the device ID of the actuator
+   * @return the actuator with the given device ID
+   */
   public Actuator getActuator(String deviceID) {
     return actuators.get(deviceID);
   }
 
+  /**
+   * Gets a sensor by its device ID.
+   * @param deviceID the device ID of the sensor
+   * @return the sensor with the given device ID
+   */
   public Sensor getSensor(String deviceID) {
     return sensors.get(deviceID);
   }
 
+  /**
+   * Returns the actuators in the sensor node.
+   * @return
+   */
   public HashMap<String, Actuator> getActuators() {
     return this.actuators;
   }
 
+  /**
+   * Returns the sensors in the sensor node.
+   * @return
+   */
   public HashMap<String, Sensor> getSensors() {
     return this.sensors;
   }
 
+  /**
+   * Toggles an actuator on or off.
+   * @param deviceID the device ID of the actuator
+   * @param greenhouse the greenhouse the actuator is in
+   * @return the new state of the actuator
+   */
   public boolean toggleActuator(String deviceID, Greenhouse greenhouse) {
     return getActuator(deviceID).toggle(greenhouse);
   }
 
+  /**
+   * Sets the power of an actuator.
+   * @param deviceID the device ID of the actuator
+   * @param power the power to set the actuator to
+   */
   public void setActuatorPower(String deviceID, int power) {
     getActuator(deviceID).setPower(power);
   }
