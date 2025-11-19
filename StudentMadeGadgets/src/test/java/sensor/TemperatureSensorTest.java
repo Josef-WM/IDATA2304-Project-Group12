@@ -63,7 +63,8 @@ class TemperatureSensorTest {
    */
   @Test
   void getId_Positive_ReturnsConstructorValue() {
-    // Arrange done in setUp()
+    // Arrange
+    sensor.setID("temp1");
 
     // Act
     String id = sensor.getID();
