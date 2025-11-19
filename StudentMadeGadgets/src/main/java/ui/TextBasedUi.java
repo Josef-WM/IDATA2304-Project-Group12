@@ -170,10 +170,16 @@ public class TextBasedUi {
       String actuatorID = entry.getKey();
       Pair<Boolean, Integer> actuatorInfo = entry.getValue();
 
-      System.out.println(index + ". " + actuatorID + ": [" + actuatorInfo.getKey() + "] Power: " + actuatorInfo.getValue());
+      String powerState;
+      if (actuatorInfo.getKey()) {
+        powerState = "ON";
+      } else {
+        powerState = "OFF";
+      }
+
+      System.out.println(index + ". " + actuatorID + ": [" + powerState + "] Power: " + actuatorInfo.getValue());
     }
 
-    System.out.println("Work in progress :'(");
     greenhouseControlMenu(greenhouseId);
   }
 
@@ -263,5 +269,10 @@ public class TextBasedUi {
     int value = scanner.nextInt();
     scanner.nextLine();
     return value;
+  }
+
+  public void pressEnterToContinue() {
+    System.out.println("Press enter to continue...");
+    scanner.nextLine();
   }
 }
