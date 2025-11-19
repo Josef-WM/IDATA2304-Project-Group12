@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class Greenhouse {
   private int greenhouseId;
   private String greenhouseName;
-  private SensorNode sensorNode = new SensorNode();
+  private transient SensorNode sensorNode = new SensorNode();
 
   private double temperature;
   private int light;

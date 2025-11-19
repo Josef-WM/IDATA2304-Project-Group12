@@ -166,6 +166,7 @@ public class TextBasedUi {
     }
 
     System.out.println("Work in progress :'(");
+    greenhouseControlMenu(greenhouseId);
   }
 
   private void addActuatorToSensorNodeMenu(int greenhouseId) throws IOException {
