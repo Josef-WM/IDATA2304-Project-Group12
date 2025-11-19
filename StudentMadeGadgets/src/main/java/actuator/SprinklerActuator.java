@@ -2,6 +2,10 @@ package actuator;
 
 import greenhouse.Greenhouse;
 
+/**
+ * Sprinkler actuator class that implements the Actuator interface.
+ * will be used to control the sprinkler in the greenhouse.
+ */
 public class SprinklerActuator implements Actuator {
   private String ID;
   private boolean isOn;
@@ -13,21 +17,34 @@ public class SprinklerActuator implements Actuator {
     this.isOn = false;
   }
 
+  /**
+   * Returns the id of the sprinkler.
+   */
   @Override
   public String getID() {
     return this.ID;
   }
 
+  /**
+   * Sets the id of the sprinkler.
+   * @param ID
+   */
   @Override
   public void setID(String ID) {
     this.ID = ID;
   }
 
+  /**
+   * Returns the type of the actuator
+   */
   @Override
   public String getType() {
     return "Light";
   }
 
+  /**
+   * Returns whether the actuator is on.
+   */
   @Override
   public boolean isOn() {
     return this.isOn;
@@ -62,6 +79,11 @@ public class SprinklerActuator implements Actuator {
     }
   }
 
+  /**
+   * Sets the state of the actuator.
+   * @param state
+   * @param greenhouse
+   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);
