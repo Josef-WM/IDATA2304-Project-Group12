@@ -240,7 +240,6 @@ public class TextBasedUi {
   private void disconnect() {
     try {
       activeControlPanel.disconnect();
-      running = false;
     } catch (IOException e) {
       System.out.println("Error while disconnecting control panel");
     }
