@@ -86,6 +86,7 @@ public class JSONHandler {
       case "REMOVE_GREENHOUSE" -> gson.fromJson(bodyJson, RemoveGreenhouse.class);
       case "INFORMATION" -> gson.fromJson(bodyJson, Information.class);
       case "ADD_ACTUATOR" -> gson.fromJson(bodyJson, AddActuator.class);
+      case "ADD_SENSOR" -> gson.fromJson(bodyJson, AddSensor.class);
       default -> null;
     };
   }
