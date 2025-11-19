@@ -2,6 +2,10 @@ package actuator;
 
 import greenhouse.Greenhouse;
 
+/**
+ * Heater actuator class that implements the Actuator interface.
+ * will be used to control the heater in the greenhouse.
+ */
 public class HeaterActuator implements Actuator {
   private String ID;
   private boolean isOn;
@@ -13,21 +17,34 @@ public class HeaterActuator implements Actuator {
     this.isOn = false;
   }
 
+  /**
+   * Returns the id of the heater.
+   */
   @Override
   public String getID() {
     return this.ID;
   }
 
+  /**
+   * Sets the id of the heater.
+   * @param ID
+   */
   @Override
   public void setID(String ID) {
     this.ID = ID;
   }
 
+  /**
+   * Returns the type of the actuator
+   */
   @Override
   public String getType() {
     return "Heater";
   }
 
+  /**
+   * Returns whether the actuator is on.
+   */
   @Override
   public boolean isOn() {
     return this.isOn;
@@ -62,6 +79,9 @@ public class HeaterActuator implements Actuator {
     }
   }
 
+  /**
+   * Sets the state of the actuator.
+   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);
