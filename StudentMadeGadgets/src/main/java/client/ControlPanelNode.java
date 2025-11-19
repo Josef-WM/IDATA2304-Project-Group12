@@ -123,6 +123,22 @@ public class ControlPanelNode {
     return information;
   }
 
+  public SensorData getAllSensorData(int greenhouseId) throws IOException {
+    Message message = new Message();
+    message.setMessageType("DATA_REQUEST");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new DataRequest(greenhouseId, "ALL", "SENSOR"));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    SensorData sensorData = (SensorData) replyMessage.getBody();
+    return sensorData;
+  }
+
   public ActuatorData getAllActuatorData(int greenhouseId) throws IOException {
     Message message = new Message();
     message.setMessageType("DATA_REQUEST");

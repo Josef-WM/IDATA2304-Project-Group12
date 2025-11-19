@@ -145,9 +145,17 @@ public class TextBasedUi {
   /**
    * Menu for viewing sensor data.
    */
-  private void viewSensorDataMenu(int greenhouseId) {
+  private void viewSensorDataMenu(int greenhouseId) throws IOException {
     displayHeader("Sensor Data for Greenhouse #" + greenhouseId);
-    System.out.println("Work in progress :'(");
+    HashMap<String, Pair<Double, String>> sensorData = activeControlPanel.getAllSensorData(greenhouseId).getSensorDataHashMap();
+
+    int index = 1;
+    for (Map.Entry<String, Pair<Double, String>> entry : sensorData.entrySet()) {
+      String sensorID = entry.getKey();
+      Pair<Double, String> sensorInfo = entry.getValue();
+
+      System.out.println(index + ". " + sensorID + ": " + sensorInfo.getKey() + " " + sensorInfo.getValue());
+    }
   }
 
   /**
