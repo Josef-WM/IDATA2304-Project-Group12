@@ -29,7 +29,7 @@ class LightSensorTest {
   void setUp() {
     greenhouse = new Greenhouse("TestHouse");
     disableTimer();
-    sensor = new LightSensor(greenhouse);
+    sensor = new LightSensor();
   }
 
   /**
@@ -118,7 +118,7 @@ class LightSensorTest {
     setLight(1234);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(1234.0, value);
@@ -134,7 +134,7 @@ class LightSensorTest {
     setLight(0);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(0.0, value);
@@ -151,7 +151,7 @@ class LightSensorTest {
     setLight(999999);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(999999.0, value);

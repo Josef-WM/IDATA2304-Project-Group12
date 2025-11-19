@@ -139,7 +139,7 @@ public class TextBasedUi {
     switch (choice) {
       case 1 -> viewSensorDataMenu(greenhouseId);
       case 2 -> viewChangeActuatorStatusMenu(greenhouseId);
-      case 3 -> addActuatorToSensorNodeMenu(greenhouseId);
+      case 3 -> addSensorToSensorNodeMenu(greenhouseId);
       case 4 -> addActuatorToSensorNodeMenu(greenhouseId);
       case 5 -> exit();
       default -> System.out.println("Invalid choice!");
@@ -160,6 +160,7 @@ public class TextBasedUi {
 
       System.out.println(index + ". " + sensorID + ": " + sensorInfo.getKey() + " " + sensorInfo.getValue());
     }
+    greenhouseControlMenu(greenhouseId);
   }
 
   /**
@@ -255,6 +256,27 @@ public class TextBasedUi {
     System.out.println("3. Light");
     System.out.println("4. Sprinkler");
     System.out.println("5. Back to Main Menu");
+
+    int choice = getUserChoice("Enter choice: ");
+
+    switch (choice) {
+      case 1 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Fan");
+      case 2 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Heater");
+      case 3 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Light");
+      case 4 -> activeControlPanel.addActuatorToSensorNode(greenhouseId, "Sprinkler");
+      case 5 -> greenhouseControlMenu(greenhouseId);
+      default -> System.out.println("Invalid choice!");
+    }
+    greenhouseControlMenu(greenhouseId);
+  }
+
+  private void addSensorToSensorNodeMenu(int greenhouseId) throws IOException {
+    displayHeader("Add sensor to sensor node in greenhouse " + greenhouseId);
+
+    System.out.println("1. Humidity");
+    System.out.println("2. Light");
+    System.out.println("3. Temperature");
+    System.out.println("4 Back to Main Menu");
 
     int choice = getUserChoice("Enter choice: ");
 

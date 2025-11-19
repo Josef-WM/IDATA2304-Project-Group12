@@ -29,7 +29,7 @@ class HumiditySensorTest {
   void setUp() {
     greenhouse = new Greenhouse("TestHouse");
     disableTimer();
-    sensor = new HumiditySensor(greenhouse);
+    sensor = new HumiditySensor();
   }
 
   /**
@@ -117,7 +117,7 @@ class HumiditySensorTest {
     setHumidity(77);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(77.0, value);
@@ -133,7 +133,7 @@ class HumiditySensorTest {
     setHumidity(0);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(0.0, value);
@@ -149,7 +149,7 @@ class HumiditySensorTest {
     setHumidity(100);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(100.0, value);

@@ -1,5 +1,7 @@
 package sensor;
 
+import greenhouse.Greenhouse;
+
 /**
  * Test implementation of {@link Sensor} used in unit tests, which are needed to refactor
  * the SensorNodeTest Class.
@@ -54,7 +56,7 @@ public class SensorTest implements Sensor {
    * @return
    */
   @Override
-  public double read() {
+  public double read(Greenhouse greenhouse) {
     return value;
   }
 }

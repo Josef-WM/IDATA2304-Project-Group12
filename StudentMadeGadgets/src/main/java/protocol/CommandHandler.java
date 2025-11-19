@@ -5,7 +5,10 @@ import client.SensorNode;
 import greenhouse.Greenhouse;
 import javafx.util.Pair;
 import protocol.command.*;
+import sensor.HumiditySensor;
+import sensor.LightSensor;
 import sensor.Sensor;
+import sensor.TemperatureSensor;
 import server.Server;
 
 import java.util.*;
@@ -77,7 +80,7 @@ public class CommandHandler {
                 String sensorID = entry.getKey();
                 Sensor sensor = entry.getValue();
 
-                sensorDataHashMap.put(sensorID, new Pair<>(sensor.read(), sensor.getUnit()));
+                sensorDataHashMap.put(sensorID, new Pair<>(sensor.read(greenhouse), sensor.getUnit()));
               }
 
               reply.setBody(new SensorData(sensorDataHashMap));
@@ -87,7 +90,7 @@ public class CommandHandler {
               return replyJson;
             } else {
               Sensor sensor = greenhouse.getSensorNode().getSensor(deviceID);
-              reply.setBody(new SensorData(sensor.getID(), sensor.read(), sensor.getUnit()));
+              reply.setBody(new SensorData(sensor.getID(), sensor.read(greenhouse), sensor.getUnit()));
               reply.setDestination(messageFromJSON.getSource());
 
               String replyJson = JSONHandler.serializeMessageToJSON(reply);
@@ -152,6 +155,32 @@ public class CommandHandler {
 
         reply.setMessageType("INFORMATION");
         reply.setBody(new Information("Actuator with id " + actuator.getID() + " was added to sensor node"));
+        reply.setDestination(messageFromJSON.getSource());
+        String replyJson = JSONHandler.serializeMessageToJSON(reply);
+        return replyJson;
+      }
+
+      case "SENSOR_ACTUATOR" -> {
+        AddSensor addSensor = (AddSensor) messageFromJSON.getBody();
+        int greenhouseId = addSensor.getGreenhouseId();
+        String actuatorType = addSensor.getSensorType();
+
+        Greenhouse greenhouse = Server.getGreenhouseRegistry().getGreenhouse(greenhouseId);
+        Sensor sensor;
+
+        switch (actuatorType) {
+          case "Humidity" -> sensor = new HumiditySensor();
+          case "Light" -> sensor = new LightSensor();
+          case "Temperature" -> sensor = new TemperatureSensor();
+          default -> {
+            return "Sensor type not found";
+          }
+        }
+
+        greenhouse.getSensorNode().addSensorToNode(sensor);
+
+        reply.setMessageType("INFORMATION");
+        reply.setBody(new Information("Sensor with id " + sensor.getID() + " was added to sensor node"));
         reply.setDestination(messageFromJSON.getSource());
         String replyJson = JSONHandler.serializeMessageToJSON(reply);
         return replyJson;

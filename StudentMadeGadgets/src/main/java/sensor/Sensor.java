@@ -1,4 +1,7 @@
 package sensor;
+
+import greenhouse.Greenhouse;
+
 /**
  * This interface represents a generic sensor in a greenhouse system.
  * It defines methods to get the sensor's ID, type, unit of measurement,
@@ -10,13 +13,5 @@ public interface Sensor {
   void setID(String ID);
   String getType();
   String getUnit();
-  double read();
-
-  /**
-   * Formats the sensor's reading as a string.
-   * @return a formatted string representing the sensor's type, reading, and unit
-   */
-  default String format() {
-    return getType() + ": " + read() + " " + getUnit();
-  }
+  double read(Greenhouse greenhouse);
 }

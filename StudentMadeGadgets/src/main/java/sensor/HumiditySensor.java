@@ -9,14 +9,11 @@ import greenhouse.Greenhouse;
  */
 public class HumiditySensor implements Sensor {
   private String ID;
-  private final Greenhouse greenhouse;
 
   /**
    * Constructor for HumiditySensor.
-   * @param greenhouse the greenhouse to read humidity from
    */
-  public HumiditySensor(Greenhouse greenhouse) {
-    this.greenhouse = greenhouse;
+  public HumiditySensor() {
   }
 
   /**
@@ -60,7 +57,7 @@ public class HumiditySensor implements Sensor {
    * @return the humidity value
    */
   @Override
-  public double read() {
+  public double read(Greenhouse greenhouse) {
     return (double) greenhouse.getHumidity();
   }
 }

@@ -9,14 +9,11 @@ import greenhouse.Greenhouse;
  */
 public class TemperatureSensor implements Sensor {
   private String ID;
-  private final Greenhouse greenhouse;
 
   /**
    * Constructor for TemperatureSensor.
-   * @param greenhouse the greenhouse to read temperature from
    */
-  public TemperatureSensor(Greenhouse greenhouse) {
-    this.greenhouse = greenhouse;
+  public TemperatureSensor() {
   }
 
   /**
@@ -55,7 +52,7 @@ public class TemperatureSensor implements Sensor {
    * Reads the temperature value from the greenhouse.
    * @return the temperature value
    */
-  @Override public double read() {
+  @Override public double read(Greenhouse greenhouse) {
     return greenhouse.getTemperature();
   }
 }

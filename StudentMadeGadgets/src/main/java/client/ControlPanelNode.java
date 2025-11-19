@@ -218,4 +218,20 @@ public class ControlPanelNode {
     Information information = (Information) replyMessage.getBody();
     return information;
   }
+
+  public Information addSensorToSensorNode(int greenhouseId, String sensorType) throws IOException {
+    Message message = new Message();
+    message.setMessageType("ADD_SENSOR");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new AddSensor(greenhouseId, sensorType));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    Information information = (Information) replyMessage.getBody();
+    return information;
+  }
 }

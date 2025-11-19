@@ -9,14 +9,11 @@ import greenhouse.Greenhouse;
  */
 public class LightSensor implements Sensor {
   private String ID;
-  private final Greenhouse greenhouse;
 
   /**
    * Constructor for LightSensor.
-   * @param greenhouse the greenhouse to read light from
    */
-  public LightSensor(Greenhouse greenhouse) {
-    this.greenhouse = greenhouse;
+  public LightSensor() {
   }
 
   /**
@@ -60,7 +57,7 @@ public class LightSensor implements Sensor {
    * @return the light value
    */
   @Override
-  public double read() {
+  public double read(Greenhouse greenhouse) {
     return (double)  greenhouse.getLight();
   }
 

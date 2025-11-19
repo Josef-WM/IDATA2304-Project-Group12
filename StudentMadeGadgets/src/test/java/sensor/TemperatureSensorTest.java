@@ -40,7 +40,7 @@ class TemperatureSensorTest {
   void setUp() {
     // Arrange
     greenhouse = new Greenhouse("TestHouse");
-    sensor = new TemperatureSensor( greenhouse);
+    sensor = new TemperatureSensor();
   }
 
   /**
@@ -110,7 +110,7 @@ class TemperatureSensorTest {
     setTemperature(22.5);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(22.5, value, 0.0001);
@@ -125,7 +125,7 @@ class TemperatureSensorTest {
     setTemperature(-3.7);
 
     // Act
-    double value = sensor.read();
+    double value = sensor.read(greenhouse);
 
     // Assert
     assertEquals(-3.7, value, 0.0001,
