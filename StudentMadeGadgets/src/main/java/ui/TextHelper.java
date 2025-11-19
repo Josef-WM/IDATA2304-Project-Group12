@@ -29,16 +29,36 @@ public class TextHelper {
    * Method for printing out coloured text.
    *
    * @param text text to print
-   * @param colour colour to use. Can be either red, or blue
+   * @param colour colour to use. Can be either red, green, yellow, blue, magenta, or cyan.
    */
   public void printTextWithColour(String text, String colour) {
 
     switch (colour) {
       case "red":
         System.out.print("\033[31m");
+        break;
+
+      case "green":
+        System.out.print("\033[32m");
+        break;
+
+      case "yellow":
+        System.out.print("\033[33m");
+        break;
 
       case "blue":
         System.out.print("\033[34m");
+        break;
+
+      case "magenta":
+        System.out.print("\033[35m");
+        break;
+
+      case "cyan":
+        System.out.print("\033[36");
+        break;
+
+      default:
     }
     System.out.println(text);
   }
