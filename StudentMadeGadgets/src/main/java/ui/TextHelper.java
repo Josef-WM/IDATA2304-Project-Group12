@@ -1,5 +1,7 @@
 package ui;
 
+import java.util.Scanner;
+
 /**
  * Class with a few helpful methods to be used
  * with the text based user interface.
@@ -83,5 +85,15 @@ public class TextHelper {
       System.out.print("=");
     }
     System.out.println();
+  }
+
+  /**
+   * Method to wait for user interaction, usually
+   * invoked before clearing the screen.
+   */
+  public void pressEnterToContinue() {
+    Scanner scanner = new Scanner(System.in);
+    printTextWithColour("Press any key to continue...", "yellow");
+    scanner.nextLine();
   }
 }

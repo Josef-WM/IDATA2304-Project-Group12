@@ -76,10 +76,14 @@ public class TextBasedUi {
     System.out.println("3. Create a greenhouse");
     System.out.println("4. Remove a greenhouse");
     System.out.println("5. Disconnect from server");
+    System.out.println();
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
-      case 1 -> listAllGreenhouses();
+      case 1 -> {
+        listAllGreenhouses();
+        textHelper.pressEnterToContinue();
+      }
       case 2 -> selectGreenhouseMenu();
       case 3 -> createGreenhouseMenu();
       case 4 -> removeGreenhouseMenu();
@@ -157,7 +161,7 @@ public class TextBasedUi {
       index++;
     }
 
-    pressEnterToContinue();
+    textHelper.pressEnterToContinue();
     greenhouseControlMenu(greenhouseId);
   }
 
@@ -353,7 +357,7 @@ public class TextBasedUi {
    * @return the user's choice, as an integer
    */
   private int getUserChoice(String prompt) {
-    System.out.println(prompt);
+    textHelper.printTextWithColour(prompt, "blue");
     while (!scanner.hasNextInt()) {
       System.out.println("Invalid input. " + prompt);
       scanner.next();
@@ -361,10 +365,5 @@ public class TextBasedUi {
     int value = scanner.nextInt();
     scanner.nextLine();
     return value;
-  }
-
-  public void pressEnterToContinue() {
-    System.out.println("Press enter to continue...");
-    scanner.nextLine();
   }
 }
