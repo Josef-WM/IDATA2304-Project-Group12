@@ -1,4 +1,3 @@
-// Java
 package client;
 
 import actuator.Actuator;
@@ -17,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *   <p>The following functionality is covered.</p>
  *   <h2>Positive tests:</h2>
  *   <ul>
- *     <li>Adding and retrieving a Sensor by id</li>
+ *     <li>Adding a Sensor and retrieving it by the generated id</li>
  *     <li>Removing a Sensor makes it unreachable</li>
- *     <li>Adding and retrieving an Actuator by id</li>
+ *     <li>Adding an Actuator and retrieving it by the generated id</li>
  *     <li>Removing an Actuator makes it unreachable</li>
  *     <li>Toggling an Actuator twice turns it ON then OFF</li>
  *     <li>Setting actuator power updates its internal state</li>
@@ -51,49 +50,79 @@ class SensorNodeTest {
   }
 
   /**
-   * Tests adding a Sensor and retrieving it by id.
-   * Expected outcome: retrieval returns the same Sensor instance.
+   * Tests adding a Sensor and retrieving it by the generated id.
+   * Expected outcome: retrieval returns the same Sensor instance and
+   *                   the id returned by addSensorToNode matches sensor.getID().
    */
   @Test
   void addSensor_Positive_CanRetrieveById() {
+    // Arrange
     Sensor sensor = new SensorTest("s1", 42.0);
-    node.addSensorToNode(sensor);
-    assertEquals(sensor, node.getSensor("s1"));
+
+    // Act
+    String id = node.addSensorToNode(sensor);
+    Sensor result = node.getSensor(id);
+
+    // Assert
+    assertEquals(sensor, result);
+    assertEquals(id, sensor.getID(), "Sensor id should be set to the generated id");
   }
 
   /**
    * Tests removing a Sensor makes subsequent lookup return null.
-   * Expected outcome: getSensor returns null after removal.
+   * Expected outcome: getSensor returns null after removal when using
+   *                   the generated id.
    */
   @Test
   void removeSensor_Positive_SensorIsRemovedFromNode() {
+    // Arrange
     Sensor sensor = new SensorTest("s1", 10.0);
-    node.addSensorToNode(sensor);
+    String id = node.addSensorToNode(sensor);
+
+    // Act
     node.removeSensorFromNode(sensor);
-    assertNull(node.getSensor("s1"));
+    Sensor result = node.getSensor(id);
+
+    // Assert
+    assertNull(result);
   }
 
   /**
-   * Tests adding an Actuator and retrieving it by id.
-   * Expected outcome: retrieval returns the same Actuator instance.
+   * Tests adding an Actuator and retrieving it by the generated id.
+   * Expected outcome: retrieval returns the same Actuator instance and
+   *                   the id returned by addActuatorToNode matches actuator.getID().
    */
   @Test
   void addActuator_Positive_CanRetrieveById() {
+    // Arrange
     ActuatorTest actuator = new ActuatorTest("a1");
-    node.addActuatorToNode(actuator);
-    assertEquals(actuator, node.getActuator("a1"));
+
+    // Act
+    String id = node.addActuatorToNode(actuator);
+    Actuator result = node.getActuator(id);
+
+    // Assert
+    assertEquals(actuator, result);
+    assertEquals(id, actuator.getID(), "Actuator id should be set to the generated id");
   }
 
   /**
    * Tests removing an Actuator makes subsequent lookup return null.
-   * Expected outcome: getActuator returns null after removal.
+   * Expected outcome: getActuator returns null after removal when using
+   *                   the generated id.
    */
   @Test
   void removeActuator_Positive_ActuatorIsRemovedFromNode() {
+    // Arrange
     ActuatorTest actuator = new ActuatorTest("a1");
-    node.addActuatorToNode(actuator);
+    String id = node.addActuatorToNode(actuator);
+
+    // Act
     node.removeActuatorFromNode(actuator);
-    assertNull(node.getActuator("a1"));
+    Actuator result = node.getActuator(id);
+
+    // Assert
+    assertNull(result);
   }
 
   /**
@@ -102,10 +131,15 @@ class SensorNodeTest {
    */
   @Test
   void toggleActuator_Positive_TogglesOnAndOff() {
+    // Arrange
     ActuatorTest actuator = new ActuatorTest("a1");
-    node.addActuatorToNode(actuator);
-    boolean first = node.toggleActuator("a1", greenhouse);
-    boolean second = node.toggleActuator("a1", greenhouse);
+    String id = node.addActuatorToNode(actuator);
+
+    // Act
+    boolean first = node.toggleActuator(id, greenhouse);
+    boolean second = node.toggleActuator(id, greenhouse);
+
+    // Assert
     assertTrue(first);
     assertFalse(second);
     assertFalse(actuator.isOn());
@@ -117,9 +151,14 @@ class SensorNodeTest {
    */
   @Test
   void setActuatorPower_Positive_UpdatesPowerOnActuator() {
+    // Arrange
     ActuatorTest actuator = new ActuatorTest("a1");
-    node.addActuatorToNode(actuator);
-    node.setActuatorPower("a1", 75);
+    String id = node.addActuatorToNode(actuator);
+
+    // Act
+    node.setActuatorPower(id, 75);
+
+    // Assert
     assertEquals(75, actuator.getPower());
   }
 
@@ -129,7 +168,13 @@ class SensorNodeTest {
    */
   @Test
   void getSensor_Negative_UnknownIdReturnsNull() {
-    assertNull(node.getSensor("unknown"));
+    // Arrange
+
+    // Act
+    Sensor result = node.getSensor("unknown");
+
+    // Assert
+    assertNull(result);
   }
 
   /**
@@ -138,7 +183,13 @@ class SensorNodeTest {
    */
   @Test
   void getActuator_Negative_UnknownIdReturnsNull() {
-    assertNull(node.getActuator("unknown"));
+    // Arrange
+
+    // Act
+    Actuator result = node.getActuator("unknown");
+
+    // Assert
+    assertNull(result);
   }
 
   /**
@@ -147,9 +198,14 @@ class SensorNodeTest {
    */
   @Test
   void removeSensor_Negative_RemovingUnknownSensorDoesNotThrow() {
+    // Arrange
     Sensor sensor = new SensorTest("s999", 0.0);
+
+    // Act (no exception expected)
     node.removeSensorFromNode(sensor);
-    assertNull(node.getSensor("s999"));
+
+    // Assert
+    assertNull(node.getSensor(sensor.getID()));
   }
 
   /**
@@ -158,9 +214,14 @@ class SensorNodeTest {
    */
   @Test
   void removeActuator_Negative_RemovingUnknownActuatorDoesNotThrow() {
+    // Arrange
     ActuatorTest actuator = new ActuatorTest("a999");
+
+    // Act (no exception expected)
     node.removeActuatorFromNode(actuator);
-    assertNull(node.getActuator("a999"));
+
+    // Assert
+    assertNull(node.getActuator(actuator.getID()));
   }
 
   /**
@@ -169,6 +230,9 @@ class SensorNodeTest {
    */
   @Test
   void toggleActuator_Negative_UnknownIdThrowsNullPointerException() {
+    // Arrange
+
+    // Act & Assert
     assertThrows(NullPointerException.class,
             () -> node.toggleActuator("unknown", greenhouse));
   }
@@ -179,6 +243,9 @@ class SensorNodeTest {
    */
   @Test
   void setActuatorPower_Negative_UnknownIdThrowsNullPointerException() {
+    // Arrange
+
+    // Act & Assert
     assertThrows(NullPointerException.class,
             () -> node.setActuatorPower("unknown", 50));
   }
