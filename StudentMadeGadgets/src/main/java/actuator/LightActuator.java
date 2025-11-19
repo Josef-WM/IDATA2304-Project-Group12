@@ -61,4 +61,12 @@ public class LightActuator implements Actuator {
       return true;
     }
   }
+
+  public void setState(boolean state, Greenhouse greenhouse) {
+    if (state) {
+      turnOn(greenhouse);
+    } else {
+      turnOff(greenhouse);
+    }
+  }
 }

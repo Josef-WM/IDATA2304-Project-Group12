@@ -139,6 +139,22 @@ public class ControlPanelNode {
     return sensorData;
   }
 
+  public ActuatorData getActuatorData(int greenhouseId, String actuatorId) throws IOException {
+    Message message = new Message();
+    message.setMessageType("DATA_REQUEST");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new DataRequest(greenhouseId, actuatorId, "ACTUATOR"));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    ActuatorData actuatorData = (ActuatorData) replyMessage.getBody();
+    return actuatorData;
+  }
+
   public ActuatorData getAllActuatorData(int greenhouseId) throws IOException {
     Message message = new Message();
     message.setMessageType("DATA_REQUEST");
@@ -153,6 +169,38 @@ public class ControlPanelNode {
     Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
     ActuatorData actuatorData = (ActuatorData) replyMessage.getBody();
     return actuatorData;
+  }
+
+  public Information changeActuatorState(int greenhouseId, String actuatorId, boolean state) throws IOException {
+    Message message = new Message();
+    message.setMessageType("ACTUATOR_COMMAND");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new ActuatorCommand(greenhouseId, actuatorId, state));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    Information information = (Information) replyMessage.getBody();
+    return information;
+  }
+
+  public Information changeActuatorPower(int greenhouseId, String actuatorId, int power) throws IOException {
+    Message message = new Message();
+    message.setMessageType("ACTUATOR_COMMAND");
+    message.setMessageID(String.valueOf(UUID.randomUUID()));
+    message.setTimestamp(System.currentTimeMillis());
+    message.setBody(new ActuatorCommand(greenhouseId, actuatorId, power));
+    String jsonMessage = JSONHandler.serializeMessageToJSON(message);
+    Protocol protocol = new Protocol(this.socket);
+    protocol.sendMessage(jsonMessage);
+
+    String reply = protocol.readMessage();
+    Message replyMessage = JSONHandler.deserializeFromJSONToMessage(reply);
+    Information information = (Information) replyMessage.getBody();
+    return information;
   }
 
   public Information addActuatorToSensorNode(int greenhouseId, String actuatorType) throws IOException {

@@ -119,6 +119,10 @@ public class SensorNode {
     return getActuator(deviceID).toggle(greenhouse);
   }
 
+  public void setActuatorState(String deviceId, Greenhouse greenhouse, boolean state) {
+   this.actuators.get(deviceId).setState(state, greenhouse);
+  }
+
   /**
    * Sets the power of an actuator.
    * @param deviceID the device ID of the actuator

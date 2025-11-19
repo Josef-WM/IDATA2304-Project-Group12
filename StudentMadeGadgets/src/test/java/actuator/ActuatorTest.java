@@ -61,6 +61,10 @@ public class ActuatorTest implements Actuator {
     return on;
   }
 
+  public void setState(boolean state, Greenhouse greenhouse) {
+   this.on = state;
+  }
+
   /**
    * Sets the power level of the actuator.
    * @param power

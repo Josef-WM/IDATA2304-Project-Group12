@@ -5,23 +5,29 @@ import actuator.Actuator;
 import java.util.ArrayList;
 
 public class ActuatorCommand implements Command {
-  private ArrayList<Actuator> actuators;
-  private int power;
+  private int greenhouseId;
+  private String actuatorId;
+  private int power = -1;
   private boolean turnOn;
 
-  public ActuatorCommand(ArrayList<Actuator> actuators, int power, boolean turnOn) {
-    this.actuators = actuators;
-    this.power = power;
+  public ActuatorCommand(int greenhouseId, String actuatorId, boolean turnOn) {
+    this.greenhouseId = greenhouseId;
+    this.actuatorId = actuatorId;
     this.turnOn = turnOn;
   }
 
-  public ActuatorCommand(ArrayList<Actuator> actuators, int power) {
-    this.actuators = actuators;
+  public ActuatorCommand(int greenhouseId, String actuatorId, int power) {
+    this.greenhouseId = greenhouseId;
+    this.actuatorId = actuatorId;
     this.power = power;
   }
 
-  public ArrayList<Actuator> getActuators() {
-    return this.actuators;
+  public int getGreenhouseId() {
+    return this.greenhouseId;
+  }
+
+  public String getActuatorId() {
+    return this.actuatorId;
   }
 
   public int getPower() {

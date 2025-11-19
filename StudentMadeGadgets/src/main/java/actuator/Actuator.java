@@ -7,6 +7,7 @@ public interface Actuator {
   void setID(String ID);
   String getType();
   boolean isOn();
+  void setState(boolean state, Greenhouse greenhouse);
   boolean toggle(Greenhouse greenhouse);
   default void setPower(int power) {};
   default int getPower() { return -1; }

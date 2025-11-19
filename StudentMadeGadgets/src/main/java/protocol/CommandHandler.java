@@ -157,6 +157,26 @@ public class CommandHandler {
         return replyJson;
       }
 
+      case "ACTUATOR_COMMAND" -> {
+        ActuatorCommand actuatorCommand = (ActuatorCommand) messageFromJSON.getBody();
+        String actuatorId = actuatorCommand.getActuatorId();
+        int greenhouseId = actuatorCommand.getGreenhouseId();
+        Greenhouse greenhouse = Server.getGreenhouseRegistry().getGreenhouse(greenhouseId);
+        if (actuatorCommand.getPower() != -1) {
+          int actuatorPower = actuatorCommand.getPower();
+          greenhouse.getSensorNode().setActuatorPower(actuatorId, actuatorPower);
+        } else {
+          boolean actuatorState = actuatorCommand.isTurnOn();
+          greenhouse.getSensorNode().setActuatorState(actuatorId, greenhouse, actuatorState);
+        }
+
+        reply.setMessageType("INFORMATION");
+        reply.setBody(new Information("Actuator state successfully changed"));
+        reply.setDestination(messageFromJSON.getSource());
+        String replyJson = JSONHandler.serializeMessageToJSON(reply);
+        return replyJson;
+      }
+
       default -> {
         return "Message type not found";
       }

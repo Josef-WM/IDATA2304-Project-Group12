@@ -2,11 +2,13 @@ package ui;
 
 import client.ControlPanelNode;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 import javafx.util.Pair;
+import protocol.command.ActuatorData;
 import protocol.command.GreenhouseListData;
 import protocol.command.Information;
 
@@ -165,10 +167,12 @@ public class TextBasedUi {
     displayHeader("Actuator Status for Greenhouse " + greenhouseId);
     HashMap<String, Pair<Boolean, Integer>> actuatorData = activeControlPanel.getAllActuatorData(greenhouseId).getActuatorDataHashMap();
 
+    ArrayList<String> actuatorIds = new ArrayList<>();
     int index = 1;
     for (Map.Entry<String, Pair<Boolean, Integer>> entry : actuatorData.entrySet()) {
       String actuatorID = entry.getKey();
       Pair<Boolean, Integer> actuatorInfo = entry.getValue();
+      actuatorIds.add(actuatorID);
 
       String powerState;
       if (actuatorInfo.getKey()) {
@@ -180,7 +184,65 @@ public class TextBasedUi {
       System.out.println(index + ". " + actuatorID + ": [" + powerState + "] Power: " + actuatorInfo.getValue());
     }
 
+    int choice = getUserChoice("Select actuator (or " + actuatorData.size() + " to quit): ");
+    if (choice <= actuatorData.size()) {
+      actuatorControlMenu(greenhouseId, actuatorIds.get(choice-1));
+    } else {
+      displayControlPanelMainPage();
+    }
+
     greenhouseControlMenu(greenhouseId);
+  }
+
+  private void actuatorControlMenu(int greenhouseId, String actuatorId) throws IOException {
+    ActuatorData actuatorData = activeControlPanel.getActuatorData(greenhouseId, actuatorId);
+
+    String powerState;
+    if (actuatorData.isOn()) {
+      powerState = "ON";
+    } else {
+      powerState = "OFF";
+    }
+
+    String lowPowerSelected = "";
+    String mediumPowerSelected = "";
+    String highPowerSelected = "";
+
+    switch (actuatorData.getPower()) {
+      case 0 -> lowPowerSelected = " [SELECTED]";
+      case 1 -> mediumPowerSelected = " [SELECTED]";
+      case 2 -> highPowerSelected = " [SELECTED]";
+    }
+
+    displayHeader("Change status of actuator " + actuatorId);
+    System.out.println("1. Toggle power status: (Currently [" + powerState + "])");
+    System.out.println("2. Select LOW power" + lowPowerSelected);
+    System.out.println("3. Select MEDIUM power" + mediumPowerSelected);
+    System.out.println("4. Select HIGH power" + highPowerSelected);
+    System.out.println("5. Back to Main Menu");
+
+    int choice = getUserChoice("Enter choice: ");
+
+    switch (choice) {
+      case 1 -> {
+        activeControlPanel.changeActuatorState(greenhouseId, actuatorId, !actuatorData.isOn());
+        actuatorControlMenu(greenhouseId, actuatorId);
+      }
+      case 2 -> {
+        activeControlPanel.changeActuatorPower(greenhouseId, actuatorId, 0);
+        actuatorControlMenu(greenhouseId, actuatorId);
+      }
+      case 3 -> {
+        activeControlPanel.changeActuatorPower(greenhouseId, actuatorId, 1);
+        actuatorControlMenu(greenhouseId, actuatorId);
+      }
+      case 4 -> {
+        activeControlPanel.changeActuatorPower(greenhouseId, actuatorId, 2);
+        actuatorControlMenu(greenhouseId, actuatorId);
+      }
+      case 5 -> viewChangeActuatorStatusMenu(greenhouseId);
+      default -> System.out.println("Invalid choice!");
+    }
   }
 
   private void addActuatorToSensorNodeMenu(int greenhouseId) throws IOException {

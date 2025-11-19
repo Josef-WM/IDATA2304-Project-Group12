@@ -72,6 +72,14 @@ public class FanActuator implements Actuator {
     }
   }
 
+  public void setState(boolean state, Greenhouse greenhouse) {
+    if (state) {
+      turnOn(greenhouse);
+    } else {
+      turnOff(greenhouse);
+    }
+  }
+
   /**
    * Returns the isOn() state.
    *
