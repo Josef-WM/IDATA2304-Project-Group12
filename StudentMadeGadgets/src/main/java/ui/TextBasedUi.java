@@ -29,8 +29,10 @@ public class TextBasedUi {
     try {
       while (running) {
         if (!activeControlPanel.isConnected()) {
+          clearScreen();
           serverConnectionMenu();
         } else {
+          clearScreen();
           displayControlPanelMainPage();
         }
       }
@@ -296,7 +298,6 @@ public class TextBasedUi {
   private void disconnect() {
     try {
       activeControlPanel.disconnect();
-      running = false;
     } catch (IOException e) {
       System.out.println("Error while disconnecting control panel");
     }
@@ -306,6 +307,7 @@ public class TextBasedUi {
    * Method to connect the control panel to a server.
    */
   private void connectToServer() {
+    clearScreen();
     System.out.println("Enter a Server host's IP:");
     try {
       String host = scanner.nextLine();
@@ -336,5 +338,24 @@ public class TextBasedUi {
   public void pressEnterToContinue() {
     System.out.println("Press enter to continue...");
     scanner.nextLine();
+  }
+
+  /**
+   * Clears the screen, works on multiple operating systems.
+   */
+  public static void clearScreen() {
+    try {
+      String os = System.getProperty("os.name").toLowerCase();
+      if (os.contains("windows")) {
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+      } else if (os.contains("linux") || os.contains("mac")) {
+        new ProcessBuilder("clear").inheritIO().start().waitFor();
+      } else {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+      }
+    } catch (final Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
