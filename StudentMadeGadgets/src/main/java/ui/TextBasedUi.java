@@ -52,8 +52,6 @@ public class TextBasedUi {
     System.out.println("1. Connect to a server");
     System.out.println("2. Exit");
 
-    textHelper.printTextWithColour("this is red text", "green");
-
     int choice = getUserChoice("Enter choice: ");
 
     switch (choice) {
