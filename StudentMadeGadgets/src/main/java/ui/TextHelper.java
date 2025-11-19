@@ -61,12 +61,13 @@ public class TextHelper {
       default:
     }
     System.out.println(text);
+    System.out.print("\033[0m");
   }
 
   /**
    * Displays application header.
    */
-  public void displayHeader(String title) {
+  public void displayHeader(String title, String colour) {
     clearScreen();
     int len = title.length();
 
@@ -76,7 +77,7 @@ public class TextHelper {
     }
     System.out.println();
 
-    System.out.println(title);
+    printTextWithColour(title, colour);
 
     for (int i = 0; i < len; i++) {
       System.out.print("=");
