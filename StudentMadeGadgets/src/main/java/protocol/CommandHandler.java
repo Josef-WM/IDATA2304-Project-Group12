@@ -115,8 +115,8 @@ public class CommandHandler {
               String replyJson = JSONHandler.serializeMessageToJSON(reply);
               return replyJson;
             } else {
-              Sensor sensor = greenhouse.getSensorNode().getSensor(deviceID);
-              reply.setBody(new SensorData(sensor.getID(), sensor.read(), sensor.getUnit()));
+              Actuator actuator = greenhouse.getSensorNode().getActuator(deviceID);
+              reply.setBody(new ActuatorData(actuator.getID(), actuator.isOn(), actuator.getPower()));
               reply.setDestination(messageFromJSON.getSource());
 
               String replyJson = JSONHandler.serializeMessageToJSON(reply);
