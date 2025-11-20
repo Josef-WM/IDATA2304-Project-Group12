@@ -1,19 +1,33 @@
 package protocol;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import protocol.command.*;
 
+/**
+ * Handles JSON serialization and deserialization for Messages.
+ */
 public class JSONHandler {
 
+  /**
+   * Serializes a Message object to a JSON string.
+   *
+   * @param message the Message object to serialize
+   * @return the JSON string representation of the Message
+   */
   public static String serializeMessageToJSON(Message message) {
     Gson gson = new Gson();
 
     return gson.toJson(message);
   }
 
+  /**
+   * Deserializes a JSON string to a Message object.
+   *
+   * @param json the JSON string to deserialize
+   * @return the deserialized Message object
+   */
   public static Message deserializeFromJSONToMessage(String json) {
     // Check for null or empty JSON first
     if (json == null || json.trim().isEmpty()) {
@@ -72,7 +86,13 @@ public class JSONHandler {
     return message;
   }
 
-
+  /**
+   * Deserializes the body of a message based on its type.
+   *
+   * @param bodyJson the JSON object representing the body
+   * @param messageType the type of the message
+   * @return the deserialized Command object
+   */
   public static Command deserializeBody(JsonObject bodyJson, String messageType) {
     Gson gson = new Gson();
 

@@ -1,8 +1,8 @@
 package protocol;
 
 import actuator.*;
-import client.SensorNode;
 import greenhouse.Greenhouse;
+import java.util.*;
 import javafx.util.Pair;
 import protocol.command.*;
 import sensor.HumiditySensor;
@@ -11,10 +11,19 @@ import sensor.Sensor;
 import sensor.TemperatureSensor;
 import server.Server;
 
-import java.util.*;
-
+/**
+ * The CommandHandler class is responsible for handling incoming commands
+ * and generating appropriate responses based on the command type.
+ */
 public class CommandHandler {
 
+  /**
+   * Handles the incoming command message and
+   * generates a response.
+   *
+   * @param message the incoming command message in JSON format
+   * @return the response message in JSON format
+   */
   public static String handleCommand(String message) {
     Message messageFromJSON = JSONHandler.deserializeFromJSONToMessage(message);
 
