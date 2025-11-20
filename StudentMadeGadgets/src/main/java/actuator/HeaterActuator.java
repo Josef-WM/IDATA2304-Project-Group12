@@ -19,7 +19,7 @@ public class HeaterActuator implements Actuator {
   }
 
   /**
-   * Returns the type of the actuator
+   * Returns the type of the actuator.
    */
   public String getType() {
     return "Heater";
@@ -71,6 +71,12 @@ public class HeaterActuator implements Actuator {
     }
   }
 
+  /**
+   * Sets the state of the actuator.
+   *
+   * @param state      the state to set
+   * @param greenhouse the greenhouse the actuator is in
+   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);

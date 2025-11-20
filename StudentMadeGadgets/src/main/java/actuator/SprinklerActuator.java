@@ -18,11 +18,10 @@ public class SprinklerActuator implements Actuator {
     this.isOn = false;
     this.power = 0;
     this.humidityDifference = 0;
-
   }
 
   /**
-   * Returns the type of the actuator
+   * Returns the type of the actuator.
    */
   public String getType() {
     return "Sprinkler";
@@ -74,6 +73,12 @@ public class SprinklerActuator implements Actuator {
     }
   }
 
+  /**
+   * Sets the state of the actuator.
+   *
+   * @param state desired state
+   * @param greenhouse the greenhouse the actuator is in
+   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);
@@ -111,6 +116,11 @@ public class SprinklerActuator implements Actuator {
     }
   }
 
+  /**
+   * Calculates the effect of the actuator based on its power.
+   *
+   * @return the effect of the actuator
+   */
   public int getEffect() {
     return (10 + (10*this.power));
   }

@@ -1,13 +1,12 @@
 package greenhouse;
 
 import client.SensorNode;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Javadoc placeholder.
+ * Represents a greenhouse with environmental parameters.
  */
 public class Greenhouse {
   private int greenhouseId;
@@ -33,10 +32,20 @@ public class Greenhouse {
     startGradualUpdater();
   }
 
+  /**
+   * Sets the ID of the greenhouse.
+   *
+   * @param id ID to set
+   */
   public void setGreenhouseId(int id) {
     this.greenhouseId = id;
   }
 
+  /**
+   * Gets the ID of the greenhouse.
+   *
+   * @return the greenhouse ID
+   */
   public int getGreenhouseId() {
     return this.greenhouseId;
   }
@@ -69,12 +78,19 @@ public class Greenhouse {
   }
 
   /**
-   * Javadoc placeholder.
+   * Sets the sensor node associated with the greenhouse.
+   *
+   * @param sensorNode sensor node to set
    */
   public void setSensorNode(SensorNode sensorNode) {
     this.sensorNode = sensorNode;
   }
 
+  /**
+   * Gets the sensor node associated with the greenhouse.
+   *
+   * @return the sensor node
+   */
   public SensorNode getSensorNode() {
     return this.sensorNode;
   }

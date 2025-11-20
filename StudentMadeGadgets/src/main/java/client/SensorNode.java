@@ -2,9 +2,9 @@ package client;
 
 import actuator.Actuator;
 import greenhouse.Greenhouse;
+import java.util.HashMap;
 import sensor.Sensor;
 
-import java.util.HashMap;
 
 /**
  * This class represents a sensor node that can hold multiple sensors and actuators.
@@ -23,6 +23,7 @@ public class SensorNode {
 
   /**
    * Adds a sensor to the node.
+   *
    * @param sensor the sensor to add
    */
   public String addSensorToNode(Sensor sensor) {
@@ -42,6 +43,7 @@ public class SensorNode {
 
   /**
    * Removes a sensor from the node.
+   *
    * @param sensor the sensor to remove
    */
   public void removeSensorFromNode(Sensor sensor) {
@@ -50,6 +52,7 @@ public class SensorNode {
 
   /**
    * Adds an actuator to the node.
+   *
    * @param actuator the actuator to add to the node
    */
   public String addActuatorToNode(Actuator actuator) {
@@ -69,6 +72,7 @@ public class SensorNode {
 
   /**
    * Removes an actuator from the node.
+   *
    * @param actuator the actuator to remove from the node
    */
   public void removeActuatorFromNode(Actuator actuator) {
@@ -77,7 +81,9 @@ public class SensorNode {
 
   /**
    * Gets an actuator by its device ID.
+   *
    * @param deviceID the device ID of the actuator
+   *
    * @return the actuator with the given device ID
    */
   public Actuator getActuator(String deviceID) {
@@ -86,7 +92,9 @@ public class SensorNode {
 
   /**
    * Gets a sensor by its device ID.
+   *
    * @param deviceID the device ID of the sensor
+   *
    * @return the sensor with the given device ID
    */
   public Sensor getSensor(String deviceID) {
@@ -95,7 +103,8 @@ public class SensorNode {
 
   /**
    * Returns the actuators in the sensor node.
-   * @return
+   *
+   * @return the actuators
    */
   public HashMap<String, Actuator> getActuators() {
     return this.actuators;
@@ -103,7 +112,8 @@ public class SensorNode {
 
   /**
    * Returns the sensors in the sensor node.
-   * @return
+   *
+   * @return the sensors
    */
   public HashMap<String, Sensor> getSensors() {
     return this.sensors;
@@ -111,6 +121,7 @@ public class SensorNode {
 
   /**
    * Toggles an actuator on or off.
+   *
    * @param deviceID the device ID of the actuator
    * @param greenhouse the greenhouse the actuator is in
    * @return the new state of the actuator
@@ -119,12 +130,20 @@ public class SensorNode {
     return getActuator(deviceID).toggle(greenhouse);
   }
 
+  /**
+   * Sets the state of an actuator.
+   *
+   * @param deviceId the device ID of the actuator
+   * @param greenhouse the greenhouse the actuator is in
+   * @param state the state to set the actuator to
+   */
   public void setActuatorState(String deviceId, Greenhouse greenhouse, boolean state) {
-   this.actuators.get(deviceId).setState(state, greenhouse);
+    this.actuators.get(deviceId).setState(state, greenhouse);
   }
 
   /**
    * Sets the power of an actuator.
+   *
    * @param deviceID the device ID of the actuator
    * @param power the power to set the actuator to
    */

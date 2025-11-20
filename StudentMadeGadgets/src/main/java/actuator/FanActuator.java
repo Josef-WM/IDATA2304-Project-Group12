@@ -71,6 +71,12 @@ public class FanActuator implements Actuator {
     }
   }
 
+  /**
+   * Sets the state of the actuator.
+   *
+   * @param state     desired state
+   * @param greenhouse the greenhouse the actuator is in
+   */
   public void setState(boolean state, Greenhouse greenhouse) {
     if (state) {
       turnOn(greenhouse);

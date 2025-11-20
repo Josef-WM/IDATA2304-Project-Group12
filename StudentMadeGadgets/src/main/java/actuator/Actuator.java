@@ -2,6 +2,9 @@ package actuator;
 
 import greenhouse.Greenhouse;
 
+/**
+ * Actuator interface for all actuators in the greenhouse system.
+ */
 public interface Actuator {
   String getID();
   void setID(String ID);
