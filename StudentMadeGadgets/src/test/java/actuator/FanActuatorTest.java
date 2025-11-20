@@ -147,8 +147,8 @@ class FanActuatorTest {
 
     // Assert
     assertTrue(actuator.isOn());
-    assertEquals(20.0, newTemp, 0.0001,
-            "Temperature should be reduced by 5 at speed 0");
+    assertEquals(22.0, newTemp, 0.0001,
+            "Temperature should be reduced by 3 at speed 0");
   }
 
   /**
@@ -188,7 +188,7 @@ class FanActuatorTest {
     // Assert
     assertTrue(result, "toggle() should return true when turning ON");
     assertTrue(actuator.isOn());
-    assertEquals(25.0, newTemp, 0.0001);
+    assertEquals(27.0, newTemp, 0.0001);
   }
 
   /**
@@ -226,7 +226,7 @@ class FanActuatorTest {
 
     // Assert
     assertTrue(actuator.isOn());
-    assertEquals(17.0, newTemp, 0.0001);
+    assertEquals(19.0, newTemp, 0.0001);
   }
 
   /**
@@ -259,7 +259,7 @@ class FanActuatorTest {
     actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // speed 0
 
-    double tempAfterSpeed0 = getTemperature(); // expect 25
+    double tempAfterSpeed0 = getTemperature(); // expect 27
     actuator.turnOff(greenhouse); // back to 30
 
     // Act
@@ -267,12 +267,12 @@ class FanActuatorTest {
     actuator.turnOn(greenhouse);
     double tempAfterSpeed2 = getTemperature();
 
-    // cooling formula: -5 * (1 + speed * 0.2)
-    // for speed=2 -> -5*(1+0.4) = -7
+    // cooling formula: 3 + (2 * power)
+    // for speed=2 -> 3 + (2*2) = 7
     // expected: 30 - 7 = 23
 
     // Assert
-    assertEquals(25.0, tempAfterSpeed0, 0.0001);
+    assertEquals(27.0, tempAfterSpeed0, 0.0001);
     assertEquals(23.0, tempAfterSpeed2, 0.0001);
   }
 
@@ -295,15 +295,15 @@ class FanActuatorTest {
     actuator.setPower(0, greenhouse);
 
     // Act
-    actuator.turnOn(greenhouse); // 20 -> 15
-    actuator.turnOn(greenhouse); // 15 -> 5 (heatDifference accumulates)
+    actuator.turnOn(greenhouse); // 20 -> 17
+    actuator.turnOn(greenhouse); // 17 -> 17
 
     double finalTemp = getTemperature();
 
     // Assert
     assertTrue(actuator.isOn());
-    assertEquals(5.0, finalTemp, 0.0001,
-            "Multiple turnOn calls should accumulate cooling");
+    assertEquals(17, finalTemp, 0.0001,
+            "Multiple turnOn calls should not accumulate cooling");
   }
 
   /**
@@ -314,8 +314,8 @@ class FanActuatorTest {
     // Arrange
     setTemperature(20.0);
     actuator.setPower(0, greenhouse);
-    actuator.turnOn(greenhouse); // 20 -> 15
-    actuator.turnOff(greenhouse); // 15 -> 20
+    actuator.turnOn(greenhouse); // 20 -> 17
+    actuator.turnOff(greenhouse); // 17 -> 20
 
     // Act
     actuator.turnOff(greenhouse); // already OFF, temp should stay

@@ -57,12 +57,11 @@ class SprinklerActuatorTest {
 
   /**
    * Tests that getType() returns the expected type string.
-   * NOTE: Current implementation returns "Light".
    */
   @Test
   void getType_Positive_ReturnsExpectedType() {
-    assertEquals("Light", actuator.getType(),
-            "SprinklerActuator currently returns 'Light' as type");
+    assertEquals("Sprinkler", actuator.getType(),
+            "SprinklerActuator currently returns 'Sprinkler' as type");
   }
 
   /**
