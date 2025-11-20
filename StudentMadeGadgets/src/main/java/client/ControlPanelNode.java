@@ -23,8 +23,6 @@ public class ControlPanelNode {
   private String host;
   private int port;
   private Socket socket;
-  private int id;
-
   /**
    * Constructor for the ControlPanelNode class.
    *
@@ -34,7 +32,6 @@ public class ControlPanelNode {
   public ControlPanelNode(String host, int port) {
     this.host = host;
     this.port = port;
-    this.id = 1;
   }
 
   // Set the control panel's connection host
