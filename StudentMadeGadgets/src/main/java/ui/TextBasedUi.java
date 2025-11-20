@@ -156,7 +156,9 @@ public class TextBasedUi {
    * Menu for controlling a greenhouse.
    */
   private void greenhouseControlMenu(int greenhouseId) throws IOException {
-    textHelper.displayHeader("Connected to Greenhouse: " + greenhouseId, "green");
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+    String greenhouseName = greenhouseListData.getGreenhouses().get(greenhouseId-1).getGreenhouseName();
+    textHelper.displayHeader("Connected to Greenhouse: " + greenhouseName, "green");
     System.out.println("1. View Sensor Data");
     System.out.println("2. View / Change Actuator Status");
     System.out.println("3. Add sensor to sensor node");
@@ -179,7 +181,9 @@ public class TextBasedUi {
    * Menu for viewing sensor data.
    */
   private void viewSensorDataMenu(int greenhouseId) throws IOException {
-    textHelper.displayHeader("Sensor Data for Greenhouse #" + greenhouseId, "yellow");
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+    String greenhouseName = greenhouseListData.getGreenhouses().get(greenhouseId-1).getGreenhouseName();
+    textHelper.displayHeader("Sensor Data for Greenhouse " + greenhouseName, "yellow");
     HashMap<String, Pair<Double, String>> sensorData = activeControlPanel.getAllSensorData(greenhouseId).getSensorDataHashMap();
 
     int index = 1;
@@ -200,7 +204,9 @@ public class TextBasedUi {
    * Menu for viewing/changing actuator status.
    */
   private void viewChangeActuatorStatusMenu(int greenhouseId) throws IOException {
-    textHelper.displayHeader("Actuator Status for Greenhouse " + greenhouseId, "yellow");
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+    String greenhouseName = greenhouseListData.getGreenhouses().get(greenhouseId-1).getGreenhouseName();
+    textHelper.displayHeader("Actuator Status for Greenhouse " + greenhouseName, "yellow");
     HashMap<String, Pair<Boolean, Integer>> actuatorData = activeControlPanel.getAllActuatorData(greenhouseId).getActuatorDataHashMap();
 
     ArrayList<String> actuatorIds = new ArrayList<>();
@@ -210,13 +216,6 @@ public class TextBasedUi {
       Pair<Boolean, Integer> actuatorInfo = entry.getValue();
       actuatorIds.add(actuatorID);
 
-      String powerState;
-      if (actuatorInfo.getKey()) {
-        powerState = "ON";
-      } else {
-        powerState = "OFF";
-      }
-
       String powerLevel;
       switch (actuatorInfo.getValue()) {
         case 0 -> powerLevel = "LOW";
@@ -225,7 +224,13 @@ public class TextBasedUi {
         default -> powerLevel = "";
       }
 
-      System.out.println(index + ". " + actuatorID + ": [" + powerState + "] Power: " + powerLevel);
+      System.out.print(index + ". " + actuatorID + ": [");
+      if (actuatorInfo.getKey()) {
+        textHelper.printTextWithColour("ON", "green");
+      } else {
+        textHelper.printTextWithColour("OFF", "red");
+      }
+      System.out.println("] Power: " + powerLevel);
       index++;
     }
 
@@ -291,7 +296,9 @@ public class TextBasedUi {
   }
 
   private void addActuatorToSensorNodeMenu(int greenhouseId) throws IOException {
-    textHelper.displayHeader("Add actuator to sensor node in greenhouse " + greenhouseId, "magenta");
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+    String greenhouseName = greenhouseListData.getGreenhouses().get(greenhouseId-1).getGreenhouseName();
+    textHelper.displayHeader("Add actuator to sensor node in greenhouse " + greenhouseName, "magenta");
 
     System.out.println("1. Fan");
     System.out.println("2. Heater");
@@ -313,7 +320,9 @@ public class TextBasedUi {
   }
 
   private void addSensorToSensorNodeMenu(int greenhouseId) throws IOException {
-    textHelper.displayHeader("Add sensor to sensor node in greenhouse " + greenhouseId, "magenta");
+    GreenhouseListData greenhouseListData = activeControlPanel.getAllGreenhouses();
+    String greenhouseName = greenhouseListData.getGreenhouses().get(greenhouseId-1).getGreenhouseName();
+    textHelper.displayHeader("Add sensor to sensor node in greenhouse " + greenhouseName, "magenta");
 
     System.out.println("1. Humidity");
     System.out.println("2. Light");
