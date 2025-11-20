@@ -5,12 +5,12 @@ import ui.TextBasedUi;
 import ui.TextHelper;
 
 /**
- * Javadoc placeholder.
+ * Main starting point of the application.
  */
 public class Main {
 
   /**
-   * Javadoc placeholder.
+   * main method.
    */
   public static void main(String[] args) throws IOException {
 

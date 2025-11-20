@@ -23,6 +23,7 @@ public class TemperatureSensor implements Sensor {
   @Override public String getID() {
     return ID;
   }
+
   /**
    * Sets the ID of the sensor.
    * @param ID the ID to set

@@ -1,30 +1,29 @@
 package server;
 
-import greenhouse.Greenhouse;
 import greenhouse.GreenhouseRegistry;
-import protocol.CommandHandler;
-import protocol.Protocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import protocol.CommandHandler;
+import protocol.Protocol;
 
 /**
  * Javadoc placeholder.
  */
 public class Server {
 
-  private static GreenhouseRegistry greenhouseRegistry = new GreenhouseRegistry();
+  private static final GreenhouseRegistry greenhouseRegistry = new GreenhouseRegistry();
   private static CommandHandler commandHandler;
+
   /**
-   * Force start a server
+   * Force start a server.
    */
   public static void main(String[] args) throws IOException {
     runServer();
   }
 
   /**
-   * Starts a new server on port 6767
+   * Starts a new server on port 6767.
    */
   public static void runServer() throws IOException {
     try (ServerSocket serverSocket = new ServerSocket(6767)) {
@@ -38,7 +37,9 @@ public class Server {
   }
 
   /**
-   * Javadoc placeholder.
+   * Handles a client connection.
+   *
+   * @param socket the client socket
    */
   public static void handle(Socket socket) {
     try (Protocol protocol = new Protocol(socket)) {
@@ -57,6 +58,11 @@ public class Server {
     }
   }
 
+  /**
+   * Gets the greenhouse registry.
+   *
+   * @return the greenhouse registry
+   */
   public static GreenhouseRegistry getGreenhouseRegistry() {
     return greenhouseRegistry;
   }

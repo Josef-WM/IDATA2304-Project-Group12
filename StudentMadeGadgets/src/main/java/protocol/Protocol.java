@@ -5,7 +5,8 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Javadoc placeholder.
+ * Provides a simple protocol for sending
+ * and receiving messages over a socket.
  */
 public final class Protocol implements Closeable {
   private final Socket socket;
@@ -13,7 +14,10 @@ public final class Protocol implements Closeable {
   private final BufferedWriter out;
 
   /**
-   * Javadoc placeholder.
+   * Constructor for Protocol.
+   *
+   * @param socket the socket to use for communication
+   * @throws IOException if an I/O error occurs when creating the input/output streams
    */
   public Protocol(Socket socket) throws IOException {
     this.socket = socket;
@@ -22,7 +26,10 @@ public final class Protocol implements Closeable {
   }
 
   /**
-   * Javadoc placeholder.
+   * Sends a message over the socket.
+   *
+   * @param message the message to send
+   * @throws IOException if an I/O error occurs when sending the message
    */
   public void sendMessage(String message) throws IOException {
     out.write(message);
@@ -31,12 +38,20 @@ public final class Protocol implements Closeable {
   }
 
   /**
-   * Javadoc placeholder.
+   * Reads a message from the socket.
+   *
+   * @return the message read from the socket
+   * @throws IOException if an I/O error occurs when reading the message
    */
   public String readMessage() throws IOException {
     return in.readLine();
   }
 
+  /**
+   * Closes the protocol and the underlying socket.
+   *
+   * @throws IOException if an I/O error occurs when closing the socket
+   */
   @Override public void close() throws IOException {
     socket.close();
   }

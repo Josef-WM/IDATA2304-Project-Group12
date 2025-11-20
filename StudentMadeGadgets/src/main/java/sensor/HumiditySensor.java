@@ -18,6 +18,7 @@ public class HumiditySensor implements Sensor {
 
   /**
    * Returns the ID of the sensor.
+   *
    * @return the ID of the sensor
    */
   @Override
@@ -27,6 +28,7 @@ public class HumiditySensor implements Sensor {
 
   /**
    * Sets the ID of the sensor.
+   *
    * @param ID the ID to set
    */
   @Override
@@ -36,6 +38,7 @@ public class HumiditySensor implements Sensor {
 
   /**
    * Returns the type of the sensor.
+   *
    * @return the type of the sensor
    */
   @Override
@@ -45,6 +48,7 @@ public class HumiditySensor implements Sensor {
 
   /**
    * Returns the unit of the sensor.
+   *
    * @return the unit of the sensor
    */
   @Override
@@ -54,6 +58,7 @@ public class HumiditySensor implements Sensor {
 
   /**
    * Reads the humidity value from the greenhouse.
+   *
    * @return the humidity value
    */
   @Override
