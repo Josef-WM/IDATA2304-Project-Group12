@@ -8,7 +8,7 @@ This document describes the Six-Seven Protocol, an application-layer communicati
 
     We can think of the sensors as the "eyes and ears" of the system, while the actuators are the "hands and feet".
 - **Control-panel nodes :** A control-panel node is the client application part of the system. This is the text UI / GUI used by the farmer to manage their greenhouses.
-- **Sensor/Actuator nodes :** A node associated with a greenhouse. It bundles a set of sensors, a set of actuators, and a logic for toggling actuators and adjusting the greenhouse state.
+- **Sensor nodes :** A node associated with a greenhouse. It bundles a set of sensors, a set of actuators, and a logic for toggling actuators and adjusting the greenhouse state.
 
 ## Table
 | Aspect                           | Specification                                                                                                             | Justification                                                                                                                                                                                                                                                                                                                                              |
