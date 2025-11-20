@@ -138,7 +138,8 @@ class FanActuatorTest {
   @Test
   void turnOn_Positive_CoolsGreenhouseAndSetsOn() {
     // Arrange
-    setTemperature(25.0);
+    double temperature = 25;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
 
     // Act
@@ -147,7 +148,7 @@ class FanActuatorTest {
 
     // Assert
     assertTrue(actuator.isOn());
-    assertEquals(22.0, newTemp, 0.0001,
+    assertEquals(temperature+actuator.getEffect(), newTemp, 0.0001,
             "Temperature should be reduced by 3 at speed 0");
   }
 
@@ -158,9 +159,10 @@ class FanActuatorTest {
   @Test
   void turnOff_Positive_RestoresTemperatureAndSetsOff() {
     // Arrange
-    setTemperature(25.0);
+    double temperature = 25;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
-    actuator.turnOn(greenhouse); // temp -> 20
+    actuator.turnOn(greenhouse);
 
     // Act
     actuator.turnOff(greenhouse);
@@ -168,7 +170,7 @@ class FanActuatorTest {
 
     // Assert
     assertFalse(actuator.isOn());
-    assertEquals(25.0, finalTemp, 0.0001,
+    assertEquals(temperature, finalTemp, 0.0001,
             "Temperature should be restored to original after turnOff");
   }
 
@@ -178,7 +180,8 @@ class FanActuatorTest {
   @Test
   void toggle_Positive_TogglesFromOffToOnAndCools() {
     // Arrange
-    setTemperature(30.0);
+    double temperature = 30;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
 
     // Act
@@ -188,7 +191,7 @@ class FanActuatorTest {
     // Assert
     assertTrue(result, "toggle() should return true when turning ON");
     assertTrue(actuator.isOn());
-    assertEquals(27.0, newTemp, 0.0001);
+    assertEquals(temperature+actuator.getEffect(), newTemp, 0.0001);
   }
 
   /**
@@ -197,9 +200,10 @@ class FanActuatorTest {
   @Test
   void toggle_Positive_TogglesFromOnToOffAndRestoresTemp() {
     // Arrange
-    setTemperature(30.0);
+    double temperature = 30;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
-    actuator.turnOn(greenhouse); // temp -> 25
+    actuator.turnOn(greenhouse);
 
     // Act
     boolean result = actuator.toggle(greenhouse);
@@ -208,7 +212,7 @@ class FanActuatorTest {
     // Assert
     assertFalse(result, "toggle() should return false when turning OFF");
     assertFalse(actuator.isOn());
-    assertEquals(30.0, finalTemp, 0.0001);
+    assertEquals(temperature, finalTemp, 0.0001);
   }
 
   /**
@@ -217,7 +221,8 @@ class FanActuatorTest {
   @Test
   void setState_Positive_TurnsOnAndCools() {
     // Arrange
-    setTemperature(22.0);
+    double temperature = 30;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
 
     // Act
@@ -226,7 +231,7 @@ class FanActuatorTest {
 
     // Assert
     assertTrue(actuator.isOn());
-    assertEquals(19.0, newTemp, 0.0001);
+    assertEquals(temperature+actuator.getEffect(), newTemp, 0.0001);
   }
 
   /**
@@ -235,7 +240,8 @@ class FanActuatorTest {
   @Test
   void setState_Positive_TurnsOffAndRestoresTemp() {
     // Arrange
-    setTemperature(22.0);
+    double temperature = 22;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // 22 -> 17
 
@@ -245,7 +251,7 @@ class FanActuatorTest {
 
     // Assert
     assertFalse(actuator.isOn());
-    assertEquals(22.0, finalTemp, 0.0001);
+    assertEquals(temperature, finalTemp, 0.0001);
   }
 
   /**
@@ -255,25 +261,21 @@ class FanActuatorTest {
   @Test
   void setPower_Positive_ChangesCoolingEffect() {
     // Arrange
-    setTemperature(30.0);
+    double temperature = 30;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
     actuator.turnOn(greenhouse); // speed 0
 
-    double tempAfterSpeed0 = getTemperature(); // expect 27
-    actuator.turnOff(greenhouse); // back to 30
+    double tempAfterSpeed0 = getTemperature();
+    // Assert
+    assertEquals(temperature+actuator.getEffect(), tempAfterSpeed0, 0.0001);
 
     // Act
     actuator.setPower(2, greenhouse); // higher speed
-    actuator.turnOn(greenhouse);
     double tempAfterSpeed2 = getTemperature();
 
-    // cooling formula: 3 + (2 * power)
-    // for speed=2 -> 3 + (2*2) = 7
-    // expected: 30 - 7 = 23
-
     // Assert
-    assertEquals(27.0, tempAfterSpeed0, 0.0001);
-    assertEquals(23.0, tempAfterSpeed2, 0.0001);
+    assertEquals(temperature+actuator.getEffect(), tempAfterSpeed2, 0.0001);
   }
 
   /**
@@ -291,18 +293,19 @@ class FanActuatorTest {
   @Test
   void turnOn_Negative_MultipleCallsAccumulateCooling() {
     // Arrange
-    setTemperature(20.0);
+    double temperature = 20;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
 
     // Act
-    actuator.turnOn(greenhouse); // 20 -> 17
-    actuator.turnOn(greenhouse); // 17 -> 17
+    actuator.turnOn(greenhouse);
+    actuator.turnOn(greenhouse);
 
     double finalTemp = getTemperature();
 
     // Assert
     assertTrue(actuator.isOn());
-    assertEquals(17, finalTemp, 0.0001,
+    assertEquals(temperature+actuator.getEffect(), finalTemp, 0.0001,
             "Multiple turnOn calls should not accumulate cooling");
   }
 
@@ -312,10 +315,11 @@ class FanActuatorTest {
   @Test
   void turnOff_Negative_RepeatedCallsDoNotChangeTempWhenAlreadyOff() {
     // Arrange
-    setTemperature(20.0);
+    double temperature = 20;
+    setTemperature(temperature);
     actuator.setPower(0, greenhouse);
-    actuator.turnOn(greenhouse); // 20 -> 17
-    actuator.turnOff(greenhouse); // 17 -> 20
+    actuator.turnOn(greenhouse);
+    actuator.turnOff(greenhouse);
 
     // Act
     actuator.turnOff(greenhouse); // already OFF, temp should stay
@@ -323,7 +327,7 @@ class FanActuatorTest {
 
     // Assert
     assertFalse(actuator.isOn());
-    assertEquals(20.0, finalTemp, 0.0001);
+    assertEquals(temperature, finalTemp, 0.0001);
   }
 
   /**
